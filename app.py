@@ -163,7 +163,7 @@ def pie_chart_donut(df, columna, titulo, key_id):
         },
         "legend": {
             "orient": "horizontal",
-            "bottom": "10%",
+            "bottom": "-10%",
             "left": "center",
             "padding": [20, 0, 0, 0]  # margen superior de la leyenda
         },
