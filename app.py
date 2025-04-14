@@ -7,6 +7,8 @@ import streamlit as st
 import streamlit_authenticator as stauth
 import yaml
 from yaml.loader import SafeLoader
+from streamlit_echarts import st_echarts
+
 
 
 # ---- CONFIGURACIÓN DE PÁGINA ----
@@ -162,4 +164,53 @@ with col8:
     tarjeta_gradiente_simple("APROBADAS", valor_col8, "linear-gradient(135deg, #43C6AC, #191654)")
 
 
+
+# Agrupar por valores únicos y contar
+conteo_puestos = df["Puesto Tipo"].value_counts().reset_index()
+conteo_puestos.columns = ["name", "value"]
+
+# Convertir al formato de ECharts (lista de diccionarios)
+data_pie = conteo_puestos.to_dict(orient="records")
+
+# Configurar el gráfico estilo donut
+option = {
+    "tooltip": {
+        "trigger": "item"
+    },
+    "legend": {
+        "top": "5%",
+        "left": "center"
+    },
+    "series": [
+        {
+            "name": "Distribución por puesto",
+            "type": "pie",
+            "radius": ["40%", "75%"],
+            "avoidLabelOverlap": False,
+            "itemStyle": {
+                "borderRadius": 10,
+                "borderColor": "#fff",
+                "borderWidth": 2
+            },
+            "label": {
+                "show": False,
+                "position": "center"
+            },
+            "emphasis": {
+                "label": {
+                    "show": True,
+                    "fontSize": 20,
+                    "fontWeight": "bold"
+                }
+            },
+            "labelLine": {
+                "show": True
+            },
+            "data": data_pie
+        }
+    ]
+}
+
+# Mostrar el gráfico
+st_echarts(options=option, height="400px", key="puesto_tipo_pie")
 
