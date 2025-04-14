@@ -109,9 +109,6 @@ def tarjeta_gradiente_simple(titulo, valor, gradiente):
         </div>
     """, unsafe_allow_html=True)
 
-st.markdown("<div style='margin-top: 40px;'></div>", unsafe_allow_html=True)
-
-
 # --- FILA 1 ---
 col1, col2, col3, col4 = st.columns(4)
 
@@ -126,9 +123,6 @@ with col3:
 
 with col4:
     tarjeta_gradiente_simple("MONTO ESTIMADO", valor_col4, "linear-gradient(135deg, #C33764, #1D2671)")
-
-st.markdown("<div style='margin-top: 40px;'></div>", unsafe_allow_html=True)
-
 
 # --- FILA 2 ---
 col5, col6, col7, col8 = st.columns(4)
@@ -146,6 +140,7 @@ with col8:
     tarjeta_gradiente_simple("APROBADAS", valor_col8, "linear-gradient(135deg, #43C6AC, #191654)")
 
 
+st.markdown("<div style='margin-top: 40px;'></div>", unsafe_allow_html=True)
 
 
 # Función reutilizable para cada pie chart
@@ -215,6 +210,9 @@ with col1:
 
 with col2:
     pie_chart_donut(df, "Tipo Comité", "Distribución por Tipo Comité", "pie2")
+
+st.markdown("<div style='margin-top: 40px;'></div>", unsafe_allow_html=True)
+
 
 # --- SEGUNDA FILA ---
 col3, col4 = st.columns(2)
