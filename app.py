@@ -235,7 +235,7 @@ def pie_chart_donut(df, columna, titulo, key_id):
         },
         "legend": {
             "orient": "horizontal",
-            "top": "80%",
+            "top": "90%",
             "left": "center",
             "padding": [20, 0, 0, 0],
             "textStyle": {"color": color_texto}
@@ -289,7 +289,7 @@ with col2:
 with col3:
     pie_chart_donut(df, "Nivel Post.", "Distribución por Nivel", "pie3")
 
-st.markdown("<div style='margin-top: 30px;'></div>", unsafe_allow_html=True)
+st.markdown("<div style='margin-top: 40px;'></div>", unsafe_allow_html=True)
 
 # FILA 2
 col4, col5, col6 = st.columns(3)
