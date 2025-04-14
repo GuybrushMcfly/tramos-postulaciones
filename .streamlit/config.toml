@@ -1,7 +1,7 @@
 [theme]
 base = "dark"
 primaryColor = "#8a6dff"               # Violeta brillante (botones, resaltados)
-backgroundColor = "#1f2235"            # Fondo principal oscuro
+backgroundColor = "#2a2e45"            # Fondo principal oscuro
 secondaryBackgroundColor = "#2a2e45"   # Tarjetas o sidebar
 textColor = "#f5f6fa"                  # Texto claro
 font = "sans serif"
