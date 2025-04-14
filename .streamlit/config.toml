@@ -5,3 +5,11 @@ backgroundColor="#0e1117"
 secondaryBackgroundColor="#262730"
 textColor="#FFFFFF"
 font="sans serif"
+
+[theme]
+base="light" # o "dark" o "auto"
+primaryColor="#0083B0"
+backgroundColor="#ffffff"
+secondaryBackgroundColor="#f0f2f6"
+textColor="#000000"
+font="sans serif"
