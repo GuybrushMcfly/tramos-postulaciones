@@ -64,6 +64,18 @@ worksheet = gc.open_by_key("11--jD47K72s9ddt727kYd9BhRmAOM7qXEUB60SX69UA").sheet
 data = worksheet.get_all_records()
 df = pd.DataFrame(data)
 
+# --- FILTRO EN BARRA LATERAL ---
+st.sidebar.header("Filtros")
+
+# Filtro por Periodo Valoración
+periodos = df["Periodo Valoración"].dropna().unique()
+periodo_seleccionado = st.sidebar.selectbox("Seleccionar Periodo Valoración", options=sorted(periodos))
+
+# Aplicar filtro
+df = df[df["Periodo Valoración"] == periodo_seleccionado]
+
+
+
 # --- LÓGICA DE VALORES ---
 estados_validos = ["Presentada", "En Actividad Valoración", "En Actividad Capacitación"]
 
@@ -85,17 +97,6 @@ valor_col5 = df[df["Estado"] == "Presentada"]["Agente"].count()
 valor_col6 = df[df["Estado"] == "En Actividad Capacitación"]["Agente"].count()
 valor_col7 = df[df["Estado"] == "En Actividad Valoración"]["Agente"].count()
 valor_col8 = 0  # APROBADAS
-
-# --- FILTRO EN BARRA LATERAL ---
-st.sidebar.header("Filtros")
-
-# Filtro por Periodo Valoración
-periodos = df["Periodo Valoración"].dropna().unique()
-periodo_seleccionado = st.sidebar.selectbox("Seleccionar Periodo Valoración", options=sorted(periodos))
-
-# Aplicar filtro
-df = df[df["Periodo Valoración"] == periodo_seleccionado]
-
 
 
 # --- FUNCIÓN PARA TARJETAS CON GRADIENTE ---
