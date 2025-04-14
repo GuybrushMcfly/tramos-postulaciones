@@ -113,7 +113,7 @@ def tarjeta_gradiente_simple(titulo, valor, gradiente):
 col1, col2, col3, col4 = st.columns(4)
 
 with col1:
-    tarjeta_gradiente_simple("TOTAL POSTULACIONES", valor_col1, "linear-gradient(135deg, #00B4DB, #0083B0)")
+    tarjeta_gradiente_simple("POSTULACIONES", valor_col1, "linear-gradient(135deg, #00B4DB, #0083B0)")
 
 with col2:
     tarjeta_gradiente_simple("POST. HISTÓRICOS", valor_col2, "linear-gradient(135deg, #FF5858, #FB5895)")
@@ -131,10 +131,10 @@ with col5:
     tarjeta_gradiente_simple("PRESENTADAS", valor_col5, "linear-gradient(135deg, #00F260, #0575E6)")
 
 with col6:
-    tarjeta_gradiente_simple("EN ACTIVIDAD CAPACITACION", valor_col6, "linear-gradient(135deg, #7F00FF, #E100FF)")
+    tarjeta_gradiente_simple("EN ACTIV. CAPACITACION", valor_col6, "linear-gradient(135deg, #7F00FF, #E100FF)")
 
 with col7:
-    tarjeta_gradiente_simple("EN ACTIVIDAD VALORACION", valor_col7, "linear-gradient(135deg, #FFE000, #799F0C)")
+    tarjeta_gradiente_simple("EN ACTIV. VALORACION", valor_col7, "linear-gradient(135deg, #FFE000, #799F0C)")
 
 with col8:
     tarjeta_gradiente_simple("APROBADAS", valor_col8, "linear-gradient(135deg, #43C6AC, #191654)")
