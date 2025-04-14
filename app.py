@@ -165,7 +165,7 @@ def pie_chart_donut(df, columna, titulo, key_id):
             "orient": "horizontal",
             "bottom": "0%",
             "left": "center",
-            "padding": [20, 0, 0, 0]  # margen superior de la leyenda
+            "padding": [30, 0, 0, 0]  # margen superior de la leyenda
         },
         "series": [
             {
@@ -197,7 +197,7 @@ def pie_chart_donut(df, columna, titulo, key_id):
         ]
     }
 
-    st_echarts(options=option, height="450px", key=key_id)
+    st_echarts(options=option, height="400px", key=key_id)
 
 
 # --- PRIMERA FILA ---
