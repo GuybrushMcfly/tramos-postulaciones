@@ -178,8 +178,10 @@ def pie_chart_donut(df, columna, titulo, key_id):
             "trigger": "item"
         },
         "legend": {
-            "top": "5%",
-            "left": "center"
+            #"top": "5%",
+            #"left": "center"
+            "show": False
+
         },
         "series": [
             {
