@@ -35,7 +35,7 @@ authenticator.login()
 if st.session_state["authentication_status"]:
     authenticator.logout("Cerrar sesión", "sidebar")
     st.sidebar.success(f"Bienvenido/a, {st.session_state['name']}")
-    st.title("📊 Dashboard de Tramitaciones Tramo Escalafonario")
+    st.title("📊 Tramitaciones Tramo Escalafonario")
 ##    st.write("✅ Estás autenticado.")
 elif st.session_state["authentication_status"] is False:
     st.error("❌ Usuario o contraseña incorrectos.")
