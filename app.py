@@ -156,7 +156,8 @@ def pie_chart_donut(df, columna, titulo, key_id):
             "top": "top",
             "textStyle": {
                 "fontSize": 18,
-                "fontWeight": "bold"
+                "fontWeight": "bold",
+                "color": "#FFFFFF"  # texto blanco para modo oscuro
             }
         },
         "tooltip": {
@@ -165,9 +166,11 @@ def pie_chart_donut(df, columna, titulo, key_id):
         "legend": {
             "orient": "horizontal",
             "top": "83%",
-            "bottom": "0%",
             "left": "center",
-            "padding": [20, 0, 0, 0]  # margen superior de la leyenda
+            "padding": [20, 0, 0, 0],
+            "textStyle": {
+                "color": "#FFFFFF"  # color de texto de la leyenda
+            }
         },
         "series": [
             {
@@ -181,18 +184,23 @@ def pie_chart_donut(df, columna, titulo, key_id):
                     "borderWidth": 2
                 },
                 "label": {
-                    "show": False,  # oculta el texto encima del gráfico
-                    "position": "center"
+                    "show": False,
+                    "position": "center",
+                    "color": "#FFFFFF"
                 },
                 "emphasis": {
                     "label": {
                         "show": True,
                         "fontSize": 20,
-                        "fontWeight": "bold"
+                        "fontWeight": "bold",
+                        "color": "#FFFFFF"
                     }
                 },
                 "labelLine": {
-                    "show": True
+                    "show": True,
+                    "lineStyle": {
+                        "color": "#FFFFFF"
+                    }
                 },
                 "data": data
             }
