@@ -199,7 +199,7 @@ st.markdown("<div style='margin-top: 50px;'></div>", unsafe_allow_html=True)
 modo = st.get_option("theme.base")
 color_texto = "#000000" if modo == "light" else "#FFFFFF"
 
-# Función reutilizable para cada pie chart
+# --- FUNCIÓN PARA GRÁFICOS PIE ---
 def pie_chart_donut(df, columna, titulo, key_id):
     conteo = df[columna].value_counts().reset_index()
     conteo.columns = ["name", "value"]
@@ -220,17 +220,13 @@ def pie_chart_donut(df, columna, titulo, key_id):
                 "color": color_texto
             }
         },
-        "tooltip": {
-            "trigger": "item"
-        },
+        "tooltip": {"trigger": "item"},
         "legend": {
             "orient": "horizontal",
             "top": "87%",
             "left": "center",
             "padding": [10, 0, 0, 0],
-            "textStyle": {
-                "color": color_texto
-            }
+            "textStyle": {"color": color_texto}
         },
         "series": [
             {
@@ -258,9 +254,7 @@ def pie_chart_donut(df, columna, titulo, key_id):
                 },
                 "labelLine": {
                     "show": True,
-                    "lineStyle": {
-                        "color": color_texto
-                    }
+                    "lineStyle": {"color": color_texto}
                 },
                 "data": data
             }
@@ -269,41 +263,33 @@ def pie_chart_donut(df, columna, titulo, key_id):
 
     st_echarts(options=option, height="350px", key=key_id)
 
-# Filtrar los datos para excluir Estados no deseados
-df = df[~df["Estado"].isin(["Pendiente", "Anulada"])]
+# --- GRILLA 3x3 DE PIE CHARTS ---
 
-# Agrupar valores personalizados en Tipo Comité
-df["Tipo Comité - Agrupado"] = df["Tipo Comité"].apply(lambda x: x if x in [
-    "Jurisdiccional (INDEC)",
-    "Transversal (INAP)",
-    "Funciones informáticas (ONTI)"
-] else "Otros (EXTERNOS)")
-
-
-# --- PRIMERA FILA ---
-col1, col2 = st.columns(2)
+# FILA 1
+col1, col2, col3 = st.columns(3)
 
 with col1:
     pie_chart_donut(df, "Puesto Tipo", "Distribución por Puesto Tipo", "pie1")
 
 with col2:
-#    pie_chart_donut(df, "Tipo Comité", "Distribución por Tipo Comité", "pie2")
     pie_chart_donut(df, "Tipo Comité - Agrupado", "Distribución por Tipo Comité", "pie2")
-
-st.markdown("<div style='margin-top: 60px;'></div>", unsafe_allow_html=True)
-
-
-# --- SEGUNDA FILA ---
-col3, col4 = st.columns(2)
 
 with col3:
     pie_chart_donut(df, "Nivel Post.", "Distribución por Nivel", "pie3")
 
+st.markdown("<div style='margin-top: 30px;'></div>", unsafe_allow_html=True)
+
+# FILA 2
+col4, col5, col6 = st.columns(3)
+
 with col4:
     pie_chart_donut(df, "Modalidad", "Distribución por Modalidad", "pie4")
 
+with col5:
+    pie_chart_donut(df, "Tramo Post.", "Distribución por Tramo", "pie5")
 
-
+with col6:
+    pie_chart_donut(df, "Agrup. Post.", "Distribución por Agrupamiento", "pie6")
 
 #----------------------
 postulaciones = pd.DataFrame(sheet.worksheet("tabla-dash").get_all_records())
