@@ -152,7 +152,7 @@ def pie_chart_donut(df, columna, titulo, key_id):
     data = conteo.to_dict(orient="records")
 
     # Detectar tema y color de texto
-    modo = st.get_option("theme.base")
+    modo = st.get_option("theme.base") or "light"
     color_texto = "#000000" if modo == "light" else "#FFFFFF"
 
     option = {
