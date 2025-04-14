@@ -303,23 +303,9 @@ with col4:
     pie_chart_donut(df, "Modalidad", "Distribución por Modalidad", "pie4")
 
 #----------------------
+postulaciones = pd.DataFrame(sheet.worksheet("tabla-dash").get_all_records())
+
 st.markdown("<div style='margin-top: 60px;'></div>", unsafe_allow_html=True)
 
-st.markdown("""
-<div style="
-    background-color: #f0f2f6;
-    padding: 12px 20px;
-    border-left: 5px solid #007acc;
-    border-radius: 6px;
-    margin-bottom: 10px;
-    font-weight: bold;
-    color: #1f4e79;
-    font-size: 16px;
-">
-🔎 VER DETALLES DE POSTULACIONES
-</div>
-""", unsafe_allow_html=True)
-
-with st.expander("📄 VER DETALLES DE POSTULACIONES"):
+with st.expander("🔵 VER DETALLES DE POSTULACIONES"):
     st.dataframe(postulaciones, use_container_width=True)
-
