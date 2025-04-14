@@ -15,6 +15,9 @@ st.set_page_config(page_title="Dashboard de Tramos", layout="wide")
 
 st.sidebar.image("logo capa.png", use_container_width=True)
 
+modo = st.get_option("theme.base")
+color_texto = "#000000" if modo == "light" else "#FFFFFF"
+
 
 # ---- CARGAR CONFIGURACIÓN DESDE YAML ----
 with open("config.yaml") as file:
@@ -148,6 +151,9 @@ valor_col8 = 0  # APROBADAS
 
 # --- FUNCIÓN PARA TARJETAS CON GRADIENTE ---
 def tarjeta_gradiente_simple(titulo, valor, gradiente):
+    modo = st.get_option("theme.base") or "light"
+    color_texto = "#000000" if modo == "light" else "#FFFFFF"
+
     st.markdown(f"""
         <div style="
             background: {gradiente};
@@ -157,8 +163,8 @@ def tarjeta_gradiente_simple(titulo, valor, gradiente):
             box-shadow: 0px 4px 10px rgba(0,0,0,0.25);
             margin-bottom: 25px;
         ">
-            <div style="font-size: 14px; color: white; font-weight: 700;">{titulo}</div>
-            <div style="font-size: 34px; color: white; font-weight: bold;">{valor}</div>
+            <div style="font-size: 14px; color: {color_texto}; font-weight: 700;">{titulo}</div>
+            <div style="font-size: 34px; color: {color_texto}; font-weight: bold;">{valor}</div>
         </div>
     """, unsafe_allow_html=True)
 
@@ -194,43 +200,6 @@ with col8:
 
 
 st.markdown("<div style='margin-top: 50px;'></div>", unsafe_allow_html=True)
-
-import plotly.graph_objects as go
-from plotly.subplots import make_subplots
-
-# Datos de ejemplo
-valores = [20, 40, 60, 80]
-colores = ["purple", "red", "blue", "green"]
-
-# Crear 4 gráficos de tipo gauge en una fila
-fig = make_subplots(rows=1, cols=4, specs=[[{'type': 'indicator'}]*4])
-
-for i, (valor, color) in enumerate(zip(valores, colores)):
-    fig.add_trace(go.Indicator(
-        mode="gauge+number",
-        value=valor,
-        number={'suffix': "%", 'font': {'size': 36}},
-        gauge={
-            'axis': {'range': [0, 100], 'tickwidth': 1},
-            'bar': {'color': color, 'thickness': 0.3},
-            'bgcolor': "lightgray",
-            'borderwidth': 2,
-            'bordercolor': "white",
-        },
-        title={'text': "Lorem Ipsum", 'font': {'size': 18}}
-    ), row=1, col=i+1)
-
-# Estilo general
-fig.update_layout(
-    height=300,
-    margin=dict(t=20, b=20, l=10, r=10),
-)
-
-st.plotly_chart(fig, use_container_width=True)
-
-
-modo = st.get_option("theme.base")
-color_texto = "#000000" if modo == "light" else "#FFFFFF"
 
 # --- FUNCIÓN PARA GRÁFICOS PIE ---
 def pie_chart_donut(df, columna, titulo, key_id):
