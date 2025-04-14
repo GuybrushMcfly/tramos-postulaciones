@@ -126,8 +126,8 @@ def tarjeta_gradiente_simple(titulo, valor, gradiente):
             box-shadow: 0px 4px 10px rgba(0,0,0,0.25);
             margin-bottom: 25px;
         ">
-            <div style="font-size: 20px; color: white; font-weight: 700;">{titulo}</div>
-            <div style="font-size: 42px; color: white; font-weight: bold;">{valor}</div>
+            <div style="font-size: 15px; color: white; font-weight: 700;">{titulo}</div>
+            <div style="font-size: 35px; color: white; font-weight: bold;">{valor}</div>
         </div>
     """, unsafe_allow_html=True)
 
