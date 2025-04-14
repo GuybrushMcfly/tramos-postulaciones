@@ -3,17 +3,26 @@ import pandas as pd
 import gspread
 from google.oauth2.service_account import Credentials
 
+# ---- CONFIGURACIÓN DE PÁGINA ----
 st.set_page_config(page_title="Lectura de Google Sheets", layout="centered")
 st.title("📄 Lectura de los primeros 10 registros")
 
-# ID de la hoja
+# ---- PARÁMETROS ----
 SHEET_ID = "11--jD47K72s9ddt727kYd9BhRmAOM7qXEUB60SX69UA"
-NOMBRE_HOJA = "Postulaciones"  # Cambiá esto si tu hoja se llama diferente
-RANGO = "A1:M10"  # Primeros 10 registros desde la columna A
+NOMBRE_HOJA = "Postulaciones"
 
-# Cargar credenciales
-creds = Credentials.from_service_account_file("credenciales_google.json", scopes=["https://www.googleapis.com/auth/spreadsheets.readonly"])
-cliente = gspread.authorize(creds)
+# ---- AUTORIZACIÓN CON SECRETOS ----
+scope = ["https://www.googleapis.com/auth/spreadsheets.readonly"]
+creds = Credentials.from_service_account_info(st.secrets["google_credentials"], scopes=scope)
+gc = gspread.authorize(creds)
+
+# ---- CARGA DE DATOS ----
+sheet = gc.open_by_key(SHEET_ID).worksheet(NOMBRE_HOJA)
+df = pd.DataFrame(sheet.get_all_records())
+
+# ---- MOSTRAR PRIMEROS 10 REGISTROS ----
+st.dataframe(df.head(10))
+
 
 # Leer los datos
 hoja = cliente.open_by_key(SHEET_ID)
