@@ -273,7 +273,7 @@ def pie_chart_donut(df, columna, titulo, key_id):
         ]
     }
 
-    st_echarts(options=option, height="370px", key=key_id)
+    st_echarts(options=option, height="330px", key=key_id)
 
 # --- GRILLA 3x3 DE PIE CHARTS ---
 
