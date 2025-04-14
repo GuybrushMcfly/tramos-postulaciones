@@ -235,7 +235,7 @@ def pie_chart_donut(df, columna, titulo, key_id):
         },
         "legend": {
             "orient": "horizontal",
-            "top": "90%",
+            "top": "86%",
             "left": "center",
             "padding": [20, 0, 0, 0],
             "textStyle": {"color": color_texto}
@@ -273,7 +273,7 @@ def pie_chart_donut(df, columna, titulo, key_id):
         ]
     }
 
-    st_echarts(options=option, height="330px", key=key_id)
+    st_echarts(options=option, height="360px", key=key_id)
 
 # --- GRILLA 3x3 DE PIE CHARTS ---
 
