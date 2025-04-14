@@ -67,14 +67,6 @@ df = pd.DataFrame(data)
 # --- FILTROS EN LA BARRA LATERAL ---
 st.sidebar.header("Filtros")
 
-# Aplicar todos los filtros antes del análisis
-df = df[
-    df["Tramo Post."].isin(tramo_seleccionado) &
-    df["Periodo Valoración"].isin(periodo_seleccionado) &
-    ~df["Estado"].isin(["Pendiente", "Anulada"])
-]
-
-
 # Filtro múltiple por TRAMO
 st.sidebar.subheader("TRAMO")
 tramos = df["Tramo Post."].dropna().unique()
@@ -92,6 +84,13 @@ periodo_seleccionado = st.sidebar.multiselect(
     options=sorted(periodos),
     default=sorted(periodos)
 )
+
+# Aplicar todos los filtros antes del análisis
+df = df[
+    df["Tramo Post."].isin(tramo_seleccionado) &
+    df["Periodo Valoración"].isin(periodo_seleccionado) &
+    ~df["Estado"].isin(["Pendiente", "Anulada"])
+]
 
 # Agrupamiento de Tipo Comité
 df["Tipo Comité - Agrupado"] = df["Tipo Comité"].apply(lambda x: x if x in [
