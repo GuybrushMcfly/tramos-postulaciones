@@ -302,3 +302,9 @@ with col3:
 with col4:
     pie_chart_donut(df, "Modalidad", "Distribución por Modalidad", "pie4")
 
+#----------------------
+st.markdown("<div style='margin-top: 60px;'></div>", unsafe_allow_html=True)
+
+with st.expander("📄 VER DATOS DE LA HOJA 'Postulaciones'"):
+    st.dataframe(postulaciones, use_container_width=True)
+
