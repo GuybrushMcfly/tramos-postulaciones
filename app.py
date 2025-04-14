@@ -42,10 +42,15 @@ elif st.session_state["authentication_status"] is None:
     st.stop()
 
 # ---- CARGA DE DATOS ----
-scope = ["https://www.googleapis.com/auth/spreadsheets"]
-credenciales_dict = json.loads(st.secrets["GOOGLE_CREDS"])
+#scope = ["https://www.googleapis.com/auth/spreadsheets"]
+#credenciales_dict = json.loads(st.secrets["GOOGLE_CREDS"])
+#creds = Credentials.from_service_account_info(credenciales_dict, scopes=scope)
+#gc = gspread.authorize(creds)
+
+credenciales_dict = dict(st.secrets["GOOGLE_CREDS"])
+scope = ["https://www.googleapis.com/auth/spreadsheets.readonly"]
 creds = Credentials.from_service_account_info(credenciales_dict, scopes=scope)
-gc = gspread.authorize(creds)
+
 
 # Abro la planilla
 sheet = gc.open_by_key("111--jD47K72s9ddt727kYd9BhRmAOM7qXEUB60SX69UA")
