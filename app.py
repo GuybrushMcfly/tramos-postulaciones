@@ -13,7 +13,7 @@ st.set_page_config(page_title="Dashboard de Tramos", layout="wide")
 
 # ---- CARGAR CONFIGURACIÓN DESDE YAML ----
 #with open("config.yaml") as file:
-    config = yaml.load(file, Loader=SafeLoader)
+#    config = yaml.load(file, Loader=SafeLoader)
     
 # 👉 Mostrar el hash cargado para verificar (solo durante pruebas)
 #st.code(config['credentials']['usernames']['carlos']['password'])
