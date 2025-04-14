@@ -305,6 +305,21 @@ with col4:
 #----------------------
 st.markdown("<div style='margin-top: 60px;'></div>", unsafe_allow_html=True)
 
-with st.expander("📄 VER DATOS DE LA HOJA 'Postulaciones'"):
+st.markdown("""
+<div style="
+    background-color: #f0f2f6;
+    padding: 12px 20px;
+    border-left: 5px solid #007acc;
+    border-radius: 6px;
+    margin-bottom: 10px;
+    font-weight: bold;
+    color: #1f4e79;
+    font-size: 16px;
+">
+🔎 VER DETALLES DE POSTULACIONES
+</div>
+""", unsafe_allow_html=True)
+
+with st.expander("📄 VER DETALLES DE POSTULACIONES"):
     st.dataframe(postulaciones, use_container_width=True)
 
