@@ -61,19 +61,35 @@ worksheet = gc.open_by_key("11--jD47K72s9ddt727kYd9BhRmAOM7qXEUB60SX69UA").sheet
 data = worksheet.get_all_records()
 df = pd.DataFrame(data)
 
-# Definimos los valores reales para las dos primeras tarjetas
+import streamlit as st
+import pandas as pd
+
+# Cargar datos desde la hoja
+data = worksheet.get_all_records()
+df = pd.DataFrame(data)
+
+# Estados válidos para total postulaciones e históricos
 estados_validos = ["Presentada", "En Actividad Valoración", "En Actividad Capacitación"]
 
-# TOTAL POSTULACIONES
-df_col1 = df[df["Estado"].isin(estados_validos)]
-valor_col1 = df_col1["Agente"].count()
+# Valores reales según lógica
+valor_col1 = df[df["Estado"].isin(estados_validos)]["Agente"].count()
 
-# POSTULACIONES HISTÓRICOS (filtrando además por Ingresante == "SI")
-df_col2 = df_col1[df_col1["Ingresante"] == "SI"]
-valor_col2 = df_col2["Agente"].count()
+valor_col2 = df[
+    (df["Estado"].isin(estados_validos)) &
+    (df["Ingresante"] == "")
+]["Agente"].count()
 
-# Simulación de valores para las otras tarjetas
-valor_ficticio = 233
+valor_col3 = df[
+    (df["Estado"].isin(estados_validos)) &
+    (df["Ingresante"] == "SI")
+]["Agente"].count()
+
+valor_col4 = 0  # MONTO ESTIMADO (placeholder)
+
+valor_col5 = df[df["Estado"] == "Presentada"]["Agente"].count()
+valor_col6 = df[df["Estado"] == "En Actividad Capacitación"]["Agente"].count()
+valor_col7 = df[df["Estado"] == "En Actividad Valoración"]["Agente"].count()
+valor_col8 = 0  # APROBADAS (placeholder)
 
 # Función para tarjeta con gradiente
 def tarjeta_gradiente_simple(titulo, valor, gradiente):
@@ -100,22 +116,23 @@ with col2:
     tarjeta_gradiente_simple("POSTULACIONES HISTÓRICOS", valor_col2, "linear-gradient(135deg, #FF416C, #FF4B2B)")
 
 with col3:
-    tarjeta_gradiente_simple("POSTULACIONES INGRESANTES", valor_ficticio, "linear-gradient(135deg, #FDC830, #F37335)")
+    tarjeta_gradiente_simple("POSTULACIONES INGRESANTES", valor_col3, "linear-gradient(135deg, #FDC830, #F37335)")
 
 with col4:
-    tarjeta_gradiente_simple("MONTO ESTIMADO", valor_ficticio, "linear-gradient(135deg, #B24592, #F15F79)")
+    tarjeta_gradiente_simple("MONTO ESTIMADO", valor_col4, "linear-gradient(135deg, #B24592, #F15F79)")
 
 # Layout fila 2
 col5, col6, col7, col8 = st.columns(4)
 
 with col5:
-    tarjeta_gradiente_simple("PRESENTADAS", valor_ficticio, "linear-gradient(135deg, #00C9FF, #92FE9D)")
+    tarjeta_gradiente_simple("PRESENTADAS", valor_col5, "linear-gradient(135deg, #00C9FF, #92FE9D)")
 
 with col6:
-    tarjeta_gradiente_simple("EN ACTIVIDAD CAPACITACION", valor_ficticio, "linear-gradient(135deg, #667EEA, #764BA2)")
+    tarjeta_gradiente_simple("EN ACTIVIDAD CAPACITACION", valor_col6, "linear-gradient(135deg, #667EEA, #764BA2)")
 
 with col7:
-    tarjeta_gradiente_simple("EN ACTIVIDAD VALORACION", valor_ficticio, "linear-gradient(135deg, #F7971E, #FFD200)")
+    tarjeta_gradiente_simple("EN ACTIVIDAD VALORACION", valor_col7, "linear-gradient(135deg, #F7971E, #FFD200)")
 
 with col8:
-    tarjeta_gradiente_simple("APROBADAS", valor_ficticio, "linear-gradient(135deg, #00F260, #0575E6)")
+    tarjeta_gradiente_simple("APROBADAS", valor_col8, "linear-gradient(135deg, #00F260, #0575E6)")
+
