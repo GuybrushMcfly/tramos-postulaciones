@@ -15,19 +15,19 @@ from streamlit_echarts import st_echarts
 st.set_page_config(page_title="Dashboard de Tramos", layout="wide")
 
 # ---- CARGAR CONFIGURACIÓN DESDE YAML ----
-#with open("config.yaml") as file:
-#    config = yaml.load(file, Loader=SafeLoader)
+with open("config.yaml") as file:
+    config = yaml.load(file, Loader=SafeLoader)
     
 # 👉 Mostrar el hash cargado para verificar (solo durante pruebas)
-#st.code(config['credentials']['usernames']['carlos']['password'])
+st.code(config['credentials']['usernames']['carlos']['password'])
 
 # ---- CREAR OBJETO AUTENTICADOR ----
-#authenticator = stauth.Authenticate(
-#    credentials=config['credentials'],
-#    cookie_name=config['cookie']['name'],
-#    cookie_key=config['cookie']['key'],
-#    cookie_expiry_days=config['cookie']['expiry_days']
-#)
+authenticator = stauth.Authenticate(
+    credentials=config['credentials'],
+    cookie_name=config['cookie']['name'],
+    cookie_key=config['cookie']['key'],
+    cookie_expiry_days=config['cookie']['expiry_days']
+)
 
 # ---- LOGIN ----
 #authenticator.login()
