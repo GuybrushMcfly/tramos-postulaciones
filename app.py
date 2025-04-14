@@ -13,24 +13,21 @@ NOMBRE_HOJA = "Postulaciones"
 
 # ---- AUTORIZACIÓN CON SECRETOS ----
 scope = ["https://www.googleapis.com/auth/spreadsheets.readonly"]
-creds = Credentials.from_service_account_info(st.secrets["google_credentials"], scopes=scope)
+creds = Credentials.from_service_account_info(
+    st.secrets["google_credentials"], scopes=scope
+)
 gc = gspread.authorize(creds)
 
 # ---- CARGA DE DATOS ----
-sheet = gc.open_by_key(SHEET_ID).worksheet(NOMBRE_HOJA)
-df = pd.DataFrame(sheet.get_all_records())
+try:
+    worksheet = gc.open_by_key(SHEET_ID).worksheet(NOMBRE_HOJA)
+    data = worksheet.get_all_records()
+    df = pd.DataFrame(data)
 
-# ---- MOSTRAR PRIMEROS 10 REGISTROS ----
-st.dataframe(df.head(10))
+    if not df.empty:
+        st.dataframe(df.head(10))
+    else:
+        st.warning("La hoja está vacía.")
 
-
-# Leer los datos
-hoja = cliente.open_by_key(SHEET_ID)
-datos = hoja.worksheet(NOMBRE_HOJA).get(RANGO)
-
-# Convertir a DataFrame
-if datos:
-    df = pd.DataFrame(datos[1:], columns=datos[0])
-    st.dataframe(df)
-else:
-    st.warning("No se encontraron datos.")
+except Exception as e:
+    st.error(f"Ocurrió un error al acceder a la hoja de cálculo: {e}")
