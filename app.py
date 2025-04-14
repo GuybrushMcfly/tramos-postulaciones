@@ -7,7 +7,6 @@ import streamlit as st
 import streamlit_authenticator as stauth
 import yaml
 from yaml.loader import SafeLoader
-from streamlit.components.v1 import html
 
 
 # ---- CONFIGURACIÓN DE PÁGINA ----
@@ -93,8 +92,32 @@ valor_col7 = df[df["Estado"] == "En Actividad Valoración"]["Agente"].count()
 valor_col8 = 0  # APROBADAS
 
 # --- FUNCIÓN CON CONTADOR ANIMADO ---
-def tarjeta_gradiente_animated(titulo, valor, gradiente, id):
-    html(f"""
+# Estados válidos para total postulaciones e históricos
+estados_validos = ["Presentada", "En Actividad Valoración", "En Actividad Capacitación"]
+
+# Valores reales según lógica
+valor_col1 = df[df["Estado"].isin(estados_validos)]["Agente"].count()
+
+valor_col2 = df[
+    (df["Estado"].isin(estados_validos)) &
+    (df["Ingresante"] == "")
+]["Agente"].count()
+
+valor_col3 = df[
+    (df["Estado"].isin(estados_validos)) &
+    (df["Ingresante"] == "SI")
+]["Agente"].count()
+
+valor_col4 = 0  # MONTO ESTIMADO
+
+valor_col5 = df[df["Estado"] == "Presentada"]["Agente"].count()
+valor_col6 = df[df["Estado"] == "En Actividad Capacitación"]["Agente"].count()
+valor_col7 = df[df["Estado"] == "En Actividad Valoración"]["Agente"].count()
+valor_col8 = 0  # APROBADAS
+
+# Función para tarjeta con gradiente
+def tarjeta_gradiente_simple(titulo, valor, gradiente):
+    st.markdown(f"""
         <div style="
             background: {gradiente};
             padding: 25px;
@@ -103,54 +126,40 @@ def tarjeta_gradiente_animated(titulo, valor, gradiente, id):
             box-shadow: 0px 4px 10px rgba(0,0,0,0.25);
             margin-bottom: 25px;
         ">
-            <div style="font-size: 15px; color: white; font-weight: 700;">{titulo}</div>
-            <div id="contador-{id}" style="font-size: 42px; color: white; font-weight: bold;">0</div>
+            <div style="font-size: 20px; color: white; font-weight: 700;">{titulo}</div>
+            <div style="font-size: 42px; color: white; font-weight: bold;">{valor}</div>
         </div>
-        <script>
-        var count = 0;
-        var target = {valor};
-        var duration = 1000;
-        var step = Math.max(Math.floor(duration / target), 20);
-        var element = document.getElementById("contador-{id}");
+    """, unsafe_allow_html=True)
 
-        var interval = setInterval(function() {{
-            count++;
-            element.innerText = count.toLocaleString();
-            if (count >= target) {{
-                clearInterval(interval);
-            }}
-        }}, step);
-        </script>
-    """, height=150)
-
-# --- TARJETAS FILA 1 ---
+# Layout fila 1
 col1, col2, col3, col4 = st.columns(4)
 
 with col1:
-    tarjeta_gradiente_animated("TOTAL POSTULACIONES", valor_col1, "linear-gradient(135deg, #00B4DB, #0083B0)", id="1")
+    tarjeta_gradiente_simple("TOTAL POSTULACIONES", valor_col1, "linear-gradient(135deg, #00B4DB, #0083B0)")
 
 with col2:
-    tarjeta_gradiente_animated("POSTULACIONES HISTÓRICOS", valor_col2, "linear-gradient(135deg, #FF5858, #FB5895)", id="2")
+    tarjeta_gradiente_simple("POSTULACIONES HISTÓRICOS", valor_col2, "linear-gradient(135deg, #FF5858, #FB5895)")
 
 with col3:
-    tarjeta_gradiente_animated("POSTULACIONES INGRESANTES", valor_col3, "linear-gradient(135deg, #FDC830, #F37335)", id="3")
+    tarjeta_gradiente_simple("POSTULACIONES INGRESANTES", valor_col3, "linear-gradient(135deg, #FDC830, #F37335)")
 
 with col4:
-    tarjeta_gradiente_animated("MONTO ESTIMADO", valor_col4, "linear-gradient(135deg, #C33764, #1D2671)", id="4")
+    tarjeta_gradiente_simple("MONTO ESTIMADO", valor_col4, "linear-gradient(135deg, #C33764, #1D2671)")
 
-# --- TARJETAS FILA 2 ---
+# Layout fila 2
 col5, col6, col7, col8 = st.columns(4)
 
 with col5:
-    tarjeta_gradiente_animated("PRESENTADAS", valor_col5, "linear-gradient(135deg, #00F260, #0575E6)", id="5")
+    tarjeta_gradiente_simple("PRESENTADAS", valor_col5, "linear-gradient(135deg, #00F260, #0575E6)")
 
 with col6:
-    tarjeta_gradiente_animated("EN ACTIVIDAD CAPACITACION", valor_col6, "linear-gradient(135deg, #7F00FF, #E100FF)", id="6")
+    tarjeta_gradiente_simple("EN ACTIVIDAD CAPACITACION", valor_col6, "linear-gradient(135deg, #7F00FF, #E100FF)")
 
 with col7:
-    tarjeta_gradiente_animated("EN ACTIVIDAD VALORACION", valor_col7, "linear-gradient(135deg, #FFE000, #799F0C)", id="7")
+    tarjeta_gradiente_simple("EN ACTIVIDAD VALORACION", valor_col7, "linear-gradient(135deg, #FFE000, #799F0C)")
 
 with col8:
-    tarjeta_gradiente_animated("APROBADAS", valor_col8, "linear-gradient(135deg, #43C6AC, #191654)", id="8")
+    tarjeta_gradiente_simple("APROBADAS", valor_col8, "linear-gradient(135deg, #43C6AC, #191654)")
+
 
 
