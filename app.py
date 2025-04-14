@@ -58,14 +58,7 @@ gc = gspread.authorize(creds)
 # Abro la planilla
 sheet = gc.open_by_key("11--jD47K72s9ddt727kYd9BhRmAOM7qXEUB60SX69UA")
 postulaciones = pd.DataFrame(sheet.worksheet("Postulaciones").get_all_records())
-
-
 worksheet = gc.open_by_key("11--jD47K72s9ddt727kYd9BhRmAOM7qXEUB60SX69UA").sheet1
-data = worksheet.get_all_records()
-df = pd.DataFrame(data)
-
-import streamlit as st
-import pandas as pd
 
 # Cargar datos desde la hoja
 data = worksheet.get_all_records()
@@ -92,6 +85,18 @@ valor_col5 = df[df["Estado"] == "Presentada"]["Agente"].count()
 valor_col6 = df[df["Estado"] == "En Actividad Capacitación"]["Agente"].count()
 valor_col7 = df[df["Estado"] == "En Actividad Valoración"]["Agente"].count()
 valor_col8 = 0  # APROBADAS
+
+# --- FILTRO EN BARRA LATERAL ---
+st.sidebar.header("Filtros")
+
+# Filtro por Periodo Valoración
+periodos = df["Periodo Valoración"].dropna().unique()
+periodo_seleccionado = st.sidebar.selectbox("Seleccionar Periodo Valoración", options=sorted(periodos))
+
+# Aplicar filtro
+df = df[df["Periodo Valoración"] == periodo_seleccionado]
+
+
 
 # --- FUNCIÓN PARA TARJETAS CON GRADIENTE ---
 def tarjeta_gradiente_simple(titulo, valor, gradiente):
