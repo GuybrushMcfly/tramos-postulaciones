@@ -64,30 +64,41 @@ worksheet = gc.open_by_key("11--jD47K72s9ddt727kYd9BhRmAOM7qXEUB60SX69UA").sheet
 data = worksheet.get_all_records()
 df = pd.DataFrame(data)
 
-# --- FILTRO EN BARRA LATERAL ---
+# --- FILTROS EN LA BARRA LATERAL ---
 st.sidebar.header("Filtros")
 
-# Filtro por Periodo Valoración (único)
-periodos = df["Periodo Valoración"].dropna().unique()
-periodo_seleccionado = st.sidebar.selectbox("Seleccionar Periodo Valoración", options=sorted(periodos))
-
-# Filtro por Tramo Post. (múltiple)
+# Filtro múltiple por TRAMO
+st.sidebar.subheader("TRAMO")
 tramos = df["Tramo Post."].dropna().unique()
-tramo_seleccionado = st.sidebar.multiselect("Seleccionar Tramo Post.", options=sorted(tramos), default=sorted(tramos))
+tramo_seleccionado = st.sidebar.multiselect(
+    "Seleccionar uno o más tramos",
+    options=sorted(tramos),
+    default=sorted(tramos)
+)
 
-# Aplicar filtros antes de cualquier análisis
+# Filtro múltiple por PERIODO
+st.sidebar.subheader("PERIODO")
+periodos = df["Periodo Valoración"].dropna().unique()
+periodo_seleccionado = st.sidebar.multiselect(
+    "Seleccionar uno o más periodos",
+    options=sorted(periodos),
+    default=sorted(periodos)
+)
+
+# Aplicar todos los filtros antes del análisis
 df = df[
-    (df["Periodo Valoración"] == periodo_seleccionado) &
-    (df["Tramo Post."].isin(tramo_seleccionado)) &
-    (~df["Estado"].isin(["Pendiente", "Anulada"]))
+    df["Tramo Post."].isin(tramo_seleccionado) &
+    df["Periodo Valoración"].isin(periodo_seleccionado) &
+    ~df["Estado"].isin(["Pendiente", "Anulada"])
 ]
 
-# Agrupar valores personalizados en Tipo Comité
+# Agrupamiento de Tipo Comité
 df["Tipo Comité - Agrupado"] = df["Tipo Comité"].apply(lambda x: x if x in [
     "Jurisdiccional (INDEC)",
     "Transversal (INAP)",
     "Funciones informáticas (ONTI)"
 ] else "Otros (EXTERNOS)")
+
 
 
 
