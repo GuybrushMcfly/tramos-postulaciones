@@ -93,29 +93,52 @@ valor_col6 = df[df["Estado"] == "En Actividad Capacitación"]["Agente"].count()
 valor_col7 = df[df["Estado"] == "En Actividad Valoración"]["Agente"].count()
 valor_col8 = 0  # APROBADAS
 
-# --- FUNCIÓN CON CONTADOR ANIMADO ---
-# Estados válidos para total postulaciones e históricos
-estados_validos = ["Presentada", "En Actividad Valoración", "En Actividad Capacitación"]
+# --- FUNCIÓN PARA TARJETAS CON GRADIENTE ---
+def tarjeta_gradiente_simple(titulo, valor, gradiente):
+    st.markdown(f"""
+        <div style="
+            background: {gradiente};
+            padding: 25px;
+            border-radius: 15px;
+            height: 120px;
+            box-shadow: 0px 4px 10px rgba(0,0,0,0.25);
+            margin-bottom: 25px;
+        ">
+            <div style="font-size: 18px; color: white; font-weight: 700;">{titulo}</div>
+            <div style="font-size: 37px; color: white; font-weight: bold;">{valor}</div>
+        </div>
+    """, unsafe_allow_html=True)
 
-# Valores reales según lógica
-valor_col1 = df[df["Estado"].isin(estados_validos)]["Agente"].count()
+# --- FILA 1 ---
+col1, col2, col3, col4 = st.columns(4)
 
-valor_col2 = df[
-    (df["Estado"].isin(estados_validos)) &
-    (df["Ingresante"] == "")
-]["Agente"].count()
+with col1:
+    tarjeta_gradiente_simple("TOTAL POSTULACIONES", valor_col1, "linear-gradient(135deg, #00B4DB, #0083B0)")
 
-valor_col3 = df[
-    (df["Estado"].isin(estados_validos)) &
-    (df["Ingresante"] == "SI")
-]["Agente"].count()
+with col2:
+    tarjeta_gradiente_simple("POST. HISTÓRICOS", valor_col2, "linear-gradient(135deg, #FF5858, #FB5895)")
 
-valor_col4 = 0  # MONTO ESTIMADO
+with col3:
+    tarjeta_gradiente_simple("POST. INGRESANTES", valor_col3, "linear-gradient(135deg, #FDC830, #F37335)")
 
-valor_col5 = df[df["Estado"] == "Presentada"]["Agente"].count()
-valor_col6 = df[df["Estado"] == "En Actividad Capacitación"]["Agente"].count()
-valor_col7 = df[df["Estado"] == "En Actividad Valoración"]["Agente"].count()
-valor_col8 = 0  # APROBADAS
+with col4:
+    tarjeta_gradiente_simple("MONTO ESTIMADO", valor_col4, "linear-gradient(135deg, #C33764, #1D2671)")
+
+# --- FILA 2 ---
+col5, col6, col7, col8 = st.columns(4)
+
+with col5:
+    tarjeta_gradiente_simple("PRESENTADAS", valor_col5, "linear-gradient(135deg, #00F260, #0575E6)")
+
+with col6:
+    tarjeta_gradiente_simple("EN ACTIVIDAD CAPACITACION", valor_col6, "linear-gradient(135deg, #7F00FF, #E100FF)")
+
+with col7:
+    tarjeta_gradiente_simple("EN ACTIVIDAD VALORACION", valor_col7, "linear-gradient(135deg, #FFE000, #799F0C)")
+
+with col8:
+    tarjeta_gradiente_simple("APROBADAS", valor_col8, "linear-gradient(135deg, #43C6AC, #191654)")
+
 
 
 
