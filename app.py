@@ -307,5 +307,5 @@ postulaciones = pd.DataFrame(sheet.worksheet("tabla-dash").get_all_records())
 
 st.markdown("<div style='margin-top: 60px;'></div>", unsafe_allow_html=True)
 
-with st.expander("🔵 VER DETALLES DE POSTULACIONES"):
+with st.expander("🔎 VER DETALLES DE POSTULACIONES 🔎"):
     st.dataframe(postulaciones, use_container_width=True, hide_index=True)
