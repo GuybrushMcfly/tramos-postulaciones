@@ -215,7 +215,7 @@ def pie_chart_donut(df, columna, titulo, key_id):
 
     # Detectar tema y color de texto
     modo = st.get_option("theme.base") or "light"
-    color_texto = "#000000" if modo == "light" else "#FFFFFF"
+    color_texto = "#000000" if modo == "light" else "#CCCCCC"  # antes era #FFFFFF
 
     option = {
         "title": {
