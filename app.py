@@ -62,7 +62,7 @@ data = worksheet.get_all_records()
 df = pd.DataFrame(data)
 
 # Contar agentes
-total_agentes = df["Agentes"].count()
+total_agentes = df["Agente"].count()
 
 # Layout de las tarjetas
 col1, col2, col3, col4 = st.columns(4)
