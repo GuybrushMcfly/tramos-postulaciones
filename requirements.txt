@@ -13,5 +13,4 @@ textblob
 nltk
 pyyaml
 streamlit-echarts
-
-
+plotly
