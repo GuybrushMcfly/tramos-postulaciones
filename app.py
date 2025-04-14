@@ -165,23 +165,21 @@ with col8:
 
 
 
-# Función reutilizable para pie charts con líneas limpias
+from streamlit_echarts import st_echarts
+
+# Función reutilizable para cada pie chart
 def pie_chart_donut(df, columna, titulo, key_id):
     conteo = df[columna].value_counts().reset_index()
     conteo.columns = ["name", "value"]
     data = conteo.to_dict(orient="records")
-
-    st.markdown(f"### {titulo}")
 
     option = {
         "tooltip": {
             "trigger": "item"
         },
         "legend": {
-            #"top": "5%",
-            #"left": "center"
-            "show": False
-
+            "top": "5%",
+            "left": "center"
         },
         "series": [
             {
@@ -195,19 +193,18 @@ def pie_chart_donut(df, columna, titulo, key_id):
                     "borderWidth": 2
                 },
                 "label": {
-                    "show": True,
-                    "formatter": "{b}: {d}%",
-                    "position": "outside"
-                },
-                "labelLine": {
-                    "show": True,
-                    "length": 20,
-                    "length2": 10
+                    "show": False,
+                    "position": "center"
                 },
                 "emphasis": {
                     "label": {
-                        "show": False
+                        "show": True,
+                        "fontSize": 20,
+                        "fontWeight": "bold"
                     }
+                },
+                "labelLine": {
+                    "show": True
                 },
                 "data": data
             }
@@ -216,7 +213,7 @@ def pie_chart_donut(df, columna, titulo, key_id):
 
     st_echarts(options=option, height="400px", key=key_id)
 
-# --- PRIMERA FILA DE GRÁFICOS ---
+# --- PRIMERA FILA ---
 col1, col2 = st.columns(2)
 
 with col1:
@@ -225,7 +222,7 @@ with col1:
 with col2:
     pie_chart_donut(df, "Tipo Comité", "Distribución por Tipo Comité", "pie2")
 
-# --- SEGUNDA FILA DE GRÁFICOS ---
+# --- SEGUNDA FILA ---
 col3, col4 = st.columns(2)
 
 with col3:
@@ -233,4 +230,3 @@ with col3:
 
 with col4:
     pie_chart_donut(df, "Modalidad", "Distribución por Modalidad", "pie4")
-
