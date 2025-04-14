@@ -19,7 +19,7 @@ with open("config.yaml") as file:
     config = yaml.load(file, Loader=SafeLoader)
     
 # 👉 Mostrar el hash cargado para verificar (solo durante pruebas)
-st.code(config['credentials']['usernames']['carlos']['password'])
+#st.code(config['credentials']['usernames']['carlos']['password'])
 
 # ---- CREAR OBJETO AUTENTICADOR ----
 authenticator = stauth.Authenticate(
@@ -35,7 +35,7 @@ authenticator.login()
 if st.session_state["authentication_status"]:
     authenticator.logout("Cerrar sesión", "sidebar")
     st.sidebar.success(f"Bienvenido/a, {st.session_state['name']}")
-    st.title("📊 Dashboard de Encuestas de Opinión")
+    st.title("📊 Dashboard de Tramitaciones Tramo Escalafonario")
 ##    st.write("✅ Estás autenticado.")
 elif st.session_state["authentication_status"] is False:
     st.error("❌ Usuario o contraseña incorrectos.")
@@ -104,8 +104,8 @@ def tarjeta_gradiente_simple(titulo, valor, gradiente):
             box-shadow: 0px 4px 10px rgba(0,0,0,0.25);
             margin-bottom: 25px;
         ">
-            <div style="font-size: 18px; color: white; font-weight: 700;">{titulo}</div>
-            <div style="font-size: 37px; color: white; font-weight: bold;">{valor}</div>
+            <div style="font-size: 15px; color: white; font-weight: 700;">{titulo}</div>
+            <div style="font-size: 34px; color: white; font-weight: bold;">{valor}</div>
         </div>
     """, unsafe_allow_html=True)
 
