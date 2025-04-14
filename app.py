@@ -195,6 +195,46 @@ with col8:
 
 st.markdown("<div style='margin-top: 50px;'></div>", unsafe_allow_html=True)
 
+import streamlit as st
+import plotly.graph_objects as go
+from plotly.subplots import make_subplots
+
+# Configuración general de la app
+st.set_page_config(layout="wide")
+
+# Datos de ejemplo
+valores = [20, 40, 60, 80]
+colores = ["purple", "red", "blue", "green"]
+
+# Crear 4 gráficos de tipo gauge en una fila
+fig = make_subplots(rows=1, cols=4, specs=[[{'type': 'indicator'}]*4])
+
+for i, (valor, color) in enumerate(zip(valores, colores)):
+    fig.add_trace(go.Indicator(
+        mode="gauge+number",
+        value=valor,
+        number={'suffix': "%", 'font': {'size': 36}},
+        gauge={
+            'axis': {'range': [0, 100], 'tickwidth': 1},
+            'bar': {'color': color, 'thickness': 0.3},
+            'bgcolor': "lightgray",
+            'borderwidth': 2,
+            'bordercolor': "white",
+        },
+        title={'text': "Lorem Ipsum", 'font': {'size': 18}}
+    ), row=1, col=i+1)
+
+# Estilo general
+fig.update_layout(
+    height=300,
+    margin=dict(t=20, b=20, l=10, r=10),
+)
+
+st.plotly_chart(fig, use_container_width=True)
+
+
+
+
 modo = st.get_option("theme.base")
 color_texto = "#000000" if modo == "light" else "#FFFFFF"
 
