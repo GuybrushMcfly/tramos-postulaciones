@@ -12,3 +12,5 @@ wordcloud
 textblob
 nltk
 pyyaml
+streamlit-echarts
+
