@@ -64,85 +64,53 @@ df = pd.DataFrame(data)
 # Contar agentes
 total_agentes = df["Agente"].count()
 
-# Layout de las tarjetas
-col1, col2, col3, col4 = st.columns(4)
+# Simulación de valor para todos (cambiá por lo que corresponda)
+valor = 233
 
-with col1:
-    st.metric("TOTAL AGENTES", total_agentes)
-
-with col2:
-    st.metric("TOTAL AGENTES", total_agentes)
-
-with col3:
-    st.metric("TOTAL AGENTES", total_agentes)
-
-with col4:
-    st.metric("TOTAL AGENTES", total_agentes)
-
-
-# Leer datos desde la hoja (ya tenés conexión con gspread)
-data = worksheet.get_all_records()
-df = pd.DataFrame(data)
-
-# Contar agentes
-total_agentes = df["Agente"].count()
-
-# Layout de las tarjetas
-col1, col2, col3, col4 = st.columns(4)
-
-# Estilo de cada tarjeta
-def tarjeta(titulo, valor, color, icono):
-    st.markdown(f"""
-        <div style="background-color:{color}; padding:20px; border-radius:10px; text-align:left; height:140px; position:relative;">
-            <div style="font-size:14px; color:white; font-weight:bold;">{titulo}</div>
-            <div style="font-size:32px; color:white; font-weight:bold;">{valor}</div>
-            <div style="font-size:12px; color:white;">Monthly progress</div>
-            <div style="position:absolute; top:10px; right:10px; font-size:32px;">{icono}</div>
-        </div>
-    """, unsafe_allow_html=True)
-
-with col1:
-    tarjeta("TOTAL AGENTES", total_agentes, "#2196F3", "🧊")
-
-with col2:
-    tarjeta("ACTIVOS HOY", total_agentes, "#E91E63", "👥")
-
-with col3:
-    tarjeta("NUEVOS INGRESOS", total_agentes, "#FF9800", "🛒")
-
-with col4:
-    tarjeta("COMENTARIOS", total_agentes, "#9C27B0", "💬")
-
-
-# Simulación de datos
-total_agentes = 233
-
-# Definición de tarjetas con gradientes
-def tarjeta_gradiente(titulo, valor, gradiente, icono):
+# Función para tarjeta con gradiente
+def tarjeta_gradiente_simple(titulo, valor, gradiente):
     st.markdown(f"""
         <div style="
             background: {gradiente};
             padding: 20px;
             border-radius: 15px;
-            height: 140px;
-            position: relative;
+            height: 100px;
             box-shadow: 0px 4px 10px rgba(0,0,0,0.25);
         ">
             <div style="font-size: 14px; color: white; font-weight: bold;">{titulo}</div>
             <div style="font-size: 32px; color: white; font-weight: bold;">{valor}</div>
-            <div style="font-size: 12px; color: white;">Monthly progress</div>
-            <div style="position: absolute; top: 10px; right: 15px; font-size: 32px; opacity: 0.5;">{icono}</div>
         </div>
     """, unsafe_allow_html=True)
 
-# Layout en 4 columnas
+# Layout fila 1
 col1, col2, col3, col4 = st.columns(4)
 
 with col1:
-    tarjeta_gradiente("TOTAL AGENTES", total_agentes, "linear-gradient(135deg, #36D1DC, #5B86E5)", "🧊")
+    tarjeta_gradiente_simple("TOTAL POSTULACIONES", valor, "linear-gradient(135deg, #36D1DC, #5B86E5)")
 
 with col2:
-    tarjeta_gradiente("ACTIVOS HOY", total_agentes, "linear-gradient(135deg, #FF416C, #FF4B2B)", "👥")
+    tarjeta_gradiente_simple("POSTULACIONES HISTÓRICOS", valor, "linear-gradient(135deg, #FF416C, #FF4B2B)")
+
+with col3:
+    tarjeta_gradiente_simple("POSTULACIONES INGRESANTES", valor, "linear-gradient(135deg, #FDC830, #F37335)")
+
+with col4:
+    tarjeta_gradiente_simple("MONTO ESTIMADO", valor, "linear-gradient(135deg, #B24592, #F15F79)")
+
+# Layout fila 2
+col5, col6, col7, col8 = st.columns(4)
+
+with col5:
+    tarjeta_gradiente_simple("PRESENTADAS", valor, "linear-gradient(135deg, #00C9FF, #92FE9D)")
+
+with col6:
+    tarjeta_gradiente_simple("EN ACTIVIDAD CAPACITACION", valor, "linear-gradient(135deg, #667EEA, #764BA2)")
+
+with col7:
+    tarjeta_gradiente_simple("EN ACTIVIDAD VALORACION", valor, "linear-gradient(135deg, #F7971E, #FFD200)")
+
+with col8:
+    tarjeta_gradiente_simple("APROBADAS", valor, "linear-gradient(135deg, #00F260, #0575E6)")
 
 with col3:
     tarjeta_gradiente("NUEVOS INGRESOS", total_agentes, "linear-gradient(135deg, #FDC830, #F37335)", "🛒")
