@@ -229,55 +229,6 @@ fig.update_layout(
 st.plotly_chart(fig, use_container_width=True)
 
 
-
-
-import streamlit as st
-import plotly.graph_objects as go
-from plotly.subplots import make_subplots
-
-# Datos de ejemplo
-valores = [20, 40, 60, 80]
-colores = ["purple", "red", "blue", "green"]
-
-# Crear 4 gráficos tipo "gauge" en círculo completo
-fig = make_subplots(rows=1, cols=4, specs=[[{'type': 'indicator'}]*4])
-
-for i, (valor, color) in enumerate(zip(valores, colores)):
-    fig.add_trace(go.Indicator(
-        mode="gauge+number",
-        value=valor,
-        number={'suffix': "%", 'font': {'size': 28}},
-        title={'text': "Lorem Ipsum", 'font': {'size': 16}},
-        gauge={
-            'shape': "bullet",  # Esto evita que sea semicircular
-            'axis': {'range': [0, 100]},
-            'bar': {'color': color, 'thickness': 0.3},
-            'bgcolor': "lightgray",
-            'steps': [
-                {'range': [0, valor], 'color': color},
-                {'range': [valor, 100], 'color': "#f0f0f0"}
-            ],
-            'threshold': {
-                'line': {'color': color, 'width': 4},
-                'thickness': 0.75,
-                'value': valor
-            }
-        },
-        domain={'row': 0, 'column': i}
-    ), row=1, col=i+1)
-
-fig.update_layout(
-    grid={'rows': 1, 'columns': 4, 'pattern': "independent"},
-    height=300,
-    margin=dict(t=30, b=30, l=10, r=10),
-)
-
-st.plotly_chart(fig, use_container_width=True)
-
-
-
-
-
 modo = st.get_option("theme.base")
 color_texto = "#000000" if modo == "light" else "#FFFFFF"
 
@@ -302,7 +253,11 @@ def pie_chart_donut(df, columna, titulo, key_id):
                 "color": color_texto
             }
         },
-        "tooltip": {"trigger": "item"},
+        #"tooltip": {"trigger": "item"},
+        "tooltip": {
+            "trigger": "item",
+            "formatter": "{b}: {c} ({d}%)"
+        },
         "legend": {
             "orient": "horizontal",
             "top": "87%",
