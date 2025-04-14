@@ -298,7 +298,7 @@ st.markdown("<div style='margin-top: 60px;'></div>", unsafe_allow_html=True)
 with st.expander("🔎 VER DETALLES DE POSTULACIONES 🔎"):
     st.dataframe(postulaciones, use_container_width=True, hide_index=True)
 
---------------------------
+#--------------------------
 
 # Crear una nueva columna combinada
 df["Etiqueta"] = df["Nivel Post."] + " - " + df["Tramo Post."] + " - " + df["Puesto Tipo"]
