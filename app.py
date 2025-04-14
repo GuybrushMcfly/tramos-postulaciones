@@ -89,7 +89,7 @@ periodo_seleccionado = st.sidebar.multiselect(
     default=sorted(periodos)
 )
 
-# Crear una nueva columna para mostrar en el filtro
+# Filtro múltiple por PERSONAL
 df["Tipo Personal"] = df["Ingresante"].apply(lambda x: "INGRESANTES" if x == "SI" else "HISTÓRICOS")
 
 # Filtro múltiple por "Tipo Personal"
@@ -100,6 +100,9 @@ tipo_seleccionado = st.sidebar.multiselect(
     options=sorted(tipos_personal),
     default=sorted(tipos_personal)
 )
+
+# Aplicar el filtro al DataFrame
+df = df[df["Tipo Personal"].isin(tipo_seleccionado)]
 
 # Aplicar todos los filtros antes del análisis
 df = df[
