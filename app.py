@@ -302,49 +302,51 @@ with st.expander("🔎 VER DETALLES DE POSTULACIONES 🔎"):
 
 from streamlit_echarts import st_echarts
 
-# Agrupar los datos reales de tu DataFrame
-# Agrupamos por 'Dep. Nacional' (Y) y 'Nivel Post.' (stacked en X)
+# Agrupamos por 'Dep. Nacional' (eje Y) y 'Nivel Post.' (stack en eje X)
 agrupado = df.groupby(["Dep. Nacional", "Nivel Post."]).size().unstack(fill_value=0)
 departamentos = list(agrupado.index)
 niveles = list(agrupado.columns)
 
-# Preparar las series para el gráfico
-series = []
-colores = ["#FF9AA2", "#FFB7B2", "#FFDAC1", "#E2F0CB", "#B5EAD7", "#C7CEEA"]
+# Paleta de colores moderna
+colores = ["#9B5DE5", "#F15BB5", "#FEE440", "#00BBF9", "#00F5D4", "#FFA07A"]
 
+# Armar series para cada Nivel Post.
+series = []
 for i, nivel in enumerate(niveles):
     series.append({
         "name": nivel,
         "type": "bar",
         "stack": "total",
-        "label": {"show": True, "color": "#fff"},
+        "label": {"show": True, "color": "#000"},
         "emphasis": {"focus": "series"},
         "itemStyle": {"color": colores[i % len(colores)]},
         "data": agrupado[nivel].tolist(),
     })
 
-# Configuración del gráfico
+# Opciones del gráfico
 options = {
-    "backgroundColor": "#1E1E2F",
+    "backgroundColor": "transparent",  # Fondo transparente
     "tooltip": {"trigger": "axis", "axisPointer": {"type": "shadow"}},
     "legend": {
-        "textStyle": {"color": "#FFFFFF"},
+        "data": niveles,
+        "textStyle": {"color": "#000"},
         "top": "top",
     },
     "grid": {"left": "3%", "right": "4%", "bottom": "3%", "containLabel": True},
     "xAxis": {
         "type": "value",
-        "axisLabel": {"color": "#FFFFFF"},
-        "splitLine": {"lineStyle": {"color": "#333"}},
+        "axisLabel": {"color": "#333"},
+        "splitLine": {"lineStyle": {"color": "#eee"}},
     },
     "yAxis": {
         "type": "category",
         "data": departamentos,
-        "axisLabel": {"color": "#FFFFFF"},
+        "axisLabel": {"color": "#333"},
     },
     "series": series,
 }
 
 # Mostrar el gráfico
 st_echarts(options=options, height="600px")
+
 
