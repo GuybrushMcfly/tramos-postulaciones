@@ -1,15 +1,7 @@
 [theme]
-base="dark"
-primaryColor="#00F260"
-backgroundColor="#0e1117"
-secondaryBackgroundColor="#262730"
-textColor="#FFFFFF"
-font="sans serif"
-
-[theme]
-base="light" # o "dark" o "auto"
-primaryColor="#0083B0"
-backgroundColor="#ffffff"
-secondaryBackgroundColor="#f0f2f6"
-textColor="#000000"
-font="sans serif"
+base = "auto"
+primaryColor = "#00B4DB"  # Azul vibrante (tarjetas, botones)
+backgroundColor = "#ffffff"  # Claro por defecto
+secondaryBackgroundColor = "#f0f2f6"  # Fondo sidebar claro
+textColor = "#000000"
+font = "sans serif"
