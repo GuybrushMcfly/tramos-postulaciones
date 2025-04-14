@@ -35,7 +35,7 @@ authenticator.login()
 if st.session_state["authentication_status"]:
     authenticator.logout("Cerrar sesión", "sidebar")
     st.sidebar.success(f"Bienvenido/a, {st.session_state['name']}")
-    st.title("📊 Tramitaciones Tramo Escalafonario")
+    st.title("📊 Dashboard DCYCP - Tramos Escalafonarios")
 ##    st.write("✅ Estás autenticado.")
 elif st.session_state["authentication_status"] is False:
     st.error("❌ Usuario o contraseña incorrectos.")
@@ -43,6 +43,8 @@ elif st.session_state["authentication_status"] is False:
 elif st.session_state["authentication_status"] is None:
     st.warning("🔒 Ingresá tus credenciales para acceder al dashboard.")
     st.stop()
+
+st.markdown("<div style='margin-top: 50px;'></div>", unsafe_allow_html=True)
 
 # ---- CARGA DE DATOS ----
 scope = ["https://www.googleapis.com/auth/spreadsheets"]
