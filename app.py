@@ -214,3 +214,41 @@ option = {
 # Mostrar el gráfico
 st_echarts(options=option, height="400px", key="puesto_tipo_pie")
 
+
+# Agrupar por valores únicos y contar
+conteo_puestos = df["Puesto Tipo"].value_counts().reset_index()
+conteo_puestos.columns = ["name", "value"]
+
+# Convertir al formato de ECharts
+data_rose = conteo_puestos.to_dict(orient="records")
+
+# Configurar estilo "rose chart"
+option_rose = {
+    "tooltip": {
+        "trigger": "item"
+    },
+    "legend": {
+        "top": "top"
+    },
+    "series": [
+        {
+            "name": "Puestos",
+            "type": "pie",
+            "radius": [30, 120],
+            "center": ["50%", "60%"],
+            "roseType": "area",  # <- esto activa estilo pétalo
+            "itemStyle": {
+                "borderRadius": 8
+            },
+            "label": {
+                "show": True
+            },
+            "data": data_rose
+        }
+    ]
+}
+
+# Mostrar gráfico
+st_echarts(options=option_rose, height="500px", key="puesto_tipo_rose")
+
+
