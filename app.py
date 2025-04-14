@@ -215,6 +215,9 @@ def pie_chart_donut(df, columna, titulo, key_id):
 
     st_echarts(options=option, height="400px", key=key_id)
 
+# Filtrar los datos para excluir Estados no deseados
+df = df[~df["Estado"].isin(["Pendiente", "Anulada"])]
+
 # Agrupar valores personalizados en Tipo Comité
 df["Tipo Comité - Agrupado"] = df["Tipo Comité"].apply(lambda x: x if x in [
     "Jurisdiccional (INDEC)",
