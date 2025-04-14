@@ -13,7 +13,7 @@ from streamlit_echarts import st_echarts
 # ---- CONFIGURACIÓN DE PÁGINA ----
 st.set_page_config(page_title="Dashboard de Tramos", layout="wide")
 
-st.sidebar.image("logo capa.png", use_container_width=True)
+st.sidebar.image("logo-cap.png", use_container_width=True)
 
 modo = st.get_option("theme.base")
 color_texto = "#000000" if modo == "light" else "#FFFFFF"
