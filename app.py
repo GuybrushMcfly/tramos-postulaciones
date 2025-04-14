@@ -142,12 +142,18 @@ with col8:
 
 st.markdown("<div style='margin-top: 40px;'></div>", unsafe_allow_html=True)
 
+modo = st.get_option("theme.base")
+color_texto = "#000000" if modo == "light" else "#FFFFFF"
 
 # Función reutilizable para cada pie chart
 def pie_chart_donut(df, columna, titulo, key_id):
     conteo = df[columna].value_counts().reset_index()
     conteo.columns = ["name", "value"]
     data = conteo.to_dict(orient="records")
+
+    # Detectar tema y color de texto
+    modo = st.get_option("theme.base")
+    color_texto = "#000000" if modo == "light" else "#FFFFFF"
 
     option = {
         "title": {
@@ -157,7 +163,7 @@ def pie_chart_donut(df, columna, titulo, key_id):
             "textStyle": {
                 "fontSize": 18,
                 "fontWeight": "bold",
-                "color": "#FFFFFF"  # texto blanco para modo oscuro
+                "color": color_texto
             }
         },
         "tooltip": {
@@ -169,7 +175,7 @@ def pie_chart_donut(df, columna, titulo, key_id):
             "left": "center",
             "padding": [20, 0, 0, 0],
             "textStyle": {
-                "color": "#FFFFFF"  # color de texto de la leyenda
+                "color": color_texto
             }
         },
         "series": [
@@ -186,20 +192,20 @@ def pie_chart_donut(df, columna, titulo, key_id):
                 "label": {
                     "show": False,
                     "position": "center",
-                    "color": "#FFFFFF"
+                    "color": color_texto
                 },
                 "emphasis": {
                     "label": {
                         "show": True,
                         "fontSize": 20,
                         "fontWeight": "bold",
-                        "color": "#FFFFFF"
+                        "color": color_texto
                     }
                 },
                 "labelLine": {
                     "show": True,
                     "lineStyle": {
-                        "color": "#FFFFFF"
+                        "color": color_texto
                     }
                 },
                 "data": data
