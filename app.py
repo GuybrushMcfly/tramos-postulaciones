@@ -117,55 +117,7 @@ valor_col6 = df[df["Estado"] == "En Actividad Capacitación"]["Agente"].count()
 valor_col7 = df[df["Estado"] == "En Actividad Valoración"]["Agente"].count()
 valor_col8 = 0  # APROBADAS
 
-# Función para tarjeta con gradiente
-def tarjeta_gradiente_simple(titulo, valor, gradiente):
-    st.markdown(f"""
-        <div style="
-            background: {gradiente};
-            padding: 25px;
-            border-radius: 15px;
-            height: 120px;
-            box-shadow: 0px 4px 10px rgba(0,0,0,0.25);
-            margin-bottom: 25px;
-        ">
-            <div style="font-size: 18px; color: white; font-weight: 700;">{titulo}</div>
-            <div style="font-size: 37px; color: white; font-weight: bold;">{valor}</div>
-        </div>
-    """, unsafe_allow_html=True)
 
-# Layout fila 1
-col1, col2, col3, col4 = st.columns(4)
-
-with col1:
-    tarjeta_gradiente_simple("TOTAL POSTULACIONES", valor_col1, "linear-gradient(135deg, #00B4DB, #0083B0)")
-
-with col2:
-    tarjeta_gradiente_simple("POST. HISTÓRICOS", valor_col2, "linear-gradient(135deg, #FF5858, #FB5895)")
-
-with col3:
-    tarjeta_gradiente_simple("POST. INGRESANTES", valor_col3, "linear-gradient(135deg, #FDC830, #F37335)")
-
-with col4:
-    tarjeta_gradiente_simple("MONTO ESTIMADO", valor_col4, "linear-gradient(135deg, #C33764, #1D2671)")
-
-# Layout fila 2
-col5, col6, col7, col8 = st.columns(4)
-
-with col5:
-    tarjeta_gradiente_simple("PRESENTADAS", valor_col5, "linear-gradient(135deg, #00F260, #0575E6)")
-
-with col6:
-    tarjeta_gradiente_simple("EN ACTIVIDAD CAPACITACION", valor_col6, "linear-gradient(135deg, #7F00FF, #E100FF)")
-
-with col7:
-    tarjeta_gradiente_simple("EN ACTIVIDAD VALORACION", valor_col7, "linear-gradient(135deg, #FFE000, #799F0C)")
-
-with col8:
-    tarjeta_gradiente_simple("APROBADAS", valor_col8, "linear-gradient(135deg, #43C6AC, #191654)")
-
-
-
-from streamlit_echarts import st_echarts
 
 # Función reutilizable para cada pie chart
 def pie_chart_donut(df, columna, titulo, key_id):
@@ -190,7 +142,7 @@ def pie_chart_donut(df, columna, titulo, key_id):
             "orient": "horizontal",
             "bottom": "0%",
             "left": "center",
-            "padding": [20, 0, 0, 0],  # espacio superior
+            "padding": [20, 0, 0, 0]  # margen superior de la leyenda
         },
         "series": [
             {
@@ -204,7 +156,7 @@ def pie_chart_donut(df, columna, titulo, key_id):
                     "borderWidth": 2
                 },
                 "label": {
-                    "show": False,
+                    "show": False,  # oculta el texto encima del gráfico
                     "position": "center"
                 },
                 "emphasis": {
@@ -223,4 +175,23 @@ def pie_chart_donut(df, columna, titulo, key_id):
     }
 
     st_echarts(options=option, height="450px", key=key_id)
+
+
+# --- PRIMERA FILA ---
+col1, col2 = st.columns(2)
+
+with col1:
+    pie_chart_donut(df, "Puesto Tipo", "Distribución por Puesto Tipo", "pie1")
+
+with col2:
+    pie_chart_donut(df, "Tipo Comité", "Distribución por Tipo Comité", "pie2")
+
+# --- SEGUNDA FILA ---
+col3, col4 = st.columns(2)
+
+with col3:
+    pie_chart_donut(df, "Nivel Post.", "Distribución por Nivel", "pie3")
+
+with col4:
+    pie_chart_donut(df, "Modalidad", "Distribución por Modalidad", "pie4")
 
