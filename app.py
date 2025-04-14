@@ -300,38 +300,51 @@ with st.expander("🔎 VER DETALLES DE POSTULACIONES 🔎"):
 
 #--------------------------
 
-# Agrupar y pivotear los datos
-pivot = df.pivot_table(
-    index="Dep. Nacional",
-    columns="Nivel Post.",
-    aggfunc="size",
-    fill_value=0
-).reset_index()
+from streamlit_echarts import st_echarts
 
-# Preparar los datos para ECharts
-categorias = pivot["Dep. Nacional"].tolist()
-series_data = [
-    {
-        "name": col,
+# Agrupar los datos reales de tu DataFrame
+# Agrupamos por 'Dep. Nacional' (Y) y 'Nivel Post.' (stacked en X)
+agrupado = df.groupby(["Dep. Nacional", "Nivel Post."]).size().unstack(fill_value=0)
+departamentos = list(agrupado.index)
+niveles = list(agrupado.columns)
+
+# Preparar las series para el gráfico
+series = []
+colores = ["#FF9AA2", "#FFB7B2", "#FFDAC1", "#E2F0CB", "#B5EAD7", "#C7CEEA"]
+
+for i, nivel in enumerate(niveles):
+    series.append({
+        "name": nivel,
         "type": "bar",
         "stack": "total",
-        "label": {"show": True},
+        "label": {"show": True, "color": "#fff"},
         "emphasis": {"focus": "series"},
-        "data": pivot[col].tolist()
-    }
-    for col in pivot.columns[1:]
-]
+        "itemStyle": {"color": colores[i % len(colores)]},
+        "data": agrupado[nivel].tolist(),
+    })
 
 # Configuración del gráfico
 options = {
+    "backgroundColor": "#1E1E2F",
     "tooltip": {"trigger": "axis", "axisPointer": {"type": "shadow"}},
-    "legend": {"data": list(pivot.columns[1:])},
+    "legend": {
+        "textStyle": {"color": "#FFFFFF"},
+        "top": "top",
+    },
     "grid": {"left": "3%", "right": "4%", "bottom": "3%", "containLabel": True},
-    "xAxis": {"type": "value"},
-    "yAxis": {"type": "category", "data": categorias},
-    "series": series_data
+    "xAxis": {
+        "type": "value",
+        "axisLabel": {"color": "#FFFFFF"},
+        "splitLine": {"lineStyle": {"color": "#333"}},
+    },
+    "yAxis": {
+        "type": "category",
+        "data": departamentos,
+        "axisLabel": {"color": "#FFFFFF"},
+    },
+    "series": series,
 }
 
 # Mostrar el gráfico
-st_echarts(options=options, height="500px", key="bar_horizontal_dep_nac")
+st_echarts(options=options, height="600px")
 
