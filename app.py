@@ -298,3 +298,41 @@ st.markdown("<div style='margin-top: 60px;'></div>", unsafe_allow_html=True)
 with st.expander("🔎 VER DETALLES DE POSTULACIONES 🔎"):
     st.dataframe(postulaciones, use_container_width=True, hide_index=True)
 
+--------------------------
+
+# Crear una nueva columna combinada
+df["Etiqueta"] = df["Nivel Post."] + " - " + df["Tramo Post."] + " - " + df["Puesto Tipo"]
+
+# Agrupar los datos
+pivot = df.pivot_table(
+    index="Dep. Nacional",
+    columns="Etiqueta",
+    values="Agente",  # o la columna de conteo que estés usando
+    aggfunc="count"
+).fillna(0).astype(int).reset_index()
+
+# Preparar opciones para ECharts
+categorias = pivot["Dep. Nacional"].tolist()
+series_data = [
+    {
+        "name": col,
+        "type": "bar",
+        "stack": "total",
+        "label": {"show": True},
+        "emphasis": {"focus": "series"},
+        "data": pivot[col].tolist()
+    }
+    for col in pivot.columns[1:]
+]
+
+options = {
+    "tooltip": {"trigger": "axis", "axisPointer": {"type": "shadow"}},
+    "legend": {"data": list(pivot.columns[1:])},
+    "grid": {"left": "3%", "right": "4%", "bottom": "3%", "containLabel": True},
+    "xAxis": {"type": "value"},
+    "yAxis": {"type": "category", "data": categorias},
+    "series": series_data
+}
+
+st_echarts(options=options, height="600px", key="grafico_apilado")
+
