@@ -61,11 +61,19 @@ worksheet = gc.open_by_key("11--jD47K72s9ddt727kYd9BhRmAOM7qXEUB60SX69UA").sheet
 data = worksheet.get_all_records()
 df = pd.DataFrame(data)
 
-# Contar agentes
-total_agentes = df["Agente"].count()
+# Definimos los valores reales para las dos primeras tarjetas
+estados_validos = ["Presentada", "En Actividad Valoración", "En Actividad Capacitación"]
 
-# Simulación de valor para todos (cambiá por lo que corresponda)
-valor = 233
+# TOTAL POSTULACIONES
+df_col1 = df[df["Estado"].isin(estados_validos)]
+valor_col1 = df_col1["Agente"].count()
+
+# POSTULACIONES HISTÓRICOS (filtrando además por Ingresante == "SI")
+df_col2 = df_col1[df_col1["Ingresante"] == "SI"]
+valor_col2 = df_col2["Agente"].count()
+
+# Simulación de valores para las otras tarjetas
+valor_ficticio = 233
 
 # Función para tarjeta con gradiente
 def tarjeta_gradiente_simple(titulo, valor, gradiente):
@@ -86,34 +94,28 @@ def tarjeta_gradiente_simple(titulo, valor, gradiente):
 col1, col2, col3, col4 = st.columns(4)
 
 with col1:
-    tarjeta_gradiente_simple("TOTAL POSTULACIONES", valor, "linear-gradient(135deg, #36D1DC, #5B86E5)")
+    tarjeta_gradiente_simple("TOTAL POSTULACIONES", valor_col1, "linear-gradient(135deg, #36D1DC, #5B86E5)")
 
 with col2:
-    tarjeta_gradiente_simple("POSTULACIONES HISTÓRICOS", valor, "linear-gradient(135deg, #FF416C, #FF4B2B)")
+    tarjeta_gradiente_simple("POSTULACIONES HISTÓRICOS", valor_col2, "linear-gradient(135deg, #FF416C, #FF4B2B)")
 
 with col3:
-    tarjeta_gradiente_simple("POSTULACIONES INGRESANTES", valor, "linear-gradient(135deg, #FDC830, #F37335)")
+    tarjeta_gradiente_simple("POSTULACIONES INGRESANTES", valor_ficticio, "linear-gradient(135deg, #FDC830, #F37335)")
 
 with col4:
-    tarjeta_gradiente_simple("MONTO ESTIMADO", valor, "linear-gradient(135deg, #B24592, #F15F79)")
+    tarjeta_gradiente_simple("MONTO ESTIMADO", valor_ficticio, "linear-gradient(135deg, #B24592, #F15F79)")
 
 # Layout fila 2
 col5, col6, col7, col8 = st.columns(4)
 
 with col5:
-    tarjeta_gradiente_simple("PRESENTADAS", valor, "linear-gradient(135deg, #00C9FF, #92FE9D)")
+    tarjeta_gradiente_simple("PRESENTADAS", valor_ficticio, "linear-gradient(135deg, #00C9FF, #92FE9D)")
 
 with col6:
-    tarjeta_gradiente_simple("EN ACTIVIDAD CAPACITACION", valor, "linear-gradient(135deg, #667EEA, #764BA2)")
+    tarjeta_gradiente_simple("EN ACTIVIDAD CAPACITACION", valor_ficticio, "linear-gradient(135deg, #667EEA, #764BA2)")
 
 with col7:
-    tarjeta_gradiente_simple("EN ACTIVIDAD VALORACION", valor, "linear-gradient(135deg, #F7971E, #FFD200)")
+    tarjeta_gradiente_simple("EN ACTIVIDAD VALORACION", valor_ficticio, "linear-gradient(135deg, #F7971E, #FFD200)")
 
 with col8:
-    tarjeta_gradiente_simple("APROBADAS", valor, "linear-gradient(135deg, #00F260, #0575E6)")
-
-with col3:
-    tarjeta_gradiente("NUEVOS INGRESOS", total_agentes, "linear-gradient(135deg, #FDC830, #F37335)", "🛒")
-
-with col4:
-    tarjeta_gradiente("COMENTARIOS", total_agentes, "linear-gradient(135deg, #B24592, #F15F79)", "💬")
+    tarjeta_gradiente_simple("APROBADAS", valor_ficticio, "linear-gradient(135deg, #00F260, #0575E6)")
