@@ -153,6 +153,7 @@ valor_col8 = 0  # APROBADAS
 def tarjeta_gradiente_simple(titulo, valor, gradiente):
     modo = st.get_option("theme.base") or "light"
     color_texto = "#000000" if modo == "light" else "#FFFFFF"
+    sombra_texto = "1px 1px 3px #444" if modo == "dark" else "none"
 
     st.markdown(f"""
         <div style="
@@ -163,10 +164,15 @@ def tarjeta_gradiente_simple(titulo, valor, gradiente):
             box-shadow: 0px 4px 10px rgba(0,0,0,0.25);
             margin-bottom: 25px;
         ">
-            <div style="font-size: 16px; color: {color_texto}; font-weight: 700;">{titulo}</div>
-            <div style="font-size: 34px; color: {color_texto}; font-weight: bold;">{valor}</div>
+            <div style="font-size: 16px; color: {color_texto}; font-weight: 700; text-shadow: {sombra_texto};">
+                {titulo}
+            </div>
+            <div style="font-size: 34px; color: {color_texto}; font-weight: bold; text-shadow: {sombra_texto};">
+                {valor}
+            </div>
         </div>
     """, unsafe_allow_html=True)
+
 
 # --- FILA 1 ---
 col1, col2, col3, col4 = st.columns(4)
