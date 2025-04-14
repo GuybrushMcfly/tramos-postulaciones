@@ -215,7 +215,7 @@ def pie_chart_donut(df, columna, titulo, key_id):
             "left": "center",
             "top": "top",
             "textStyle": {
-                "fontSize": 18,
+                "fontSize": 16,
                 "fontWeight": "bold",
                 "color": color_texto
             }
@@ -267,7 +267,7 @@ def pie_chart_donut(df, columna, titulo, key_id):
         ]
     }
 
-    st_echarts(options=option, height="400px", key=key_id)
+    st_echarts(options=option, height="350px", key=key_id)
 
 # Filtrar los datos para excluir Estados no deseados
 df = df[~df["Estado"].isin(["Pendiente", "Anulada"])]
@@ -301,6 +301,9 @@ with col3:
 
 with col4:
     pie_chart_donut(df, "Modalidad", "Distribución por Modalidad", "pie4")
+
+
+
 
 #----------------------
 postulaciones = pd.DataFrame(sheet.worksheet("tabla-dash").get_all_records())
