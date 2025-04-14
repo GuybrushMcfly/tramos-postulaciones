@@ -224,7 +224,7 @@ with col2:
 col3, col4 = st.columns(2)
 
 with col3:
-    pie_chart_donut(df, "Nivel", "Distribución por Nivel", "pie3")
+    pie_chart_donut(df, "Nivel Post.", "Distribución por Nivel", "pie3")
 
 with col4:
     pie_chart_donut(df, "Modalidad", "Distribución por Modalidad", "pie4")
