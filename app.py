@@ -303,7 +303,10 @@ with st.expander("🔎 VER DETALLES DE POSTULACIONES 🔎"):
 from streamlit_echarts import st_echarts
 
 # Agrupamos por 'Dep. Nacional' (eje Y) y 'Nivel Post.' (stack en eje X)
+# Agrupar y normalizar cada fila (cada Dep. Nacional) al 100%
 agrupado = df.groupby(["Dep. Nacional", "Nivel Post."]).size().unstack(fill_value=0)
+agrupado = agrupado.div(agrupado.sum(axis=1), axis=0).fillna(0) * 100  # Normalizar a %
+
 departamentos = list(agrupado.index)
 niveles = list(agrupado.columns)
 
