@@ -57,7 +57,7 @@ sheet = gc.open_by_key("11--jD47K72s9ddt727kYd9BhRmAOM7qXEUB60SX69UA")
 postulaciones = pd.DataFrame(sheet.worksheet("Postulaciones").get_all_records())
 
 
-worksheet = gc.open_by_key("111--jD47K72s9ddt727kYd9BhRmAOM7qXEUB60SX69UA").sheet1
+worksheet = gc.open_by_key("11--jD47K72s9ddt727kYd9BhRmAOM7qXEUB60SX69UA").sheet1
 data = worksheet.get_all_records()
 df = pd.DataFrame(data)
 
