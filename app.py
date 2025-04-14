@@ -235,8 +235,6 @@ import streamlit as st
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 
-st.set_page_config(layout="wide")
-
 # Datos de ejemplo
 valores = [20, 40, 60, 80]
 colores = ["purple", "red", "blue", "green"]
