@@ -8,6 +8,8 @@ import streamlit_authenticator as stauth
 import yaml
 from yaml.loader import SafeLoader
 from streamlit_echarts import st_echarts
+import seaborn as sns
+
 
 
 
@@ -37,7 +39,7 @@ authenticator.login()
 
 if st.session_state["authentication_status"]:
     authenticator.logout("Cerrar sesión", "sidebar")
-    st.sidebar.success(f"Bienvenido/a, {st.session_state['name']}")
+    st.sidebar.success(f"Hola, {st.session_state['name']}")
     st.title("📊 Dashboard DCYCP - Tramos Escalafonarios")
 ##    st.write("✅ Estás autenticado.")
 elif st.session_state["authentication_status"] is False:
@@ -298,3 +300,25 @@ st.markdown("<div style='margin-top: 60px;'></div>", unsafe_allow_html=True)
 
 with st.expander("🔎 VER DETALLES DE POSTULACIONES 🔎"):
     st.dataframe(postulaciones, use_container_width=True, hide_index=True)
+
+
+
+
+# Crear tabla de contingencia
+tabla = pd.crosstab(df["Dep. Nacional"], df["Nivel Post."])
+
+# Plot en matplotlib
+fig, ax = plt.subplots(figsize=(10, 6))
+sns.heatmap(tabla, annot=True, fmt='d', cmap="YlOrBr", linewidths=0.5, linecolor='gray', cbar_kws={"label": "Cantidad"}, ax=ax)
+
+# Etiquetas y formato
+ax.set_title("Distribución por Departamento Nacional y Nivel", fontsize=14, weight="bold")
+ax.set_xlabel("Nivel Post.", fontsize=12)
+ax.set_ylabel("Dep. Nacional", fontsize=12)
+ax.tick_params(axis='x', rotation=0)
+ax.tick_params(axis='y', rotation=0)
+plt.tight_layout()
+
+# Mostrar en Streamlit
+st.pyplot(fig)
+
