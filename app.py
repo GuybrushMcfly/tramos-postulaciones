@@ -211,7 +211,7 @@ with col1:
 with col2:
     pie_chart_donut(df, "Tipo Comité", "Distribución por Tipo Comité", "pie2")
 
-st.markdown("<div style='margin-top: 40px;'></div>", unsafe_allow_html=True)
+st.markdown("<div style='margin-top: 60px;'></div>", unsafe_allow_html=True)
 
 
 # --- SEGUNDA FILA ---
