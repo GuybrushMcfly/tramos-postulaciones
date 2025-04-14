@@ -12,34 +12,34 @@ from yaml.loader import SafeLoader
 st.set_page_config(page_title="Dashboard de Tramos", layout="wide")
 
 # ---- CARGAR CONFIGURACIÓN DESDE YAML ----
-with open("config.yaml") as file:
+#with open("config.yaml") as file:
     config = yaml.load(file, Loader=SafeLoader)
     
 # 👉 Mostrar el hash cargado para verificar (solo durante pruebas)
 #st.code(config['credentials']['usernames']['carlos']['password'])
 
 # ---- CREAR OBJETO AUTENTICADOR ----
-authenticator = stauth.Authenticate(
-    credentials=config['credentials'],
-    cookie_name=config['cookie']['name'],
-    cookie_key=config['cookie']['key'],
-    cookie_expiry_days=config['cookie']['expiry_days']
-)
+#authenticator = stauth.Authenticate(
+#    credentials=config['credentials'],
+#    cookie_name=config['cookie']['name'],
+#    cookie_key=config['cookie']['key'],
+#    cookie_expiry_days=config['cookie']['expiry_days']
+#)
 
 # ---- LOGIN ----
-authenticator.login()
+#authenticator.login()
 
-if st.session_state["authentication_status"]:
-    authenticator.logout("Cerrar sesión", "sidebar")
-    st.sidebar.success(f"Bienvenido/a, {st.session_state['name']}")
-    st.title("📊 Dashboard de Encuestas de Opinión")
-#    st.write("✅ Estás autenticado.")
-elif st.session_state["authentication_status"] is False:
-    st.error("❌ Usuario o contraseña incorrectos.")
-    st.stop()
-elif st.session_state["authentication_status"] is None:
-    st.warning("🔒 Ingresá tus credenciales para acceder al dashboard.")
-    st.stop()
+#if st.session_state["authentication_status"]:
+#    authenticator.logout("Cerrar sesión", "sidebar")
+#    st.sidebar.success(f"Bienvenido/a, {st.session_state['name']}")
+#    st.title("📊 Dashboard de Encuestas de Opinión")
+##    st.write("✅ Estás autenticado.")
+#elif st.session_state["authentication_status"] is False:
+#    st.error("❌ Usuario o contraseña incorrectos.")
+#    st.stop()
+#elif st.session_state["authentication_status"] is None:
+#    st.warning("🔒 Ingresá tus credenciales para acceder al dashboard.")
+#    st.stop()
 
 # ---- CARGA DE DATOS ----
 scope = ["https://www.googleapis.com/auth/spreadsheets"]
@@ -55,3 +55,26 @@ gc = gspread.authorize(creds)
 # Abro la planilla
 sheet = gc.open_by_key("11--jD47K72s9ddt727kYd9BhRmAOM7qXEUB60SX69UA")
 postulaciones = pd.DataFrame(sheet.worksheet("Postulaciones").get_all_records())
+
+
+worksheet = gc.open_by_key("111--jD47K72s9ddt727kYd9BhRmAOM7qXEUB60SX69UA").sheet1
+data = worksheet.get_all_records()
+df = pd.DataFrame(data)
+
+# Contar agentes
+total_agentes = df["Agentes"].count()
+
+# Layout de las tarjetas
+col1, col2, col3, col4 = st.columns(4)
+
+with col1:
+    st.metric("TOTAL AGENTES", total_agentes)
+
+with col2:
+    st.metric("TOTAL AGENTES", total_agentes)
+
+with col3:
+    st.metric("TOTAL AGENTES", total_agentes)
+
+with col4:
+    st.metric("TOTAL AGENTES", total_agentes)
