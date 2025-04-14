@@ -138,10 +138,10 @@ with col1:
     tarjeta_gradiente_simple("TOTAL POSTULACIONES", valor_col1, "linear-gradient(135deg, #00B4DB, #0083B0)")
 
 with col2:
-    tarjeta_gradiente_simple("POSTULACIONES HISTÓRICOS", valor_col2, "linear-gradient(135deg, #FF5858, #FB5895)")
+    tarjeta_gradiente_simple("POST. HISTÓRICOS", valor_col2, "linear-gradient(135deg, #FF5858, #FB5895)")
 
 with col3:
-    tarjeta_gradiente_simple("POSTULACIONES INGRESANTES", valor_col3, "linear-gradient(135deg, #FDC830, #F37335)")
+    tarjeta_gradiente_simple("POST. INGRESANTES", valor_col3, "linear-gradient(135deg, #FDC830, #F37335)")
 
 with col4:
     tarjeta_gradiente_simple("MONTO ESTIMADO", valor_col4, "linear-gradient(135deg, #C33764, #1D2671)")
