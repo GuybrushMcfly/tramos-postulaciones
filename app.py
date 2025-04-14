@@ -174,12 +174,23 @@ def pie_chart_donut(df, columna, titulo, key_id):
     data = conteo.to_dict(orient="records")
 
     option = {
+        "title": {
+            "text": titulo,
+            "left": "center",
+            "top": "top",
+            "textStyle": {
+                "fontSize": 18,
+                "fontWeight": "bold"
+            }
+        },
         "tooltip": {
             "trigger": "item"
         },
         "legend": {
-            "top": "5%",
-            "left": "center"
+            "orient": "horizontal",
+            "bottom": "0%",
+            "left": "center",
+            "padding": [20, 0, 0, 0],  # espacio superior
         },
         "series": [
             {
@@ -211,22 +222,5 @@ def pie_chart_donut(df, columna, titulo, key_id):
         ]
     }
 
-    st_echarts(options=option, height="400px", key=key_id)
+    st_echarts(options=option, height="450px", key=key_id)
 
-# --- PRIMERA FILA ---
-col1, col2 = st.columns(2)
-
-with col1:
-    pie_chart_donut(df, "Puesto Tipo", "Distribución por Puesto Tipo", "pie1")
-
-with col2:
-    pie_chart_donut(df, "Tipo Comité", "Distribución por Tipo Comité", "pie2")
-
-# --- SEGUNDA FILA ---
-col3, col4 = st.columns(2)
-
-with col3:
-    pie_chart_donut(df, "Nivel Post.", "Distribución por Nivel", "pie3")
-
-with col4:
-    pie_chart_donut(df, "Modalidad", "Distribución por Modalidad", "pie4")
