@@ -30,19 +30,19 @@ authenticator = stauth.Authenticate(
 )
 
 # ---- LOGIN ----
-#authenticator.login()
+authenticator.login()
 
-#if st.session_state["authentication_status"]:
-#    authenticator.logout("Cerrar sesión", "sidebar")
-#    st.sidebar.success(f"Bienvenido/a, {st.session_state['name']}")
-#    st.title("📊 Dashboard de Encuestas de Opinión")
+if st.session_state["authentication_status"]:
+    authenticator.logout("Cerrar sesión", "sidebar")
+    st.sidebar.success(f"Bienvenido/a, {st.session_state['name']}")
+    st.title("📊 Dashboard de Encuestas de Opinión")
 ##    st.write("✅ Estás autenticado.")
-#elif st.session_state["authentication_status"] is False:
-#    st.error("❌ Usuario o contraseña incorrectos.")
-#    st.stop()
-#elif st.session_state["authentication_status"] is None:
-#    st.warning("🔒 Ingresá tus credenciales para acceder al dashboard.")
-#    st.stop()
+elif st.session_state["authentication_status"] is False:
+    st.error("❌ Usuario o contraseña incorrectos.")
+    st.stop()
+elif st.session_state["authentication_status"] is None:
+    st.warning("🔒 Ingresá tus credenciales para acceder al dashboard.")
+    st.stop()
 
 # ---- CARGA DE DATOS ----
 scope = ["https://www.googleapis.com/auth/spreadsheets"]
