@@ -78,3 +78,37 @@ with col3:
 
 with col4:
     st.metric("TOTAL AGENTES", total_agentes)
+
+
+# Leer datos desde la hoja (ya tenés conexión con gspread)
+data = worksheet.get_all_records()
+df = pd.DataFrame(data)
+
+# Contar agentes
+total_agentes = df["Agente"].count()
+
+# Layout de las tarjetas
+col1, col2, col3, col4 = st.columns(4)
+
+# Estilo de cada tarjeta
+def tarjeta(titulo, valor, color, icono):
+    st.markdown(f"""
+        <div style="background-color:{color}; padding:20px; border-radius:10px; text-align:left; height:140px; position:relative;">
+            <div style="font-size:14px; color:white; font-weight:bold;">{titulo}</div>
+            <div style="font-size:32px; color:white; font-weight:bold;">{valor}</div>
+            <div style="font-size:12px; color:white;">Monthly progress</div>
+            <div style="position:absolute; top:10px; right:10px; font-size:32px;">{icono}</div>
+        </div>
+    """, unsafe_allow_html=True)
+
+with col1:
+    tarjeta("TOTAL AGENTES", total_agentes, "#2196F3", "🧊")
+
+with col2:
+    tarjeta("ACTIVOS HOY", total_agentes, "#E91E63", "👥")
+
+with col3:
+    tarjeta("NUEVOS INGRESOS", total_agentes, "#FF9800", "🛒")
+
+with col4:
+    tarjeta("COMENTARIOS", total_agentes, "#9C27B0", "💬")
