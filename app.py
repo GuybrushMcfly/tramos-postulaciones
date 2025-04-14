@@ -12,7 +12,7 @@ from streamlit_echarts import st_echarts
 
 
 # ---- CONFIGURACIÓN DE PÁGINA ----
-st.set_page_config(page_title="Dashboard de Tramos", layout="wide")
+##st.set_page_config(page_title="Dashboard de Tramos", layout="wide")
 
 st.sidebar.image("logo capa.png", use_container_width=True)
 
