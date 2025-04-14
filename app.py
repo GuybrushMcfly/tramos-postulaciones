@@ -7,6 +7,8 @@ import streamlit as st
 import streamlit_authenticator as stauth
 import yaml
 from yaml.loader import SafeLoader
+from streamlit.components.v1 import html
+
 
 # ---- CONFIGURACIÓN DE PÁGINA ----
 st.set_page_config(page_title="Dashboard de Tramos", layout="wide")
@@ -92,7 +94,7 @@ valor_col8 = 0  # APROBADAS
 
 # --- FUNCIÓN CON CONTADOR ANIMADO ---
 def tarjeta_gradiente_animated(titulo, valor, gradiente, id):
-    st.markdown(f"""
+    html(f"""
         <div style="
             background: {gradiente};
             padding: 25px;
@@ -107,19 +109,19 @@ def tarjeta_gradiente_animated(titulo, valor, gradiente, id):
         <script>
         var count = 0;
         var target = {valor};
-        var duration = 800;
+        var duration = 1000;
         var step = Math.max(Math.floor(duration / target), 20);
         var element = document.getElementById("contador-{id}");
 
         var interval = setInterval(function() {{
             count++;
-            element.innerText = count;
+            element.innerText = count.toLocaleString();
             if (count >= target) {{
                 clearInterval(interval);
             }}
         }}, step);
         </script>
-    """, unsafe_allow_html=True)
+    """, height=150)
 
 # --- TARJETAS FILA 1 ---
 col1, col2, col3, col4 = st.columns(4)
