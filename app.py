@@ -165,74 +165,6 @@ with col8:
 
 
 
-# Función reutilizable para cada pie chart
-def pie_chart_donut(df, columna, titulo, key_id):
-    conteo = df[columna].value_counts().reset_index()
-    conteo.columns = ["name", "value"]
-    data = conteo.to_dict(orient="records")
-
-    option = {
-        "tooltip": {
-            "trigger": "item"
-        },
-        "legend": {
-            "top": "5%",
-            "left": "center"
-        },
-        "series": [
-            {
-                "name": titulo,
-                "type": "pie",
-                "radius": ["40%", "75%"],
-                "avoidLabelOverlap": False,
-                "itemStyle": {
-                    "borderRadius": 10,
-                    "borderColor": "#fff",
-                    "borderWidth": 2
-                },
-                "label": {
-                    "show": False,
-                    "position": "center"
-                },
-                "emphasis": {
-                    "label": {
-                        "show": True,
-                        "fontSize": 20,
-                        "fontWeight": "bold"
-                    }
-                },
-                "labelLine": {
-                    "show": True
-                },
-                "data": data
-            }
-        ]
-    }
-
-    st_echarts(options=option, height="400px", key=key_id)
-
-# --- PRIMERA FILA ---
-col1, col2 = st.columns(2)
-
-with col1:
-    pie_chart_donut(df, "Puesto Tipo", "Distribución por Puesto Tipo", "pie1")
-
-with col2:
-    pie_chart_donut(df, "Tipo Comité", "Distribución por Tipo Comité", "pie2")
-
-# --- SEGUNDA FILA ---
-col3, col4 = st.columns(2)
-
-with col3:
-    pie_chart_donut(df, "Nivel Post.", "Distribución por Nivel", "pie3")
-
-with col4:
-    pie_chart_donut(df, "Modalidad", "Distribución por Modalidad", "pie4")
-
-
-
-
-
 from streamlit_echarts import st_echarts
 
 # Función reutilizable para pie charts con mejoras
@@ -296,6 +228,5 @@ with col3:
 
 with col4:
     pie_chart_donut(df, "Modalidad", "Distribución por Modalidad", "pie4")
-
 
 
