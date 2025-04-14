@@ -165,9 +165,7 @@ with col8:
 
 
 
-from streamlit_echarts import st_echarts
-
-# Función reutilizable para pie charts con mejoras
+# Función reutilizable para pie charts con líneas limpias
 def pie_chart_donut(df, columna, titulo, key_id):
     conteo = df[columna].value_counts().reset_index()
     conteo.columns = ["name", "value"]
@@ -204,6 +202,11 @@ def pie_chart_donut(df, columna, titulo, key_id):
                     "length": 20,
                     "length2": 10
                 },
+                "emphasis": {
+                    "label": {
+                        "show": False
+                    }
+                },
                 "data": data
             }
         ]
@@ -211,7 +214,7 @@ def pie_chart_donut(df, columna, titulo, key_id):
 
     st_echarts(options=option, height="400px", key=key_id)
 
-# --- PRIMERA FILA ---
+# --- PRIMERA FILA DE GRÁFICOS ---
 col1, col2 = st.columns(2)
 
 with col1:
@@ -220,7 +223,7 @@ with col1:
 with col2:
     pie_chart_donut(df, "Tipo Comité", "Distribución por Tipo Comité", "pie2")
 
-# --- SEGUNDA FILA ---
+# --- SEGUNDA FILA DE GRÁFICOS ---
 col3, col4 = st.columns(2)
 
 with col3:
@@ -228,5 +231,4 @@ with col3:
 
 with col4:
     pie_chart_donut(df, "Modalidad", "Distribución por Modalidad", "pie4")
-
 
