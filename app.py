@@ -165,90 +165,71 @@ with col8:
 
 
 
-# Agrupar por valores únicos y contar
-conteo_puestos = df["Puesto Tipo"].value_counts().reset_index()
-conteo_puestos.columns = ["name", "value"]
+# Función reutilizable para cada pie chart
+def pie_chart_donut(df, columna, titulo, key_id):
+    conteo = df[columna].value_counts().reset_index()
+    conteo.columns = ["name", "value"]
+    data = conteo.to_dict(orient="records")
 
-# Convertir al formato de ECharts (lista de diccionarios)
-data_pie = conteo_puestos.to_dict(orient="records")
-
-# Configurar el gráfico estilo donut
-option = {
-    "tooltip": {
-        "trigger": "item"
-    },
-    "legend": {
-        "top": "5%",
-        "left": "center"
-    },
-    "series": [
-        {
-            "name": "Distribución por puesto",
-            "type": "pie",
-            "radius": ["40%", "75%"],
-            "avoidLabelOverlap": False,
-            "itemStyle": {
-                "borderRadius": 10,
-                "borderColor": "#fff",
-                "borderWidth": 2
-            },
-            "label": {
-                "show": False,
-                "position": "center"
-            },
-            "emphasis": {
+    option = {
+        "tooltip": {
+            "trigger": "item"
+        },
+        "legend": {
+            "top": "5%",
+            "left": "center"
+        },
+        "series": [
+            {
+                "name": titulo,
+                "type": "pie",
+                "radius": ["40%", "75%"],
+                "avoidLabelOverlap": False,
+                "itemStyle": {
+                    "borderRadius": 10,
+                    "borderColor": "#fff",
+                    "borderWidth": 2
+                },
                 "label": {
-                    "show": True,
-                    "fontSize": 20,
-                    "fontWeight": "bold"
-                }
-            },
-            "labelLine": {
-                "show": True
-            },
-            "data": data_pie
-        }
-    ]
-}
+                    "show": False,
+                    "position": "center"
+                },
+                "emphasis": {
+                    "label": {
+                        "show": True,
+                        "fontSize": 20,
+                        "fontWeight": "bold"
+                    }
+                },
+                "labelLine": {
+                    "show": True
+                },
+                "data": data
+            }
+        ]
+    }
 
-# Mostrar el gráfico
-st_echarts(options=option, height="400px", key="puesto_tipo_pie")
+    st_echarts(options=option, height="400px", key=key_id)
+
+# --- PRIMERA FILA ---
+col1, col2 = st.columns(2)
+
+with col1:
+    pie_chart_donut(df, "Puesto Tipo", "Distribución por Puesto Tipo", "pie1")
+
+with col2:
+    pie_chart_donut(df, "Tipo Comité", "Distribución por Tipo Comité", "pie2")
+
+# --- SEGUNDA FILA ---
+col3, col4 = st.columns(2)
+
+with col3:
+    pie_chart_donut(df, "Nivel", "Distribución por Nivel", "pie3")
+
+with col4:
+    pie_chart_donut(df, "Modalidad", "Distribución por Modalidad", "pie4")
 
 
-# Agrupar por valores únicos y contar
-conteo_puestos = df["Puesto Tipo"].value_counts().reset_index()
-conteo_puestos.columns = ["name", "value"]
 
-# Convertir al formato de ECharts
-data_rose = conteo_puestos.to_dict(orient="records")
-
-# Configurar estilo "rose chart"
-option_rose = {
-    "tooltip": {
-        "trigger": "item"
-    },
-    "legend": {
-        "top": "top"
-    },
-    "series": [
-        {
-            "name": "Puestos",
-            "type": "pie",
-            "radius": [30, 120],
-            "center": ["50%", "60%"],
-            "roseType": "area",  # <- esto activa estilo pétalo
-            "itemStyle": {
-                "borderRadius": 8
-            },
-            "label": {
-                "show": True
-            },
-            "data": data_rose
-        }
-    ]
-}
-
-# Mostrar gráfico
-st_echarts(options=option_rose, height="500px", key="puesto_tipo_rose")
 
 
