@@ -44,7 +44,7 @@ elif st.session_state["authentication_status"] is None:
     st.warning("🔒 Ingresá tus credenciales para acceder al dashboard.")
     st.stop()
 
-st.markdown("<div style='margin-top: 30px;'></div>", unsafe_allow_html=True)
+st.markdown("<div style='margin-top: 10px;'></div>", unsafe_allow_html=True)
 
 # ---- CARGA DE DATOS ----
 scope = ["https://www.googleapis.com/auth/spreadsheets"]
