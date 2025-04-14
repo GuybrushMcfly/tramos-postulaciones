@@ -112,3 +112,40 @@ with col3:
 
 with col4:
     tarjeta("COMENTARIOS", total_agentes, "#9C27B0", "💬")
+
+
+# Simulación de datos
+total_agentes = 233
+
+# Definición de tarjetas con gradientes
+def tarjeta_gradiente(titulo, valor, gradiente, icono):
+    st.markdown(f"""
+        <div style="
+            background: {gradiente};
+            padding: 20px;
+            border-radius: 15px;
+            height: 140px;
+            position: relative;
+            box-shadow: 0px 4px 10px rgba(0,0,0,0.25);
+        ">
+            <div style="font-size: 14px; color: white; font-weight: bold;">{titulo}</div>
+            <div style="font-size: 32px; color: white; font-weight: bold;">{valor}</div>
+            <div style="font-size: 12px; color: white;">Monthly progress</div>
+            <div style="position: absolute; top: 10px; right: 15px; font-size: 32px; opacity: 0.5;">{icono}</div>
+        </div>
+    """, unsafe_allow_html=True)
+
+# Layout en 4 columnas
+col1, col2, col3, col4 = st.columns(4)
+
+with col1:
+    tarjeta_gradiente("TOTAL AGENTES", total_agentes, "linear-gradient(135deg, #36D1DC, #5B86E5)", "🧊")
+
+with col2:
+    tarjeta_gradiente("ACTIVOS HOY", total_agentes, "linear-gradient(135deg, #FF416C, #FF4B2B)", "👥")
+
+with col3:
+    tarjeta_gradiente("NUEVOS INGRESOS", total_agentes, "linear-gradient(135deg, #FDC830, #F37335)", "🛒")
+
+with col4:
+    tarjeta_gradiente("COMENTARIOS", total_agentes, "linear-gradient(135deg, #B24592, #F15F79)", "💬")
