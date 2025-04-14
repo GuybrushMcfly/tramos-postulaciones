@@ -13,5 +13,5 @@ textblob
 nltk
 pyyaml
 streamlit-echarts
-seaborn
+
 
