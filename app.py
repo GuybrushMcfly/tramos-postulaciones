@@ -53,5 +53,5 @@ gc = gspread.authorize(creds)
 
 
 # Abro la planilla
-sheet = gc.open_by_key("111--jD47K72s9ddt727kYd9BhRmAOM7qXEUB60SX69UA")
+sheet = gc.open_by_key("11--jD47K72s9ddt727kYd9BhRmAOM7qXEUB60SX69UA")
 postulaciones = pd.DataFrame(sheet.worksheet("Postulaciones").get_all_records())
