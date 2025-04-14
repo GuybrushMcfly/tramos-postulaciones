@@ -1,7 +1,7 @@
 [theme]
-base = "auto"
-primaryColor = "#00B4DB"  # Azul vibrante (tarjetas, botones)
-backgroundColor = "#ffffff"  # Claro por defecto
-secondaryBackgroundColor = "#f0f2f6"  # Fondo sidebar claro
-textColor = "#000000"
+base = "dark"
+primaryColor = "#00F260"
+backgroundColor = "#0e1117"
+secondaryBackgroundColor = "#262730"
+textColor = "#FFFFFF"
 font = "sans serif"
