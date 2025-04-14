@@ -69,7 +69,8 @@ st.sidebar.header("Filtros")
 
 # Filtro múltiple por TRAMO
 st.sidebar.subheader("TRAMO")
-tramos = df["Tramo Post."].dropna().unique()
+tramos = df["Tramo Post."].dropna()
+tramos = tramos[tramos != ""].unique()
 tramo_seleccionado = st.sidebar.multiselect(
     "Seleccionar uno o más tramos",
     options=sorted(tramos),
@@ -78,7 +79,8 @@ tramo_seleccionado = st.sidebar.multiselect(
 
 # Filtro múltiple por PERIODO
 st.sidebar.subheader("PERIODO")
-periodos = df["Periodo Valoración"].dropna().unique()
+periodos = df["Periodo Valoración"].dropna()
+periodos = periodos[periodos != ""].unique()
 periodo_seleccionado = st.sidebar.multiselect(
     "Seleccionar uno o más periodos",
     options=sorted(periodos),
@@ -92,7 +94,7 @@ df = df[
     ~df["Estado"].isin(["Pendiente", "Anulada"])
 ]
 
-# Agrupamiento de Tipo Comité
+# Agrupar valores personalizados en Tipo Comité
 df["Tipo Comité - Agrupado"] = df["Tipo Comité"].apply(lambda x: x if x in [
     "Jurisdiccional (INDEC)",
     "Transversal (INAP)",
