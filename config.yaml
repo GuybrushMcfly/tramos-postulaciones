@@ -6,7 +6,7 @@ credentials:
       password: '$2b$12$gUAFeTlzBSjMz8V4HfnZL.r5jmDnRcy5Ju7WCCAlWJsMnOoafkP8C'  
     pbarrientos:
       email: pilar@example.com
-      name: Pilar La Jefa Barrientos
+      name: Pilar
       password: '$2b$12$jFkjJ7AtyAaXILK/JH0mpe6fnIvK8aHk4/WNLx.MTiVevGwvqgPjq'  
     dcapone:
       email: debora@example.com
