@@ -37,7 +37,7 @@ authenticator.login()
 if st.session_state["authentication_status"]:
     authenticator.logout("Cerrar sesión", "sidebar")
     st.sidebar.success(f"Hola, {st.session_state['name']}")
-    st.title("📊 Dashboard DCYCP - Tramos Escalafonarios")
+    st.title("📊 Dashboard Tramos Escalafonarios")
 ##    st.write("✅ Estás autenticado.")
 elif st.session_state["authentication_status"] is False:
     st.error("❌ Usuario o contraseña incorrectos.")
@@ -300,4 +300,38 @@ with st.expander("🔎 VER DETALLES DE POSTULACIONES 🔎"):
 
 #--------------------------
 
+# Agrupar y pivotear los datos
+pivot = df.pivot_table(
+    index="Dep. Nacional",
+    columns="Nivel Post.",
+    aggfunc="size",
+    fill_value=0
+).reset_index()
+
+# Preparar los datos para ECharts
+categorias = pivot["Dep. Nacional"].tolist()
+series_data = [
+    {
+        "name": col,
+        "type": "bar",
+        "stack": "total",
+        "label": {"show": True},
+        "emphasis": {"focus": "series"},
+        "data": pivot[col].tolist()
+    }
+    for col in pivot.columns[1:]
+]
+
+# Configuración del gráfico
+options = {
+    "tooltip": {"trigger": "axis", "axisPointer": {"type": "shadow"}},
+    "legend": {"data": list(pivot.columns[1:])},
+    "grid": {"left": "3%", "right": "4%", "bottom": "3%", "containLabel": True},
+    "xAxis": {"type": "value"},
+    "yAxis": {"type": "category", "data": categorias},
+    "series": series_data
+}
+
+# Mostrar el gráfico
+st_echarts(options=options, height="500px", key="bar_horizontal_dep_nac")
 
