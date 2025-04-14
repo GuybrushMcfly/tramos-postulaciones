@@ -195,12 +195,8 @@ with col8:
 
 st.markdown("<div style='margin-top: 50px;'></div>", unsafe_allow_html=True)
 
-import streamlit as st
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
-
-# Configuración general de la app
-st.set_page_config(layout="wide")
 
 # Datos de ejemplo
 valores = [20, 40, 60, 80]
