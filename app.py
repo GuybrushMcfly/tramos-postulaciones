@@ -215,6 +215,13 @@ def pie_chart_donut(df, columna, titulo, key_id):
 
     st_echarts(options=option, height="400px", key=key_id)
 
+# Agrupar valores personalizados en Tipo Comité
+df["Tipo Comité - Agrupado"] = df["Tipo Comité"].apply(lambda x: x if x in [
+    "Jurisdiccional (INDEC)",
+    "Transversal (INAP)",
+    "Funciones informáticas (ONTI)"
+] else "Otros (EXTERNOS)")
+
 
 # --- PRIMERA FILA ---
 col1, col2 = st.columns(2)
@@ -223,7 +230,8 @@ with col1:
     pie_chart_donut(df, "Puesto Tipo", "Distribución por Puesto Tipo", "pie1")
 
 with col2:
-    pie_chart_donut(df, "Tipo Comité", "Distribución por Tipo Comité", "pie2")
+#    pie_chart_donut(df, "Tipo Comité", "Distribución por Tipo Comité", "pie2")
+    pie_chart_donut(df, "Tipo Comité - Agrupado", "Distribución por Tipo Comité", "pie2")
 
 st.markdown("<div style='margin-top: 60px;'></div>", unsafe_allow_html=True)
 
