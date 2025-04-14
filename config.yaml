@@ -22,7 +22,7 @@ credentials:
       password: '$2b$12$mHsnmrnss.kKW63.W1JEneXyL0te1DZOzaNMBAu84u2bqN9zer4..'  
     pfiorentini:
       email: pablo@example.com
-      name: Pablo Fiorentini
+      name: Pablo
       password: '$2b$12$MQpPsx9OotpXNB81nhSaIeztR8oQmOcIn9n2J54G03QDc/IBIM7DO'  
 
 cookie:
