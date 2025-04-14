@@ -47,20 +47,6 @@ credenciales_dict = json.loads(st.secrets["GOOGLE_CREDS"])
 creds = Credentials.from_service_account_info(credenciales_dict, scopes=scope)
 gc = gspread.authorize(creds)
 
-# ---- PARÁMETROS ----
-SHEET_ID = "11--jD47K72s9ddt727kYd9BhRmAOM7qXEUB60SX69UA"
-NOMBRE_HOJA = "Postulaciones"
-
-# ---- CARGA DE DATOS ----
-try:
-    worksheet = gc.open_by_key(SHEET_ID).worksheet(NOMBRE_HOJA)
-    data = worksheet.get_all_records()
-    df = pd.DataFrame(data)
-
-    if not df.empty:
-        st.dataframe(df.head(10))
-    else:
-        st.warning("La hoja está vacía.")
-
-except Exception as e:
-    st.error(f"Ocurrió un error al acceder a la hoja de cálculo: {e}")
+# Abro la planilla
+sheet = gc.open_by_key("111--jD47K72s9ddt727kYd9BhRmAOM7qXEUB60SX69UA")
+postulaciones = pd.DataFrame(sheet.worksheet("Postulaciones").get_all_records())
