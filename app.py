@@ -70,6 +70,10 @@ data = worksheet.get_all_records()
 # 8️⃣ Convierte los datos en un DataFrame de pandas
 df = pd.DataFrame(data)
 
+# Listar las hojas disponibles
+nombres_hojas = [ws.title for ws in sheet.worksheets()]
+st.write("📄 Hojas disponibles:", nombres_hojas)
+
 # 9️⃣ Intenta cargar la hoja llamada "valores" como DataFrame
 try:
     valores = pd.DataFrame(sheet.worksheet("valores").get_all_records())
