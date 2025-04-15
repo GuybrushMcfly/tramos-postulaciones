@@ -66,9 +66,12 @@ gc = gspread.authorize(creds)
 sheet = gc.open_by_key("11--jD47K72s9ddt727kYd9BhRmAOM7qXEUB60SX69UA")
 postulaciones = pd.DataFrame(sheet.worksheet("Postulaciones").get_all_records())
 valores = pd.DataFrame(sheet.worksheet("valores").get_all_records())
-worksheet = gc.open_by_key("11--jD47K72s9ddt727kYd9BhRmAOM7qXEUB60SX69UA").sheet1
+#worksheet = gc.open_by_key("11--jD47K72s9ddt727kYd9BhRmAOM7qXEUB60SX69UA").sheet1
 
-valores["Monto"] = valores["Monto"].replace(",", ".", regex=True).astype(float)
+# LIMPIEZA Y CONVERSIÓN DE MONTOS
+valores["Monto"] = valores["Monto"].astype(str)
+valores["Monto"] = valores["Monto"].str.replace(",", ".", regex=False).str.strip()
+valores["Monto"] = pd.to_numeric(valores["Monto"], errors="coerce").fillna(0)
 
 # Cargar datos desde la hoja
 data = worksheet.get_all_records()
