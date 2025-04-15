@@ -180,7 +180,7 @@ st.markdown("""
     }
 
     .tooltip-info {
-        font-size: 12px;
+        font-size: 16px;
         color: #eeeeee;
         margin-top: 8px;
         opacity: 0;
