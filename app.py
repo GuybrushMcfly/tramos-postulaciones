@@ -219,8 +219,8 @@ with col1:
     tarjeta_hover_tooltip(
         titulo="POSTULACIONES",
         valor=valor_col1,
-        color="#39d4cc",
-        descripcion="Incluye postulaciones en estado activo, capacitación o valoración.",
+        color="#3850a6",
+        descripcion="Total de postulaciones presentadas por los agentes.",
         size_titulo=15,
         size_valor=32
     )
@@ -229,7 +229,7 @@ with col2:
     tarjeta_hover_tooltip(
         titulo="POST. HISTÓRICOS",
         valor=valor_col2,
-        color="#6ce2be",
+        color="#7c4daa",
         descripcion="Agentes de planta permanente históricos.",
         size_titulo=14,
         size_valor=34
@@ -239,7 +239,7 @@ with col3:
     tarjeta_hover_tooltip(
         titulo="POST. INGRESANTES",
         valor=valor_col3,
-        color="#9cefaf",
+        color="#b147a2",
         descripcion="Agentes que concursaron en 2023.",
         size_titulo=16,
         size_valor=33
@@ -249,10 +249,10 @@ with col4:
     tarjeta_hover_tooltip(
         titulo="MONTO ESTIMADO",
         valor=valor_col4_mostrado,
-        color="#cdf8a3",
+        color="#dc4390",
         descripcion="Valor total estimado de asignación por tramo.",
         size_titulo=15,
-        size_valor=28
+        size_valor=25
     )
 
 
@@ -300,6 +300,10 @@ with col8:
         size_titulo=15,
         size_valor=36
     )
+
+st.markdown("<div style='margin-top: 30px;'></div>", unsafe_allow_html=True)
+st.markdown(f"### Resumen")
+
 
 
 # --- FUNCIÓN PARA GRÁFICOS PIE ---
