@@ -272,7 +272,7 @@ def pie_chart_donut(df, columna, titulo, key_id):
         ]
     }
 
-    st_echarts(options=option, height="420px", key=key_id)
+    st_echarts(options=option, height="460px", key=key_id)
 
 
 
