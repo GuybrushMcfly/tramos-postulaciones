@@ -142,7 +142,9 @@ valor_col3 = df[
 valor_col4 = valores["Monto"].sum()
 
 # Formateo estilo
+valor_col4 = pd.to_numeric(valores["Monto"], errors="coerce").sum()
 valor_col4_mostrado = f"{valor_col4:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
+
 
 
 valor_col5 = df[df["Estado"] == "Presentada"]["Agente"].count()
