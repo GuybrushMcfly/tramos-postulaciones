@@ -139,13 +139,9 @@ valor_col3 = df[
     (df["Ingresante"] == "SI")
 ]["Agente"].count()
 
+st.write("🔍 Monto total (sin formato):", valor_col4, type(valor_col4))
 valor_col4 = valores["Monto"].sum()
 
-# Formateo estilo
-st.write("🔍 Monto total (sin formato):", valor_col4, type(valor_col4))
-
-valor_col4 = pd.to_numeric(valores["Monto"], errors="coerce").sum()
-valor_col4_mostrado = f"{valor_col4:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
 
 
 
