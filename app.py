@@ -547,6 +547,9 @@ st.markdown("#### 📊 Presupuesto estimado por Nivel y Período")
 st.dataframe(pivot_valores, use_container_width=True, hide_index=True)
 
 
+
+from streamlit_echarts import st_echarts
+
 # Construimos la base de datos para ECharts
 meses = pivot_valores["Mes"].tolist()
 
