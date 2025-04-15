@@ -144,6 +144,7 @@ valor_col3 = df[
 valor_col4 = valores["Monto"].sum()
 valor_col4_mostrado = f"{valor_col4:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
 
+
 valor_col5 = df[df["Estado"] == "Presentada"]["Agente"].count()
 valor_col6 = df[df["Estado"] == "En Actividad Capacitación"]["Agente"].count()
 valor_col7 = df[df["Estado"] == "En Actividad Valoración"]["Agente"].count()
