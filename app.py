@@ -46,62 +46,38 @@ st.markdown("<div style='margin-top: 10px;'></div>", unsafe_allow_html=True)
 
 # ---- CARGA DE DATOS DE GOOGLE SHEETS ----
 
-# 1️⃣ Define el alcance (scope) para acceder a Google Sheets con permisos de lectura/escritura
+# 1️⃣ Definir permisos de acceso
 scope = ["https://www.googleapis.com/auth/spreadsheets"]
-
-# 2️⃣ Carga las credenciales del archivo secreto (.streamlit/secrets.toml)
 credenciales_dict = json.loads(st.secrets["GOOGLE_CREDS"])
-
-# 3️⃣ Crea un objeto de credenciales de Google para autenticar
 creds = Credentials.from_service_account_info(credenciales_dict, scopes=scope)
-
-# 4️⃣ Autoriza la conexión a Google Sheets usando gspread
 gc = gspread.authorize(creds)
 
-# 5️⃣ Abre el archivo de Google Sheets por su ID único (parte de la URL)
+# 2️⃣ Abrir archivo de Sheets
 sheet = gc.open_by_key("11--jD47K72s9ddt727kYd9BhRmAOM7qXEUB60SX69UA")
 
-# 6️⃣ Carga la primera hoja del archivo (worksheet principal)
+# 3️⃣ Cargar hoja principal
 worksheet = sheet.sheet1
-
-# 7️⃣ Obtiene todos los registros de la hoja como una lista de diccionarios
 data = worksheet.get_all_records()
-
-# 8️⃣ Convierte los datos en un DataFrame de pandas
 df = pd.DataFrame(data)
 
-# Cargar datos crudos desde la hoja 'valores'
+# 4️⃣ Cargar hoja 'valores' usando get_all_values para evitar errores con celdas vacías
 raw = sheet.worksheet("valores").get_all_values()
-
-# Obtener encabezados válidos, ignorando celdas vacías
 columnas = [col for col in raw[0] if col.strip() != ""]
-
-# Crear el DataFrame desde la segunda fila
 valores = pd.DataFrame(raw[1:], columns=columnas)
 
-# Limpieza de la columna "Monto"
-valores["Monto"] = valores["Monto"].astype(str)
-valores["Monto"] = valores["Monto"].str.replace(".", "", regex=False)
-valores["Monto"] = valores["Monto"].str.replace(",", ".", regex=False)
-valores["Monto"] = pd.to_numeric(valores["Monto"], errors="coerce").fillna(0)
-
-
-# Asegura que todos los valores estén como texto
-valores["Monto"] = valores["Monto"].astype(str)
-
-# Elimina los puntos de miles: ej. "1.234.567,89" → "1234567,89"
-valores["Monto"] = valores["Monto"].str.replace(".", "", regex=False)
-
-# Reemplaza la coma decimal por punto: "1234567,89" → "1234567.89"
-valores["Monto"] = valores["Monto"].str.replace(",", ".", regex=False)
-
-# Convierte los montos a valores numéricos (float); reemplaza errores por 0
+# 5️⃣ Limpiar y convertir la columna "Monto"
+valores["Monto"] = (
+    valores["Monto"]
+    .astype(str)
+    .str.replace(".", "", regex=False)  # Quitar puntos de miles
+    .str.replace(",", ".", regex=False)  # Reemplazar coma decimal por punto
+)
 valores["Monto"] = pd.to_numeric(valores["Monto"], errors="coerce").fillna(0)
 
 # ---- FILTROS EN LA BARRA LATERAL ----
 st.sidebar.header("Filtros")
 
-# Filtro múltiple por TRAMO
+# Filtro por Tramo
 st.sidebar.subheader("TRAMO")
 tramos = df["Tramo Post."].dropna()
 tramos = tramos[tramos != ""].unique()
@@ -111,7 +87,7 @@ tramo_seleccionado = st.sidebar.multiselect(
     default=sorted(tramos)
 )
 
-# Filtro múltiple por PERIODO
+# Filtro por Periodo
 st.sidebar.subheader("PERIODO")
 periodos = df["Periodo Valoración"].dropna()
 periodos = periodos[periodos != ""].unique()
@@ -121,10 +97,8 @@ periodo_seleccionado = st.sidebar.multiselect(
     default=sorted(periodos)
 )
 
-# Crear columna de tipo personal
+# Filtro por tipo de personal
 df["Tipo Personal"] = df["Ingresante"].apply(lambda x: "INGRESANTES" if x == "SI" else "HISTÓRICOS")
-
-# Filtro múltiple por TIPO PERSONAL
 st.sidebar.subheader("PERSONAL")
 tipos_personal = df["Tipo Personal"].dropna().unique()
 tipo_seleccionado = st.sidebar.multiselect(
@@ -133,22 +107,21 @@ tipo_seleccionado = st.sidebar.multiselect(
     default=sorted(tipos_personal)
 )
 
-# Aplicar el filtro al DataFrame
+# Aplicar filtros
 df = df[df["Tipo Personal"].isin(tipo_seleccionado)]
-
-# Aplicar todos los filtros antes del análisis
 df = df[
     df["Tramo Post."].isin(tramo_seleccionado) &
     df["Periodo Valoración"].isin(periodo_seleccionado) &
     ~df["Estado"].isin(["Pendiente", "Anulada"])
 ]
 
-# Agrupar valores personalizados en Tipo Comité
+# Agrupar tipo de comité en categorías personalizadas
 df["Tipo Comité - Agrupado"] = df["Tipo Comité"].apply(lambda x: x if x in [
     "Jurisdiccional (INDEC)",
     "Transversal (INAP)",
     "Funciones informáticas (ONTI)"
 ] else "Otros (EXTERNOS)")
+
 
 
 # --- LÓGICA DE VALORES ---
