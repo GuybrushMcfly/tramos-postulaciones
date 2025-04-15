@@ -216,16 +216,16 @@ st.markdown("#### 🧍‍♂️🧍‍♀️ Postulaciones Totales")
 col1, col2, col3, col4 = st.columns(4)
 
 with col1:
-    tarjeta_hover_tooltip("POSTULACIONES", valor_col1, "#1d5a55", "Incluye postulaciones en estado activo, capacitación o valoración.")
+    tarjeta_hover_tooltip("POSTULACIONES", valor_col1, "#3850a6", "Incluye postulaciones en estado activo, capacitación o valoración.")
 
 with col2:
-    tarjeta_hover_tooltip("POST. HISTÓRICOS", valor_col2, "#42846d", "Agentes con antecedentes previos en el organismo.")
+    tarjeta_hover_tooltip("POST. HISTÓRICOS", valor_col2, "#7c4daa", "Agentes con antecedentes previos en el organismo.")
 
 with col3:
-    tarjeta_hover_tooltip("POST. INGRESANTES", valor_col3, "#9cefaf", "Agentes nuevos en el organismo.")
+    tarjeta_hover_tooltip("POST. INGRESANTES", valor_col3, "#b147a2", "Agentes nuevos en el organismo.")
 
 with col4:
-    tarjeta_hover_tooltip("MONTO ESTIMADO", valor_col4_mostrado, "#cdf8a3", "Valor estimado para el conjunto de postulaciones.")
+    tarjeta_hover_tooltip("MONTO ESTIMADO", valor_col4_mostrado, "#dc4390", "Valor estimado para el conjunto de postulaciones.")
 
 
 # --- FILA 2 ---
@@ -234,17 +234,18 @@ st.markdown("#### 📂 Estado de Tramitaciones")
 col5, col6, col7, col8 = st.columns(4)
 
 with col5:
-    tarjeta_hover_tooltip("PRESENTADAS", valor_col5, "#ffffa0", "Tramitaciones que fueron cargadas y están a la espera de revisión.")
+    tarjeta_hover_tooltip("PRESENTADAS", valor_col5, "#fa4c76", "Tramitaciones que fueron cargadas y están a la espera de revisión.")
 
 with col6:
-    tarjeta_hover_tooltip("EN ACTIV. CAPACITACION", valor_col6, "#fdd274", "Postulaciones actualmente en proceso de capacitación.")
+    tarjeta_hover_tooltip("EN ACTIV. CAPACITACION", valor_col6, "#ff6357", "Postulaciones actualmente en proceso de capacitación.")
 
 with col7:
-    tarjeta_hover_tooltip("EN ACTIV. VALORACION", valor_col7, "#f6a259", "Postulaciones en análisis por el comité de valoración.")
+    tarjeta_hover_tooltip("EN ACTIV. VALORACION", valor_col7, "#ff8336", "Postulaciones en análisis por el comité de valoración.")
 
 with col8:
-    tarjeta_hover_tooltip("APROBADAS", valor_col8, "#ea714f", "Tramitaciones que recibieron aprobación definitiva.")
+    tarjeta_hover_tooltip("APROBADAS", valor_col8, "#ffa600", "Tramitaciones que recibieron aprobación definitiva.")
 
+st.markdown("<div style='margin-top: 30px;'></div>", unsafe_allow_html=True)
 
 
 # --- FUNCIÓN PARA GRÁFICOS PIE ---
