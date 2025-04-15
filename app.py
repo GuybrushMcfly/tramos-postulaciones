@@ -45,30 +45,50 @@ elif st.session_state["authentication_status"] is None:
 st.markdown("<div style='margin-top: 10px;'></div>", unsafe_allow_html=True)
 
 # ---- CARGA DE DATOS DE GOOGLE SHEETS ----
+
+# 1️⃣ Define el alcance (scope) para acceder a Google Sheets con permisos de lectura/escritura
 scope = ["https://www.googleapis.com/auth/spreadsheets"]
+
+# 2️⃣ Carga las credenciales del archivo secreto (.streamlit/secrets.toml)
 credenciales_dict = json.loads(st.secrets["GOOGLE_CREDS"])
+
+# 3️⃣ Crea un objeto de credenciales de Google para autenticar
 creds = Credentials.from_service_account_info(credenciales_dict, scopes=scope)
+
+# 4️⃣ Autoriza la conexión a Google Sheets usando gspread
 gc = gspread.authorize(creds)
 
-# Acceso a la planilla
+# 5️⃣ Abre el archivo de Google Sheets por su ID único (parte de la URL)
 sheet = gc.open_by_key("11--jD47K72s9ddt727kYd9BhRmAOM7qXEUB60SX69UA")
 
-# Cargar hoja principal como DataFrame
+# 6️⃣ Carga la primera hoja del archivo (worksheet principal)
 worksheet = sheet.sheet1
+
+# 7️⃣ Obtiene todos los registros de la hoja como una lista de diccionarios
 data = worksheet.get_all_records()
+
+# 8️⃣ Convierte los datos en un DataFrame de pandas
 df = pd.DataFrame(data)
 
-# Cargar hoja "valores"
-valores = pd.DataFrame(sheet.worksheet("valores").get_all_records())
+# 9️⃣ Intenta cargar la hoja llamada "valores" como DataFrame
+try:
+    valores = pd.DataFrame(sheet.worksheet("valores").get_all_records())
+except Exception as e:
+    st.error("❌ No se pudo cargar la hoja 'valores'. Verificá que exista y tenga datos.")
+    st.stop()
 
-# Normalizar CUIL
-valores["CUIL"] = valores["CUIL"].astype(str)
-df["CUIL"] = df["CUIL"].astype(str)
+# 🔟 Limpieza y conversión de la columna "Monto" en el DataFrame 'valores'
 
-# Limpieza y conversión de montos
+# Asegura que todos los valores estén como texto
 valores["Monto"] = valores["Monto"].astype(str)
-valores["Monto"] = valores["Monto"].str.replace(".", "", regex=False)   # Quita puntos de miles
-valores["Monto"] = valores["Monto"].str.replace(",", ".", regex=False)  # Cambia coma decimal por punto
+
+# Elimina los puntos de miles: ej. "1.234.567,89" → "1234567,89"
+valores["Monto"] = valores["Monto"].str.replace(".", "", regex=False)
+
+# Reemplaza la coma decimal por punto: "1234567,89" → "1234567.89"
+valores["Monto"] = valores["Monto"].str.replace(",", ".", regex=False)
+
+# Convierte los montos a valores numéricos (float); reemplaza errores por 0
 valores["Monto"] = pd.to_numeric(valores["Monto"], errors="coerce").fillna(0)
 
 # ---- FILTROS EN LA BARRA LATERAL ----
