@@ -74,6 +74,8 @@ valores["Monto"] = (
 # Convertir a número decimal (float)
 valores["Monto"] = pd.to_numeric(valores["Monto"], errors="coerce").fillna(0)
 
+st.write("🧪 Primeros 20 montos procesados:", valores["Monto"].head(20))
+
 
 # ---- FILTROS EN LA BARRA LATERAL ----
 st.sidebar.header("Filtros")
