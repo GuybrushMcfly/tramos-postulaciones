@@ -222,7 +222,7 @@ with col1:
         color="#3850a6",
         descripcion="Total de postulaciones presentadas por los agentes.",
         size_titulo=15,
-        size_valor=32
+        size_valor=34
     )
 
 with col2:
@@ -231,7 +231,7 @@ with col2:
         valor=valor_col2,
         color="#7c4daa",
         descripcion="Agentes de planta permanente históricos.",
-        size_titulo=14,
+        size_titulo=15,
         size_valor=34
     )
 
@@ -241,8 +241,8 @@ with col3:
         valor=valor_col3,
         color="#b147a2",
         descripcion="Agentes que concursaron en 2023.",
-        size_titulo=16,
-        size_valor=33
+        size_titulo=15,
+        size_valor=34
     )
 
 with col4:
@@ -269,7 +269,7 @@ with col5:
         color="#fa4c76",
         descripcion="Postulaciones presentadas por los agentes a la espera de iniciar el trámite.",
         size_titulo=15,
-        size_valor=35
+        size_valor=34
     )
 
 with col6:
@@ -278,8 +278,8 @@ with col6:
         valor=valor_col6,
         color="#ff6357",
         descripcion="Postulaciones actualmente en proceso de capacitación.",
-        size_titulo=14,
-        size_valor=30
+        size_titulo=15,
+        size_valor=34
     )
 
 with col7:
@@ -288,8 +288,8 @@ with col7:
         valor=valor_col7,
         color="#ff8336",
         descripcion="Postulaciones en análisis por el comité de valoración.",
-        size_titulo=14,
-        size_valor=32
+        size_titulo=15,
+        size_valor=34
     )
 
 with col8:
@@ -299,7 +299,7 @@ with col8:
         color="#ffa600",
         descripcion="Tramitaciones aprobadas por resolución.",
         size_titulo=15,
-        size_valor=36
+        size_valor=34
     )
 
 st.markdown("<div style='margin-top: 60px;'></div>", unsafe_allow_html=True)
