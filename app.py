@@ -232,11 +232,18 @@ def pie_chart_donut(df, columna, titulo, key_id):
             "trigger": "item",
             "formatter": "{b}: {c} ({d}%)"
         },
+        #"legend": {
+        #    "orient": "horizontal",
+        #    "top": "80%",  # más arriba para que no se corte
+           # "left": "center",
+           # "padding": [0, 0, 20, 0],
+        #    "textStyle": {"color": color_texto}
+        #},
+
         "legend": {
-            "orient": "horizontal",
-            "top": "80%",  # más arriba para que no se corte
-            "left": "center",
-            "padding": [0, 0, 20, 0],
+            "orient": "vertical",
+            "left": "right",
+            "top": "center",
             "textStyle": {"color": color_texto}
         },
         "series": [
