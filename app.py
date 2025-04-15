@@ -505,10 +505,8 @@ valores["CUIL"] = valores["CUIL"].astype(str)
 valores["Nivel Post."] = valores["Nivel Post."].astype(str)
 valores["Monto"] = pd.to_numeric(valores["Monto"], errors="coerce").fillna(0)
 
-# Convertir Periodo Valoracion a datetime con día fijo para evitar errores
-valores["Periodo Valoracion"] = pd.to_datetime(
-    valores["Periodo Valoracion"].astype(str) + "01", format="%Y%m%d", errors="coerce"
-)
+# Usar columna correcta: 'Periodo' (donde están los meses numéricos)
+valores["Periodo"] = pd.to_datetime(valores["Periodo"].astype(str) + "01", format="%Y%m%d", errors="coerce")
 
 # Diccionario de meses en español
 meses_es = {
@@ -516,9 +514,9 @@ meses_es = {
     7: "Jul", 8: "Ago", 9: "Sep", 10: "Oct", 11: "Nov", 12: "Dic"
 }
 
-# Crear columnas auxiliares
-valores["Periodo_Orden"] = valores["Periodo Valoracion"]
-valores["Mes"] = valores["Periodo_Orden"].dt.month.map(meses_es) + "-" + valores["Periodo_Orden"].dt.strftime("%y")
+# Columnas auxiliares
+valores["Periodo_Orden"] = valores["Periodo"]
+valores["Mes"] = valores["Periodo"].dt.month.map(meses_es) + "-" + valores["Periodo"].dt.strftime("%y")
 
 # Crear tabla dinámica con sumatoria por nivel
 pivot_valores = valores.pivot_table(
@@ -540,39 +538,10 @@ for nivel in ["A", "B", "C", "D"]:
 # Calcular total por fila
 pivot_valores["Total"] = pivot_valores[["A", "B", "C", "D"]].sum(axis=1)
 
-# Reordenar columnas para visualización
+# Reordenar columnas
 columnas_finales = ["Mes", "A", "B", "C", "D", "Total"]
 pivot_valores = pivot_valores[columnas_finales]
 
-# Mostrar tabla en el dashboard
+# Mostrar en el dashboard
 st.markdown("#### 📊 Presupuesto estimado por Nivel y Período")
 st.dataframe(pivot_valores, use_container_width=True, hide_index=True)
-
-# Suma total general
-total_monto = valores["Monto"].sum()
-
-
-
-import pandas as pd
-
-# Aseguramos que los datos estén bien formateados
-valores["Periodo"] = pd.to_datetime(valores["Periodo"].astype(str) + "01", format="%Y%m%d", errors="coerce")
-valores["Monto"] = pd.to_numeric(valores["Monto"], errors="coerce").fillna(0)
-valores["Nivel Post."] = valores["Nivel Post."].astype(str)
-
-# Creamos la tabla dinámica
-pivot = pd.pivot_table(
-    valores,
-    index=valores["Periodo"].dt.strftime("%Y-%m"),  # Formato Año-Mes
-    columns="Nivel",
-    values="Monto",
-    aggfunc="sum",
-    fill_value=0
-)
-
-# Mostrar la tabla (si estás usando Streamlit)
-import streamlit as st
-st.dataframe(pivot, use_container_width=True)
-
-
-
