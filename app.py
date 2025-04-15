@@ -320,15 +320,20 @@ with col6:
 #----------------------
 st.markdown("<div style='margin-top: 60px;'></div>", unsafe_allow_html=True)
 
+# Obtener las columnas de la hoja "tabla-dash"
 postulaciones = pd.DataFrame(sheet.worksheet("tabla-dash").get_all_records())
-df = pd.DataFrame(sheet.worksheet("tabla-dash").get_all_records())
+columnas_tabla_dash = postulaciones.columns.tolist()
 
+# Aplicar esas columnas al df filtrado (descartando cualquier otra)
+df_filtrado_para_mostrar = df.copy()
+df_filtrado_para_mostrar = df_filtrado_para_mostrar[[col for col in columnas_tabla_dash if col in df_filtrado_para_mostrar.columns]]
 
-# 👉 Ver solo las postulaciones que coinciden con los filtros actuales
+# Mostrar con expander
 st.markdown("<div style='margin-top: 60px;'></div>", unsafe_allow_html=True)
 
 with st.expander("🔍 VER POSTULACIONES FILTRADAS 🔎"):
-    st.dataframe(df, use_container_width=True, hide_index=True)
+    st.dataframe(df_filtrado_para_mostrar, use_container_width=True, hide_index=True)
+
 #----------------------
 
 st.markdown("<div style='margin-top: 60px;'></div>", unsafe_allow_html=True)
