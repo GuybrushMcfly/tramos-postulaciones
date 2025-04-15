@@ -550,13 +550,10 @@ st.dataframe(pivot_valores, use_container_width=True, hide_index=True)
 
 from streamlit_echarts import st_echarts
 
+# Preparar datos
 meses = pivot_valores["Mes"].tolist()
 niveles = ["A", "B", "C", "D"]
 series = []
-
-function (value) {
-    return value.toLocaleString('de-DE');
-}
 
 for nivel in niveles:
     series.append({
@@ -566,9 +563,9 @@ for nivel in niveles:
         "areaStyle": {},
         "emphasis": {"focus": "series"},
         "data": pivot_valores[nivel].round(2).tolist()
-        # No agregamos "label": {"show": True} → eso quita los números visibles
     })
 
+# Opciones del gráfico
 options = {
     "title": {
         "text": "Presupuesto por Nivel - Área Apilada",
@@ -609,6 +606,6 @@ options = {
     "series": series,
 }
 
-
+# Mostrar gráfico
 st_echarts(options=options, height="400px")
 
