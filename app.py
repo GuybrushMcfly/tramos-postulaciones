@@ -12,21 +12,16 @@ from streamlit_echarts import st_echarts
 
 # ---- CONFIGURACIÓN DE PÁGINA ----
 st.set_page_config(page_title="Dashboard de Tramos", layout="wide")
-
 st.sidebar.image("logo-cap.png", use_container_width=True)
 
 modo = st.get_option("theme.base")
 color_texto = "#000000" if modo == "light" else "#FFFFFF"
 
-
 # ---- CARGAR CONFIGURACIÓN DESDE YAML ----
 with open("config.yaml") as file:
     config = yaml.load(file, Loader=SafeLoader)
-    
-# 👉 Mostrar el hash cargado para verificar (solo durante pruebas)
-#st.code(config['credentials']['usernames']['carlos']['password'])
 
-# ---- CREAR OBJETO AUTENTICADOR ----
+# ---- AUTENTICACIÓN ----
 authenticator = stauth.Authenticate(
     credentials=config['credentials'],
     cookie_name=config['cookie']['name'],
@@ -34,14 +29,12 @@ authenticator = stauth.Authenticate(
     cookie_expiry_days=config['cookie']['expiry_days']
 )
 
-# ---- LOGIN ----
 authenticator.login()
 
 if st.session_state["authentication_status"]:
     authenticator.logout("Cerrar sesión", "sidebar")
     st.sidebar.success(f"Hola, {st.session_state['name']}")
     st.title("📊 Dashboard Tramos Escalafonarios")
-##    st.write("✅ Estás autenticado.")
 elif st.session_state["authentication_status"] is False:
     st.error("❌ Usuario o contraseña incorrectos.")
     st.stop()
@@ -51,44 +44,34 @@ elif st.session_state["authentication_status"] is None:
 
 st.markdown("<div style='margin-top: 10px;'></div>", unsafe_allow_html=True)
 
-# ---- CARGA DE DATOS ----
+# ---- CARGA DE DATOS DE GOOGLE SHEETS ----
 scope = ["https://www.googleapis.com/auth/spreadsheets"]
 credenciales_dict = json.loads(st.secrets["GOOGLE_CREDS"])
 creds = Credentials.from_service_account_info(credenciales_dict, scopes=scope)
 gc = gspread.authorize(creds)
 
-#credenciales_dict = dict(st.secrets["GOOGLE_CREDS"])
-#scope = ["https://www.googleapis.com/auth/spreadsheets.readonly"]
-#creds = Credentials.from_service_account_info(credenciales_dict, scopes=scope)
-
-
-# Abro la planilla
+# Acceso a la planilla
 sheet = gc.open_by_key("11--jD47K72s9ddt727kYd9BhRmAOM7qXEUB60SX69UA")
-postulaciones = pd.DataFrame(sheet.worksheet("Postulaciones").get_all_records())
+
+# Cargar hoja principal como DataFrame
+worksheet = sheet.sheet1
+data = worksheet.get_all_records()
+df = pd.DataFrame(data)
+
+# Cargar hoja "valores"
 valores = pd.DataFrame(sheet.worksheet("valores").get_all_records())
-worksheet = gc.open_by_key("11--jD47K72s9ddt727kYd9BhRmAOM7qXEUB60SX69UA").sheet1
 
-try:
-    valores = pd.DataFrame(sheet.worksheet("valores").get_all_records())
-except Exception as e:
-    st.error(f"Error al cargar hoja 'valores': {e}")
-    st.stop()
-
+# Normalizar CUIL
 valores["CUIL"] = valores["CUIL"].astype(str)
 df["CUIL"] = df["CUIL"].astype(str)
 
-# Limpieza de montos 
+# Limpieza y conversión de montos
 valores["Monto"] = valores["Monto"].astype(str)
 valores["Monto"] = valores["Monto"].str.replace(".", "", regex=False)   # Quita puntos de miles
 valores["Monto"] = valores["Monto"].str.replace(",", ".", regex=False)  # Cambia coma decimal por punto
 valores["Monto"] = pd.to_numeric(valores["Monto"], errors="coerce").fillna(0)
 
-
-# Cargar datos desde la hoja
-data = worksheet.get_all_records()
-df = pd.DataFrame(data)
-
-# --- FILTROS EN LA BARRA LATERAL ---
+# ---- FILTROS EN LA BARRA LATERAL ----
 st.sidebar.header("Filtros")
 
 # Filtro múltiple por TRAMO
@@ -111,10 +94,10 @@ periodo_seleccionado = st.sidebar.multiselect(
     default=sorted(periodos)
 )
 
-# Filtro múltiple por PERSONAL
+# Crear columna de tipo personal
 df["Tipo Personal"] = df["Ingresante"].apply(lambda x: "INGRESANTES" if x == "SI" else "HISTÓRICOS")
 
-# Filtro múltiple por "Tipo Personal"
+# Filtro múltiple por TIPO PERSONAL
 st.sidebar.subheader("PERSONAL")
 tipos_personal = df["Tipo Personal"].dropna().unique()
 tipo_seleccionado = st.sidebar.multiselect(
