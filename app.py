@@ -368,38 +368,28 @@ st.dataframe(tabla_dinamica, use_container_width=True, hide_index=True)
 
 
 # ----------------------
+# ----------------------
 st.markdown("### 📊 Distribución porcentual por Nivel en cada Dependencia")
 
-import plotly.express as px
+import plotly.graph_objects as go
 
 # Preparar datos base
 df_grafico = tabla_dinamica.set_index("DEPENDENCIA NACIONAL/GENERAL")
-
-# Calcular porcentajes por fila
 df_totales = df_grafico.sum(axis=1)
 df_porcentajes = df_grafico.div(df_totales, axis=0) * 100
 df_porcentajes = df_porcentajes.fillna(0)
 
-# Convertir a formato largo para gráfico
+# Convertir a formato largo
 df_melt_abs = df_grafico.reset_index().melt(id_vars="DEPENDENCIA NACIONAL/GENERAL", var_name="Nivel", value_name="Absoluto")
 df_melt_pct = df_porcentajes.reset_index().melt(id_vars="DEPENDENCIA NACIONAL/GENERAL", var_name="Nivel", value_name="Porcentaje")
-
-# Unir ambos para el tooltip
 df_graf_final = df_melt_abs.merge(df_melt_pct, on=["DEPENDENCIA NACIONAL/GENERAL", "Nivel"])
 
-# Colores estilo ECharts por orden
-colores_echarts = [
-    "#5470C6", "#91CC75", "#EE6666", "#FAC858",
-    "#73C0DE", "#3BA272", "#FC8452", "#9A60B4", "#EA7CCC"
-]
+# Colores personalizados
+colores_custom = ["#003f5c", "#7a5195", "#ef5675", "#ffa600"]
 
 # Crear gráfico
-import plotly.graph_objects as go
-
-niveles = df_graf_final["Nivel"].unique()
-dependencias = df_graf_final["DEPENDENCIA NACIONAL/GENERAL"].unique()
-
 fig = go.Figure()
+niveles = df_graf_final["Nivel"].unique()
 
 for i, nivel in enumerate(niveles):
     datos_nivel = df_graf_final[df_graf_final["Nivel"] == nivel]
@@ -408,7 +398,7 @@ for i, nivel in enumerate(niveles):
         x=datos_nivel["Porcentaje"],
         name=nivel,
         orientation="h",
-        marker=dict(color=colores_echarts[i % len(colores_echarts)]),
+        marker=dict(color=colores_custom[i % len(colores_custom)]),
         hovertemplate=(
             "<b>%{y}</b><br>" +
             "Nivel: <b>" + nivel + "</b><br>" +
@@ -418,20 +408,19 @@ for i, nivel in enumerate(niveles):
         customdata=datos_nivel[["Absoluto"]]
     ))
 
-# Configuración general
+# Configuración de layout
 fig.update_layout(
     barmode="stack",
     xaxis=dict(title="Porcentaje", range=[0, 100], ticksuffix="%"),
     yaxis=dict(title=""),
     legend_title="Nivel Escalafonario",
-    height=500,
+    height=700,  # ← más altura para dar espacio
     margin=dict(t=40, b=40, l=40, r=10),
     plot_bgcolor="rgba(0,0,0,0)"
 )
 
-# Mostrar en Streamlit
+# Mostrar gráfico
 st.plotly_chart(fig, use_container_width=True)
-
 
 
 
