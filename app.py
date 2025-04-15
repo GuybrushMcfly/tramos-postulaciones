@@ -316,18 +316,24 @@ with col5:
 with col6:
     pie_chart_donut(df, "Agrup. Post.", "Distribución por Agrupamiento", "pie6")
 
+
 #----------------------
+st.markdown("<div style='margin-top: 60px;'></div>", unsafe_allow_html=True)
+
 postulaciones = pd.DataFrame(sheet.worksheet("tabla-dash").get_all_records())
+
+# 👉 Ver solo las postulaciones que coinciden con los filtros actuales
+st.markdown("<div style='margin-top: 60px;'></div>", unsafe_allow_html=True)
+
+with st.expander("🔍 VER POSTULACIONES FILTRADAS 🔎"):
+    st.dataframe(df, use_container_width=True, hide_index=True)
+#----------------------
 
 st.markdown("<div style='margin-top: 60px;'></div>", unsafe_allow_html=True)
 
-with st.expander("🔎 VER DETALLES DE POSTULACIONES 🔎"):
+with st.expander("🔍 VER DETALLES DE POSTULACIONES 🔎"):
     st.dataframe(postulaciones, use_container_width=True, hide_index=True)
 
 #--------------------------
 
-# 👉 Ver solo las postulaciones que coinciden con los filtros actuales
-st.markdown("<div style='margin-top: 30px;'></div>", unsafe_allow_html=True)
 
-with st.expander("🔍 VER POSTULACIONES FILTRADAS"):
-    st.dataframe(df, use_container_width=True, hide_index=True)
