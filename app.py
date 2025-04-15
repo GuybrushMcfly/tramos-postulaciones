@@ -338,11 +338,30 @@ with st.expander("🔍 #### VER POSTULACIONES FILTRADAS 🔎"):
 
 
 # ----------------------
-st.markdown("#### 📊 Distribución porcentual por Nivel en cada Dependencia")
+# ----------------------
+st.markdown("<div style='margin-top: 60px;'></div>", unsafe_allow_html=True)
+st.markdown("##### 📊 Personas por Dependencia Nacional y Nivel Escalafonario")
 
-import plotly.graph_objects as go
+# Cargar hoja "tabla-dash"
+tabla_dash = pd.DataFrame(sheet.worksheet("tabla-dash").get_all_records())
 
-# Preparar datos base
+# Renombrar columna para mostrar
+tabla_dash["DEPENDENCIA NACIONAL/GENERAL"] = tabla_dash["Dep. Nacional"]
+
+# Asegurar tipos correctos
+tabla_dash["Nivel Post."] = tabla_dash["Nivel Post."].astype(str)
+tabla_dash["DEPENDENCIA NACIONAL/GENERAL"] = tabla_dash["DEPENDENCIA NACIONAL/GENERAL"].astype(str)
+
+# Crear tabla dinámica para gráfico
+tabla_dinamica = tabla_dash.pivot_table(
+    index="DEPENDENCIA NACIONAL/GENERAL",
+    columns="Nivel Post.",
+    values="Agente",
+    aggfunc="count",
+    fill_value=0
+).reset_index()
+
+# Preparar datos para gráfico de barras apilado 100%
 df_grafico = tabla_dinamica.set_index("DEPENDENCIA NACIONAL/GENERAL")
 df_totales = df_grafico.sum(axis=1)
 df_porcentajes = df_grafico.div(df_totales, axis=0) * 100
@@ -353,12 +372,14 @@ df_melt_abs = df_grafico.reset_index().melt(id_vars="DEPENDENCIA NACIONAL/GENERA
 df_melt_pct = df_porcentajes.reset_index().melt(id_vars="DEPENDENCIA NACIONAL/GENERAL", var_name="Nivel", value_name="Porcentaje")
 df_graf_final = df_melt_abs.merge(df_melt_pct, on=["DEPENDENCIA NACIONAL/GENERAL", "Nivel"])
 
-# Colores personalizados
+# Colores personalizados definitivos
 colores_custom = ["#0c555c", "#007f5b", "#7b9f28", "#ffa600"]
 
 # Crear gráfico
+import plotly.graph_objects as go
+
 fig = go.Figure()
-niveles = df_graf_final["Nivel"].unique()
+niveles = sorted(df_graf_final["Nivel"].unique())  # ordenamos los niveles si querés A-B-C-D
 
 for i, nivel in enumerate(niveles):
     datos_nivel = df_graf_final[df_graf_final["Nivel"] == nivel]
@@ -377,18 +398,18 @@ for i, nivel in enumerate(niveles):
         customdata=datos_nivel[["Absoluto"]]
     ))
 
-# Configuración de layout
+# Configuración del layout
 fig.update_layout(
     barmode="stack",
     xaxis=dict(title="Porcentaje", range=[0, 100], ticksuffix="%"),
     yaxis=dict(title=""),
     legend_title="Nivel Escalafonario",
-    height=700,  # ← más altura para dar espacio
+    height=700,
     margin=dict(t=40, b=40, l=40, r=10),
     plot_bgcolor="rgba(0,0,0,0)"
 )
 
-# Mostrar gráfico
+# Mostrar gráfico en Streamlit
 st.plotly_chart(fig, use_container_width=True)
 
 
