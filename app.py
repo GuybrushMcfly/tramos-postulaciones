@@ -259,6 +259,7 @@ with col4:
 # --- FILA 2 ---
 st.markdown("<div style='margin-top: 30px;'></div>", unsafe_allow_html=True)
 st.markdown("#### 📂 Estado de Tramitaciones")
+
 col5, col6, col7, col8 = st.columns(4)
 
 with col5:
@@ -301,10 +302,8 @@ with col8:
         size_valor=36
     )
 
-st.markdown("<div style='margin-top: 30px;'></div>", unsafe_allow_html=True)
-st.markdown(f"### Resumen")
-
-
+st.markdown("<div style='margin-top: 60px;'></div>", unsafe_allow_html=True)
+st.markdown("##### 📊 Distribución de las postulaciones")
 
 # --- FUNCIÓN PARA GRÁFICOS PIE ---
 def pie_chart_donut(df, columna, titulo, key_id):
@@ -423,7 +422,6 @@ with st.expander("🔍 #### VER POSTULACIONES FILTRADAS 🔎"):
     st.dataframe(df_filtrado_para_mostrar, use_container_width=True, hide_index=True)
 
 
-# ----------------------
 # ----------------------
 st.markdown("<div style='margin-top: 60px;'></div>", unsafe_allow_html=True)
 st.markdown("##### 📊 Personas por Dependencia Nacional y Nivel Escalafonario")
