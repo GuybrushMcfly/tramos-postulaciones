@@ -393,35 +393,36 @@ st.markdown("### 📊 Tabla dinámica de montos por Nivel y Mes")
 st.dataframe(pivot_valores, use_container_width=True, hide_index=True)
 
 
+import plotly.graph_objects as go
 
-# Asegurar que existan todas las columnas A, B, C, D
-for nivel in ["A", "B", "C", "D"]:
-    if nivel not in pivot_valores.columns:
-        pivot_valores[nivel] = 0
+# Crear figura con barras agrupadas por nivel
+fig = go.Figure()
 
-# Calcular total por fila
-pivot_valores["Total"] = pivot_valores[["A", "B", "C", "D"]].sum(axis=1)
+niveles = ["A", "B", "C", "D"]
+colores = ["#00B4DB", "#FF5858", "#FDC830", "#C33764"]  # opcionales
 
-# Reordenar columnas
-columnas_finales = ["Mes", "A", "B", "C", "D", "Total"]
-pivot_valores = pivot_valores[columnas_finales]
+for nivel, color in zip(niveles, colores):
+    fig.add_trace(go.Bar(
+        x=pivot_valores["Mes"],
+        y=pivot_valores[nivel],
+        name=f"Nivel {nivel}",
+        marker_color=color
+    ))
 
-# Crear fila de totales finales
-fila_total = pd.DataFrame({
-    "Mes": ["🧾 Total"],
-    "A": [pivot_valores["A"].sum()],
-    "B": [pivot_valores["B"].sum()],
-    "C": [pivot_valores["C"].sum()],
-    "D": [pivot_valores["D"].sum()],
-    "Total": [pivot_valores["Total"].sum()]
-})
+# Configurar layout
+fig.update_layout(
+    title="Montos mensuales por Nivel",
+    xaxis_title="Mes",
+    yaxis_title="Monto",
+    barmode="group",
+    legend_title="Nivel",
+    xaxis=dict(type='category'),  # mantiene el orden textual de los meses
+    height=500
+)
 
-# Agregar la fila al final
-pivot_valores = pd.concat([pivot_valores, fila_total], ignore_index=True)
+# Mostrar gráfico
+st.plotly_chart(fig, use_container_width=True)
 
-# Mostrar tabla
-st.markdown("### 📊 Tabla dinámica de montos por Nivel y Mes")
-st.dataframe(pivot_valores, use_container_width=True, hide_index=True)
 
 
 
