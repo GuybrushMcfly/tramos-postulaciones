@@ -215,7 +215,7 @@ def pie_chart_donut(df, columna, titulo, key_id):
 
     # Detectar tema y color de texto
     modo = st.get_option("theme.base") or "light"
-    color_texto = "#000000" if modo == "light" else "#CCCCCC"  # antes era #FFFFFF
+    color_texto = "#000000" if modo == "light" else "#CCCCCC"
 
     option = {
         "title": {
@@ -227,52 +227,53 @@ def pie_chart_donut(df, columna, titulo, key_id):
                 "fontWeight": "bold",
                 "color": color_texto
             }
-    },
-    "tooltip": {
-        "trigger": "item",
-        "formatter": "{b}: {c} ({d}%)"
-    },
-    "legend": {
-        "orient": "horizontal",
-        "top": "80%",  # ← más arriba
-        "left": "center",
-        "padding": [0, 0, 20, 0],
-        "textStyle": {"color": color_texto}
-    },
-    "series": [
-        {
-            "name": titulo,
-            "type": "pie",
-            "radius": ["40%", "75%"],
-            "avoidLabelOverlap": False,
-            "itemStyle": {
-                "borderRadius": 10,
-                "borderColor": "#fff",
-                "borderWidth": 2
-            },
-            "label": {
-                "show": False,
-                "position": "center",
-                "color": color_texto
-            },
-            "emphasis": {
+        },  # ← esta llave FALTABA
+        "tooltip": {
+            "trigger": "item",
+            "formatter": "{b}: {c} ({d}%)"
+        },
+        "legend": {
+            "orient": "horizontal",
+            "top": "80%",  # más arriba para que no se corte
+            "left": "center",
+            "padding": [0, 0, 20, 0],
+            "textStyle": {"color": color_texto}
+        },
+        "series": [
+            {
+                "name": titulo,
+                "type": "pie",
+                "radius": ["40%", "75%"],
+                "avoidLabelOverlap": False,
+                "itemStyle": {
+                    "borderRadius": 10,
+                    "borderColor": "#fff",
+                    "borderWidth": 2
+                },
                 "label": {
-                    "show": True,
-                    "fontSize": 20,
-                    "fontWeight": "bold",
+                    "show": False,
+                    "position": "center",
                     "color": color_texto
-                }
-            },
-            "labelLine": {
-                "show": True,
-                "lineStyle": {"color": color_texto}
-            },
-            "data": data
-        }
-    ]
-}
+                },
+                "emphasis": {
+                    "label": {
+                        "show": True,
+                        "fontSize": 20,
+                        "fontWeight": "bold",
+                        "color": color_texto
+                    }
+                },
+                "labelLine": {
+                    "show": True,
+                    "lineStyle": {"color": color_texto}
+                },
+                "data": data
+            }
+        ]
+    }
 
-st_echarts(options=option, height="420px", key=key_id)
+    st_echarts(options=option, height="420px", key=key_id)
+
 
 
 # --- GRILLA 3x3 DE PIE CHARTS ---
