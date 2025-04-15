@@ -86,6 +86,17 @@ periodo_seleccionado = st.sidebar.multiselect(
     default=sorted(periodos)
 )
 
+# Filtro por Nivel Escalafonario
+st.sidebar.subheader("NIVEL ESCALAFONARIO")
+niveles = df["Nivel Post."].dropna()
+niveles = niveles[niveles != ""].unique()
+nivel_seleccionado = st.sidebar.multiselect(
+    "Seleccionar uno o más niveles",
+    options=sorted(niveles),
+    default=sorted(niveles)
+)
+
+
 # Filtro por tipo de personal
 df["Tipo Personal"] = df["Ingresante"].apply(lambda x: "INGRESANTES" if x == "SI" else "HISTÓRICOS")
 st.sidebar.subheader("PERSONAL")
