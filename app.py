@@ -501,14 +501,17 @@ st.plotly_chart(fig, use_container_width=True)
 
 
 # --- TABLA DINÁMICA DE MONTOS POR MES Y NIVEL ---
+# --- TABLA DINÁMICA DE MONTOS POR MES Y NIVEL ---
 
-# Asegurar formato correcto
-valores["Periodo Valoracion"] = pd.to_datetime(
-    valores["Periodo Valoracion"].astype(str) + "01", format="%Y%m%d", errors="coerce"
-)
+# Conversión y limpieza de datos
 valores["CUIL"] = valores["CUIL"].astype(str)
 valores["Nivel Post."] = valores["Nivel Post."].astype(str)
 valores["Monto"] = pd.to_numeric(valores["Monto"], errors="coerce").fillna(0)
+
+# Convertir Periodo Valoracion a datetime con día fijo para evitar errores
+valores["Periodo Valoracion"] = pd.to_datetime(
+    valores["Periodo Valoracion"].astype(str) + "01", format="%Y%m%d", errors="coerce"
+)
 
 # Diccionario de meses en español
 meses_es = {
@@ -516,11 +519,11 @@ meses_es = {
     7: "Jul", 8: "Ago", 9: "Sep", 10: "Oct", 11: "Nov", 12: "Dic"
 }
 
-# Crear columna "Mes" con formato mes-año
+# Crear columnas auxiliares
 valores["Periodo_Orden"] = valores["Periodo Valoracion"]
 valores["Mes"] = valores["Periodo_Orden"].dt.month.map(meses_es) + "-" + valores["Periodo_Orden"].dt.strftime("%y")
 
-# Tabla dinámica
+# Crear tabla dinámica con sumatoria por nivel
 pivot_valores = valores.pivot_table(
     index=["Periodo_Orden", "Mes"],
     columns="Nivel Post.",
@@ -529,19 +532,18 @@ pivot_valores = valores.pivot_table(
     fill_value=0
 ).reset_index().sort_values("Periodo_Orden")
 
-# Limpiar columnas auxiliares
-pivot_valores = pivot_valores.drop(columns=["Periodo_Orden"])
-pivot_valores = pivot_valores.reset_index(drop=True)
+# Eliminar columna auxiliar
+pivot_valores = pivot_valores.drop(columns=["Periodo_Orden"]).reset_index(drop=True)
 
-# Asegurar que existan todas las columnas A, B, C, D
+# Asegurar presencia de columnas A, B, C, D
 for nivel in ["A", "B", "C", "D"]:
     if nivel not in pivot_valores.columns:
         pivot_valores[nivel] = 0
 
-# Calcular total
+# Calcular total por fila
 pivot_valores["Total"] = pivot_valores[["A", "B", "C", "D"]].sum(axis=1)
 
-# Reordenar columnas
+# Reordenar columnas para visualización
 columnas_finales = ["Mes", "A", "B", "C", "D", "Total"]
 pivot_valores = pivot_valores[columnas_finales]
 
@@ -549,13 +551,8 @@ pivot_valores = pivot_valores[columnas_finales]
 st.markdown("#### 📊 Presupuesto estimado por Nivel y Período")
 st.dataframe(pivot_valores, use_container_width=True, hide_index=True)
 
-
-# Suma total del campo Monto
+# Suma total general
 total_monto = valores["Monto"].sum()
-
-# Mostrar en millones con dos decimales y formato regional
-total_formateado = f"{total_monto:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
-st.markdown(f"#### 💰 Suma total de Monto: **${total_formateado}**")
 
 
 
