@@ -182,7 +182,7 @@ st.markdown("""
     .tooltip-info {
         font-size: 13px;
         color: #eeeeee;
-        margin-top: 8px;
+        margin-top: 20px;
         opacity: 0;
         transition: opacity 0.3s ease;
     }
