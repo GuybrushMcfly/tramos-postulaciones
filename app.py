@@ -247,7 +247,7 @@ with col3:
 
 with col4:
     tarjeta_hover_tooltip(
-        titulo="PRESUPUESTO ESTIMADO",
+        titulo="PRESUPUESTO",
         valor=valor_col4_mostrado,
         color="#dc4390",
         descripcion="Presupuesto estimado de asignación por tramo.",
