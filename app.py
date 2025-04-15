@@ -234,7 +234,7 @@ def pie_chart_donut(df, columna, titulo, key_id):
         },
         "legend": {
             "orient": "horizontal",
-            "top": "80%",  # más arriba para que no se corte
+            "top": "90%",  # más arriba para que no se corte
             "left": "center",
             "padding": [0, 0, 20, 0],
             "textStyle": {"color": color_texto}
