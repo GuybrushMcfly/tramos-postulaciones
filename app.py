@@ -217,16 +217,16 @@ def pie_chart_donut(df, columna, titulo, key_id):
     modo = st.get_option("theme.base") or "light"
     color_texto = "#000000" if modo == "light" else "#CCCCCC"  # antes era #FFFFFF
 
- option = {
-    "title": {
-        "text": titulo,
-        "left": "center",
-        "top": "top",
-        "textStyle": {
-            "fontSize": 16,
-            "fontWeight": "bold",
-            "color": color_texto
-        }
+    option = {
+        "title": {
+            "text": titulo,
+            "left": "center",
+            "top": "top",
+            "textStyle": {
+                "fontSize": 16,
+                "fontWeight": "bold",
+                "color": color_texto
+            }
     },
     "tooltip": {
         "trigger": "item",
