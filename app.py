@@ -343,4 +343,43 @@ with st.expander("🔍 VER DETALLES DE POSTULACIONES 🔎"):
 
 #--------------------------
 
+# --- TABLA DINÁMICA DE MONTOS POR MES Y NIVEL ---
+
+import pandas as pd
+
+# Asegurar tipos correctos para evitar problemas
+valores["Periodo"] = pd.to_datetime(valores["Periodo"].astype(str) + "01", format="%Y%m%d")
+valores["CUIL"] = valores["CUIL"].astype(str)
+valores["Nivel"] = valores["Nivel"].astype(str)
+valores["Monto"] = pd.to_numeric(valores["Monto"], errors="coerce").fillna(0)
+
+# Diccionario de meses en español
+meses_es = {
+    1: "Ene", 2: "Feb", 3: "Mar", 4: "Abr", 5: "May", 6: "Jun",
+    7: "Jul", 8: "Ago", 9: "Sep", 10: "Oct", 11: "Nov", 12: "Dic"
+}
+
+# Crear columnas auxiliares
+valores["Periodo_Orden"] = valores["Periodo"]
+valores["Mes"] = valores["Periodo"].dt.month.map(meses_es) + "-" + valores["Periodo"].dt.strftime("%y")
+
+# Tabla dinámica (pivot table)
+pivot_valores = valores.pivot_table(
+    index=["Periodo_Orden", "Mes"],
+    columns="Nivel",
+    values="Monto",
+    aggfunc="sum",
+    fill_value=0
+).reset_index().sort_values("Periodo_Orden")
+
+# Eliminar la columna auxiliar de orden y reordenar
+pivot_valores = pivot_valores.drop(columns="Periodo_Orden")
+pivot_valores = pivot_valores.reset_index(drop=True)
+
+# Agregar columna de total
+pivot_valores["Total"] = pivot_valores[["A", "B", "C", "D"]].sum(axis=1)
+
+# Mostrar en Streamlit
+st.markdown("### 📊 Tabla dinámica de montos por Nivel y Mes")
+st.dataframe(pivot_valores, use_container_width=True, hide_index=True)
 
