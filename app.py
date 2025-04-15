@@ -61,9 +61,9 @@ data = worksheet.get_all_records()
 df = pd.DataFrame(data)
 
 # 4️⃣ Cargar hoja 'valores' usando get_all_values para evitar errores con celdas vacías
-raw = sheet.worksheet("valores").get_all_values()
-columnas = [col for col in raw[0] if col.strip() != ""]
-valores = pd.DataFrame(raw[1:], columns=columnas)
+#raw = sheet.worksheet("valores").get_all_values()
+#columnas = [col for col in raw[0] if col.strip() != ""]
+#valores = pd.DataFrame(raw[1:], columns=columnas)
 
 # 5️⃣ Limpiar y convertir la columna "Monto"
 valores["Monto"] = (
