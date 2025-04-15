@@ -385,7 +385,7 @@ df_melt_pct = df_porcentajes.reset_index().melt(id_vars="DEPENDENCIA NACIONAL/GE
 df_graf_final = df_melt_abs.merge(df_melt_pct, on=["DEPENDENCIA NACIONAL/GENERAL", "Nivel"])
 
 # Colores personalizados
-colores_custom = ["#003f5c", "#7a5195", "#ef5675", "#ffa600"]
+colores_custom = ["#0c555c", "#007f5b", "#7b9f28", "#ffa600"]
 
 # Crear gráfico
 fig = go.Figure()
