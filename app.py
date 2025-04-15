@@ -70,13 +70,21 @@ data = worksheet.get_all_records()
 # 8️⃣ Convierte los datos en un DataFrame de pandas
 df = pd.DataFrame(data)
 
-try:
-    valores_raw = sheet.worksheet("valores").get_all_values()
-    st.write("🔍 Contenido crudo de 'valores':", valores_raw)
-except Exception as e:
-    st.error(f"❌ No se pudo leer la hoja 'valores': {e}")
+# Cargar datos crudos desde la hoja 'valores'
+raw = sheet.worksheet("valores").get_all_values()
 
-# 🔟 Limpieza y conversión de la columna "Monto" en el DataFrame 'valores'
+# Obtener encabezados válidos, ignorando celdas vacías
+columnas = [col for col in raw[0] if col.strip() != ""]
+
+# Crear el DataFrame desde la segunda fila
+valores = pd.DataFrame(raw[1:], columns=columnas)
+
+# Limpieza de la columna "Monto"
+valores["Monto"] = valores["Monto"].astype(str)
+valores["Monto"] = valores["Monto"].str.replace(".", "", regex=False)
+valores["Monto"] = valores["Monto"].str.replace(",", ".", regex=False)
+valores["Monto"] = pd.to_numeric(valores["Monto"], errors="coerce").fillna(0)
+
 
 # Asegura que todos los valores estén como texto
 valores["Monto"] = valores["Monto"].astype(str)
