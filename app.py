@@ -180,7 +180,7 @@ st.markdown("""
     }
 
     .tooltip-info {
-        font-size: 14px;
+        font-size: 13px;
         color: #eeeeee;
         margin-top: 8px;
         opacity: 0;
@@ -219,13 +219,13 @@ with col1:
     tarjeta_hover_tooltip("POSTULACIONES", valor_col1, "#3850a6", "Incluye postulaciones en estado activo, capacitación o valoración.")
 
 with col2:
-    tarjeta_hover_tooltip("POST. HISTÓRICOS", valor_col2, "#7c4daa", "Agentes con antecedentes previos en el organismo.")
+    tarjeta_hover_tooltip("POST. HISTÓRICOS", valor_col2, "#7c4daa", "Agentes de planta permanente históricos.")
 
 with col3:
-    tarjeta_hover_tooltip("POST. INGRESANTES", valor_col3, "#b147a2", "Agentes nuevos en el organismo.")
+    tarjeta_hover_tooltip("POST. INGRESANTES", valor_col3, "#b147a2", "Agentes que concursaron en 2023.")
 
 with col4:
-    tarjeta_hover_tooltip("MONTO ESTIMADO", valor_col4_mostrado, "#dc4390", "Valor estimado para el conjunto de postulaciones.")
+    tarjeta_hover_tooltip("MONTO ESTIMADO", valor_col4_mostrado, "#dc4390", "Valor total estimado de asignación por tramo.")
 
 
 # --- FILA 2 ---
