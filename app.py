@@ -470,9 +470,14 @@ st.plotly_chart(fig, use_container_width=True)
 # --- TABLA DINÁMICA DE MONTOS POR MES Y NIVEL ---
 
 # Asegurar formato correcto
-valores["Periodo"] = pd.to_datetime(valores["Periodo"].astype(str) + "01", format="%Y%m%d", errors="coerce")
+valores["Periodo"] = pd.to_datetime(valores["Periodo Valoracion"].astype(str) + "01", format="%Y%m%d", errors="coerce")
 valores["CUIL"] = valores["CUIL"].astype(str)
-valores["Nivel"] = valores["Nivel"].astype(str)
+valores["Nivel"] = valores["Nivel Post."].astype(str)
+valores["Monto"] = (
+    valores["Monto"].astype(str)
+    .str.replace(".", "", regex=False)
+    .str.replace(",", ".", regex=False)
+)
 valores["Monto"] = pd.to_numeric(valores["Monto"], errors="coerce").fillna(0)
 
 # Diccionario de meses en español
@@ -513,5 +518,6 @@ pivot_valores = pivot_valores[columnas_finales]
 # Mostrar tabla en el dashboard
 st.markdown("### 📊 Tabla dinámica de montos por Nivel y Mes")
 st.dataframe(pivot_valores, use_container_width=True, hide_index=True)
+
 
 
