@@ -465,3 +465,53 @@ fig.update_layout(
 st.plotly_chart(fig, use_container_width=True)
 
 
+
+
+# --- TABLA DINÁMICA DE MONTOS POR MES Y NIVEL ---
+
+# Asegurar formato correcto
+valores["Periodo"] = pd.to_datetime(valores["Periodo"].astype(str) + "01", format="%Y%m%d", errors="coerce")
+valores["CUIL"] = valores["CUIL"].astype(str)
+valores["Nivel"] = valores["Nivel"].astype(str)
+valores["Monto"] = pd.to_numeric(valores["Monto"], errors="coerce").fillna(0)
+
+# Diccionario de meses en español
+meses_es = {
+    1: "Ene", 2: "Feb", 3: "Mar", 4: "Abr", 5: "May", 6: "Jun",
+    7: "Jul", 8: "Ago", 9: "Sep", 10: "Oct", 11: "Nov", 12: "Dic"
+}
+
+# Crear columna "Mes" con formato mes-año
+valores["Periodo_Orden"] = valores["Periodo"]
+valores["Mes"] = valores["Periodo"].dt.month.map(meses_es) + "-" + valores["Periodo"].dt.strftime("%y")
+
+# Tabla dinámica
+pivot_valores = valores.pivot_table(
+    index=["Periodo_Orden", "Mes"],
+    columns="Nivel",
+    values="Monto",
+    aggfunc="sum",
+    fill_value=0
+).reset_index().sort_values("Periodo_Orden")
+
+# Limpiar columnas auxiliares
+pivot_valores = pivot_valores.drop(columns=["Periodo_Orden"])
+pivot_valores = pivot_valores.reset_index(drop=True)
+
+# Asegurar que existan todas las columnas A, B, C, D
+for nivel in ["A", "B", "C", "D"]:
+    if nivel not in pivot_valores.columns:
+        pivot_valores[nivel] = 0
+
+# Calcular total
+pivot_valores["Total"] = pivot_valores[["A", "B", "C", "D"]].sum(axis=1)
+
+# Reordenar columnas
+columnas_finales = ["Mes", "A", "B", "C", "D", "Total"]
+pivot_valores = pivot_valores[columnas_finales]
+
+# Mostrar tabla en el dashboard
+st.markdown("### 📊 Tabla dinámica de montos por Nivel y Mes")
+st.dataframe(pivot_valores, use_container_width=True, hide_index=True)
+
+
