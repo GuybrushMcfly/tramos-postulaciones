@@ -321,6 +321,8 @@ with col6:
 st.markdown("<div style='margin-top: 60px;'></div>", unsafe_allow_html=True)
 
 postulaciones = pd.DataFrame(sheet.worksheet("tabla-dash").get_all_records())
+df = pd.DataFrame(sheet.worksheet("tabla-dash").get_all_records())
+
 
 # 👉 Ver solo las postulaciones que coinciden con los filtros actuales
 st.markdown("<div style='margin-top: 60px;'></div>", unsafe_allow_html=True)
