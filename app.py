@@ -68,12 +68,11 @@ import re
 
 def limpiar_monto(valor):
     if isinstance(valor, str):
-        # Reemplaza solo la coma decimal final por un punto
-        valor = re.sub(r"\.(?=\d{3}(?:\.|,))", "", valor)  # elimina puntos de miles
-        valor = valor.replace(",", ".")  # cambia la coma decimal por punto
+        # Elimina puntos SOLO si son separadores de miles (delante de tres dígitos y seguidos por punto o coma)
+        valor = re.sub(r"\.(?=\d{3}(?:[.,]|$))", "", valor)
+        # Reemplaza la coma decimal por punto
+        valor = valor.replace(",", ".")
     return pd.to_numeric(valor, errors="coerce")
-
-valores["Monto"] = valores["Monto"].apply(limpiar_monto).fillna(0)
 
 st.write("🧪 Primeros 20 montos procesados:", valores["Monto"].head(20))
 
