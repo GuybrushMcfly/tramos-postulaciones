@@ -67,10 +67,13 @@ valores = pd.DataFrame(sheet.worksheet("valores").get_all_records())
 valores["Monto"] = (
     valores["Monto"]
     .astype(str)
-    .str.replace(".", "", regex=False)
-    .str.replace(",", ".", regex=False)
+    .str.replace(",", "DECIMAL", regex=False)  # Paso 1: marcador temporal
+    .str.replace(".", "", regex=False)         # Paso 2: eliminar separadores de miles
+    .str.replace("DECIMAL", ".", regex=False)  # Paso 3: restaurar como punto decimal
 )
+
 valores["Monto"] = pd.to_numeric(valores["Monto"], errors="coerce").fillna(0)
+
 
 # ---- FILTROS EN LA BARRA LATERAL ----
 st.sidebar.header("Filtros")
