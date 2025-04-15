@@ -142,10 +142,7 @@ valor_col3 = df[
     (df["Ingresante"] == "SI")
 ]["Agente"].count()
 
-valores["CUIL"] = valores["CUIL"].astype(str)
-df["CUIL"] = df["CUIL"].astype(str)
-
-valor_col4 = valores[valores["CUIL"].isin(df["CUIL"])]["Monto"].sum()
+valor_col4 = valores["Monto"].sum()
 valor_col4_mostrado = f"${valor_col4:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
 
 valor_col5 = df[df["Estado"] == "Presentada"]["Agente"].count()
