@@ -517,3 +517,12 @@ st.markdown("### 📊 Tabla dinámica de montos por Nivel y Mes")
 st.dataframe(pivot_valores, use_container_width=True, hide_index=True)
 
 
+# Suma total del campo Monto
+total_monto = valores["Monto"].sum()
+
+# Mostrar en millones con dos decimales y formato regional
+total_formateado = f"{total_monto:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
+st.markdown(f"### 💰 Suma total de Monto: **${total_formateado}**")
+
+
+
