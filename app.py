@@ -108,10 +108,11 @@ tipo_seleccionado = st.sidebar.multiselect(
 )
 
 # Aplicar filtros
-df = df[df["Tipo Personal"].isin(tipo_seleccionado)]
 df = df[
+    df["Tipo Personal"].isin(tipo_seleccionado) &
     df["Tramo Post."].isin(tramo_seleccionado) &
     df["Periodo Valoración"].isin(periodo_seleccionado) &
+    df["Nivel Post."].isin(nivel_seleccionado) &
     ~df["Estado"].isin(["Pendiente", "Anulada"])
 ]
 
