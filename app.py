@@ -70,7 +70,7 @@ valores["Monto"] = (
     .str.replace(".", "", regex=False)
     .str.replace(",", ".", regex=False)
 )
-#valores["Monto"] = pd.to_numeric(valores["Monto"], errors="coerce").fillna(0)
+valores["Monto"] = pd.to_numeric(valores["Monto"], errors="coerce").fillna(0)
 
 # ---- FILTROS EN LA BARRA LATERAL ----
 st.sidebar.header("Filtros")
