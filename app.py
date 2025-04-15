@@ -140,7 +140,10 @@ valor_col3 = df[
 ]["Agente"].count()
 
 valor_col4 = valores["Monto"].sum()
-#valor_col4_mostrado = f"${valor_col4:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
+
+# Formateo estilo
+valor_col4_mostrado = f"{valor_col4:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
+
 
 valor_col5 = df[df["Estado"] == "Presentada"]["Agente"].count()
 valor_col6 = df[df["Estado"] == "En Actividad Capacitación"]["Agente"].count()
@@ -186,7 +189,7 @@ with col3:
     tarjeta_gradiente_simple("POST. INGRESANTES", valor_col3, "linear-gradient(135deg, #FDC830, #F37335)")
 
 with col4:
-    tarjeta_gradiente_simple("MONTO ESTIMADO", valor_col4, "linear-gradient(135deg, #C33764, #1D2671)")
+    tarjeta_gradiente_simple("MONTO ESTIMADO", valor_col4_mostrado, "linear-gradient(135deg, #C33764, #1D2671)")
 
 # --- FILA 2 ---
 col5, col6, col7, col8 = st.columns(4)
