@@ -393,3 +393,35 @@ st.markdown("### 📊 Tabla dinámica de montos por Nivel y Mes")
 st.dataframe(pivot_valores, use_container_width=True, hide_index=True)
 
 
+
+# Asegurar que existan todas las columnas A, B, C, D
+for nivel in ["A", "B", "C", "D"]:
+    if nivel not in pivot_valores.columns:
+        pivot_valores[nivel] = 0
+
+# Calcular total por fila
+pivot_valores["Total"] = pivot_valores[["A", "B", "C", "D"]].sum(axis=1)
+
+# Reordenar columnas
+columnas_finales = ["Mes", "A", "B", "C", "D", "Total"]
+pivot_valores = pivot_valores[columnas_finales]
+
+# Crear fila de totales finales
+fila_total = pd.DataFrame({
+    "Mes": ["🧾 Total"],
+    "A": [pivot_valores["A"].sum()],
+    "B": [pivot_valores["B"].sum()],
+    "C": [pivot_valores["C"].sum()],
+    "D": [pivot_valores["D"].sum()],
+    "Total": [pivot_valores["Total"].sum()]
+})
+
+# Agregar la fila al final
+pivot_valores = pd.concat([pivot_valores, fila_total], ignore_index=True)
+
+# Mostrar tabla
+st.markdown("### 📊 Tabla dinámica de montos por Nivel y Mes")
+st.dataframe(pivot_valores, use_container_width=True, hide_index=True)
+
+
+
