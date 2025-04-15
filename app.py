@@ -141,7 +141,16 @@ valor_col3 = df[
 ]["Agente"].count()
 
 # --- LÓGICA DE VALORES ---
-valor_col4 = valores["Monto"].sum()
+#valor_col4 = valores["Monto"].sum()
+#valor_col4_mostrado = f"{valor_col4:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
+
+# Asegurar que los CUIL estén como texto
+valores["CUIL"] = valores["CUIL"].astype(str)
+df["CUIL"] = df["CUIL"].astype(str)
+# Filtrar los montos según los CUIL del df filtrado
+valores_filtrados = valores[valores["CUIL"].isin(df["CUIL"])]
+# Sumar y formatear
+valor_col4 = valores_filtrados["Monto"].sum()
 valor_col4_mostrado = f"{valor_col4:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
 
 
