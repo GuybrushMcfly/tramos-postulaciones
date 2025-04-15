@@ -395,13 +395,17 @@ st.dataframe(pivot_valores, use_container_width=True, hide_index=True)
 
 import plotly.graph_objects as go
 
+# Calcular total por fila y agregar como columna extra si aún no está
+if "Total" not in pivot_valores.columns:
+    pivot_valores["Total"] = pivot_valores[["A", "B", "C", "D"]].sum(axis=1)
+
 # Crear figura
 fig = go.Figure()
 
 niveles = ["A", "B", "C", "D"]
 colores = ["#00B4DB", "#FF5858", "#FDC830", "#C33764"]
 
-# Barras apiladas por nivel
+# Agregar trazas por nivel
 for nivel, color in zip(niveles, colores):
     fig.add_trace(go.Bar(
         x=pivot_valores["Mes"],
@@ -410,15 +414,17 @@ for nivel, color in zip(niveles, colores):
         marker_color=color
     ))
 
-# Etiquetas con totales en millones
-fig.add_trace(go.Scatter(
+# Agregar TOTAL como una barra transparente con etiquetas, para que sea dinámica
+fig.add_trace(go.Bar(
     x=pivot_valores["Mes"],
     y=pivot_valores["Total"],
-    mode="text",
+    name="Total mensual",
     text=[f"{x/1_000_000:.1f}M" for x in pivot_valores["Total"]],
-    textposition="top center",
+    textposition="outside",
+    marker_color="rgba(0,0,0,0)",  # invisible
+    hoverinfo="skip",
     showlegend=False,
-    textfont=dict(size=14, color="black", family="Arial")  # Cambiá color acá si querés
+    textfont=dict(color="#CCCCCC", size=13)
 ))
 
 # Layout final
@@ -430,7 +436,10 @@ fig.update_layout(
     legend_title="Nivel",
     xaxis=dict(type="category"),
     height=550,
-    margin=dict(t=80),  # espacio arriba para que entren los números
+    margin=dict(t=80),
+    font=dict(color="#CCCCCC"),  # color de las leyendas y ejes
+    plot_bgcolor="rgba(0,0,0,0)",  # fondo transparente (útil si usás dark theme)
+    paper_bgcolor="rgba(0,0,0,0)"
 )
 
 # Mostrar gráfico en Streamlit
