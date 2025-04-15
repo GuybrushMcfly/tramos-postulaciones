@@ -340,10 +340,13 @@ with st.expander("🔍 VER POSTULACIONES FILTRADAS 🔎"):
 st.markdown("<div style='margin-top: 60px;'></div>", unsafe_allow_html=True)
 
 # 📊 TABLA DINÁMICA: Personas por Dependencia y Nivel
-st.markdown("### 🧩 Personas por Dependencia Nacional y Nivel Escalafonario")
+st.markdown("### Personas por Dependencia Nacional y Nivel Escalafonario")
 
-# Cargar hoja "tabla-dash" si no se cargó aún
+# Cargar hoja "tabla-dash"
 tabla_dash = pd.DataFrame(sheet.worksheet("tabla-dash").get_all_records())
+
+# Crear columna con el nombre que querés mostrar
+tabla_dash["DEPENDENCIA NACIONAL/GENERAL"] = tabla_dash["Dep. Nacional"]
 
 # Asegurar tipos correctos
 tabla_dash["Nivel Post."] = tabla_dash["Nivel Post."].astype(str)
@@ -360,6 +363,7 @@ tabla_dinamica = tabla_dash.pivot_table(
 
 # Mostrar tabla
 st.dataframe(tabla_dinamica, use_container_width=True, hide_index=True)
+
 
 
 
