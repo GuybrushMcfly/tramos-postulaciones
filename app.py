@@ -550,7 +550,6 @@ st.dataframe(pivot_valores, use_container_width=True, hide_index=True)
 
 from streamlit_echarts import st_echarts
 
-# Preparar datos
 meses = pivot_valores["Mes"].tolist()
 niveles = ["A", "B", "C", "D"]
 series = []
@@ -563,20 +562,17 @@ for nivel in niveles:
         "areaStyle": {},
         "emphasis": {"focus": "series"},
         "data": pivot_valores[nivel].round(2).tolist()
+        # No agregamos "label": {"show": True} → eso quita los números visibles
     })
 
-# Opciones del gráfico
 options = {
     "title": {
-        "text": "Presupuesto por Nivel - Área Apilada",
+        "text": "Presupuesto por Nivel",
         "textStyle": {"color": "#eeeeee"}
     },
     "tooltip": {
         "trigger": "axis",
-        "axisPointer": {"type": "cross", "label": {"backgroundColor": "#6a7985"}},
-        "valueFormatter": """function (value) {
-            return value.toLocaleString('de-DE');
-        }"""
+        "axisPointer": {"type": "cross", "label": {"backgroundColor": "#6a7985"}}
     },
     "legend": {
         "data": niveles,
@@ -589,23 +585,18 @@ options = {
             "type": "category",
             "boundaryGap": False,
             "data": meses,
-            "axisLabel": {"color": "#eeeeee"}
+            "axisLabel": {"color": "#eeeeee"}  # Eje X claro
         }
     ],
     "yAxis": [
         {
             "type": "value",
-            "axisLabel": {
-                "color": "#eeeeee",
-                "formatter": """function (value) {
-                    return value.toLocaleString('de-DE');
-                }"""
-            }
+            "axisLabel": {"color": "#eeeeee"}  # Eje Y claro
         }
     ],
     "series": series,
 }
 
-# Mostrar gráfico
 st_echarts(options=options, height="400px")
+
 
