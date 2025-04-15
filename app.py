@@ -194,14 +194,14 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 
-# --- FUNCIÓN TARJETAS CON HOVER Y TOOLTIP ---
-def tarjeta_hover_tooltip(titulo, valor, color, descripcion):
+# --- FUNCIÓN CON CONTROL TOTAL ---
+def tarjeta_hover_tooltip(titulo, valor, color, descripcion, size_titulo=17, size_valor=36):
     st.markdown(f"""
         <div class="tarjeta-hover" style="background: {color};">
-            <div style="font-size: 17px; color: white; font-weight: 700;">
+            <div style="font-size: {size_titulo}px; color: white; font-weight: 700;">
                 {titulo}
             </div>
-            <div style="font-size: 36px; color: white; font-weight: bold;">
+            <div style="font-size: {size_valor}px; color: white; font-weight: bold;">
                 {valor}
             </div>
             <div class="tooltip-info">
@@ -216,16 +216,44 @@ st.markdown("#### 🧍‍♂️🧍‍♀️ Postulaciones Totales")
 col1, col2, col3, col4 = st.columns(4)
 
 with col1:
-    tarjeta_hover_tooltip("POSTULACIONES", valor_col1, "#3850a6", "Incluye postulaciones en estado activo, capacitación o valoración.")
+    tarjeta_hover_tooltip(
+        titulo="POSTULACIONES",
+        valor=valor_col1,
+        color="#39d4cc",
+        descripcion="Incluye postulaciones en estado activo, capacitación o valoración.",
+        size_titulo=15,
+        size_valor=32
+    )
 
 with col2:
-    tarjeta_hover_tooltip("POST. HISTÓRICOS", valor_col2, "#7c4daa", "Agentes de planta permanente históricos.")
+    tarjeta_hover_tooltip(
+        titulo="POST. HISTÓRICOS",
+        valor=valor_col2,
+        color="#6ce2be",
+        descripcion="Agentes de planta permanente históricos.",
+        size_titulo=14,
+        size_valor=34
+    )
 
 with col3:
-    tarjeta_hover_tooltip("POST. INGRESANTES", valor_col3, "#b147a2", "Agentes que concursaron en 2023.")
+    tarjeta_hover_tooltip(
+        titulo="POST. INGRESANTES",
+        valor=valor_col3,
+        color="#9cefaf",
+        descripcion="Agentes que concursaron en 2023.",
+        size_titulo=16,
+        size_valor=33
+    )
 
 with col4:
-    tarjeta_hover_tooltip("MONTO ESTIMADO", valor_col4_mostrado, "#dc4390", "Valor total estimado de asignación por tramo.")
+    tarjeta_hover_tooltip(
+        titulo="MONTO ESTIMADO",
+        valor=valor_col4_mostrado,
+        color="#cdf8a3",
+        descripcion="Valor total estimado de asignación por tramo.",
+        size_titulo=15,
+        size_valor=28
+    )
 
 
 # --- FILA 2 ---
@@ -234,18 +262,44 @@ st.markdown("#### 📂 Estado de Tramitaciones")
 col5, col6, col7, col8 = st.columns(4)
 
 with col5:
-    tarjeta_hover_tooltip("PRESENTADAS", valor_col5, "#fa4c76", "Tramitaciones que fueron cargadas y están a la espera de revisión.")
+    tarjeta_hover_tooltip(
+        titulo="PRESENTADAS",
+        valor=valor_col5,
+        color="#ffffa0",
+        descripcion="Tramitaciones que fueron cargadas y están a la espera de revisión.",
+        size_titulo=15,
+        size_valor=35
+    )
 
 with col6:
-    tarjeta_hover_tooltip("EN ACTIV. CAPACITACION", valor_col6, "#ff6357", "Postulaciones actualmente en proceso de capacitación.")
+    tarjeta_hover_tooltip(
+        titulo="EN ACTIV. CAPACITACION",
+        valor=valor_col6,
+        color="#fdd274",
+        descripcion="Postulaciones actualmente en proceso de capacitación.",
+        size_titulo=14,
+        size_valor=30
+    )
 
 with col7:
-    tarjeta_hover_tooltip("EN ACTIV. VALORACION", valor_col7, "#ff8336", "Postulaciones en análisis por el comité de valoración.")
+    tarjeta_hover_tooltip(
+        titulo="EN ACTIV. VALORACION",
+        valor=valor_col7,
+        color="#f6a259",
+        descripcion="Postulaciones en análisis por el comité de valoración.",
+        size_titulo=14,
+        size_valor=32
+    )
 
 with col8:
-    tarjeta_hover_tooltip("APROBADAS", valor_col8, "#ffa600", "Tramitaciones que recibieron aprobación definitiva.")
-
-st.markdown("<div style='margin-top: 30px;'></div>", unsafe_allow_html=True)
+    tarjeta_hover_tooltip(
+        titulo="APROBADAS",
+        valor=valor_col8,
+        color="#d43d51",
+        descripcion="Tramitaciones que recibieron aprobación definitiva.",
+        size_titulo=15,
+        size_valor=36
+    )
 
 
 # --- FUNCIÓN PARA GRÁFICOS PIE ---
