@@ -160,6 +160,42 @@ valor_col7 = df[df["Estado"] == "En Actividad Valoración"]["Agente"].count()
 valor_col8 = 0  # APROBADAS
 
 
+st.markdown("""
+    <style>
+    .tarjeta-hover {
+        background: linear-gradient(135deg, #00B4DB, #0083B0);
+        padding: 25px;
+        border-radius: 15px;
+        height: 120px;
+        box-shadow: 0px 4px 10px rgba(0,0,0,0.25);
+        margin-bottom: 25px;
+        transition: all 0.3s ease;
+        position: relative;
+    }
+
+    .tarjeta-hover:hover {
+        transform: translateY(-5px);
+        box-shadow: 0px 8px 20px rgba(0,0,0,0.35);
+        cursor: default;
+    }
+
+    .tooltip-info {
+        font-size: 12px;
+        color: #eeeeee;
+        margin-top: 8px;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    .tarjeta-hover:hover .tooltip-info {
+        opacity: 1;
+    }
+    </style>
+""", unsafe_allow_html=True)
+
+
+
+
 # --- FUNCIÓN PARA TARJETAS CON GRADIENTE ---
 def tarjeta_gradiente_simple(titulo, valor, gradiente):
     modo = st.get_option("theme.base") or "light"
@@ -190,7 +226,21 @@ st.markdown("#### 🧍‍♂️🧍‍♀️ Postulaciones Totales")
 col1, col2, col3, col4 = st.columns(4)
 
 with col1:
-    tarjeta_gradiente_simple("POSTULACIONES", valor_col1, "linear-gradient(135deg, #00B4DB, #0083B0)")
+  #  tarjeta_gradiente_simple("POSTULACIONES", valor_col1, "linear-gradient(135deg, #00B4DB, #0083B0)")
+    st.markdown(f"""
+    <div class="tarjeta-hover">
+        <div style="font-size: 19px; color: white; font-weight: 700;">
+            POSTULACIONES
+        </div>
+        <div style="font-size: 37px; color: white; font-weight: bold;">
+            {valor_col1}
+        </div>
+        <div class="tooltip-info">
+            Incluye postulaciones en estado activo, capacitación o valoración.
+        </div>
+    </div>
+""", unsafe_allow_html=True)
+
 
 with col2:
     tarjeta_gradiente_simple("POST. HISTÓRICOS", valor_col2, "linear-gradient(135deg, #FF5858, #FB5895)")
