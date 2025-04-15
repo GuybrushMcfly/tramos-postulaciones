@@ -550,34 +550,34 @@ st.dataframe(pivot_valores, use_container_width=True, hide_index=True)
 
 from streamlit_echarts import st_echarts
 
-# Construimos la base de datos para ECharts
 meses = pivot_valores["Mes"].tolist()
-
-series = []
 niveles = ["A", "B", "C", "D"]
-colores = ["#5470C6", "#91CC75", "#FAC858", "#EE6666"]  # opcionales
+series = []
 
-for idx, nivel in enumerate(niveles):
-    serie = {
+for nivel in niveles:
+    series.append({
         "name": nivel,
         "type": "line",
         "stack": "Total",
         "areaStyle": {},
         "emphasis": {"focus": "series"},
         "data": pivot_valores[nivel].round(2).tolist()
-    }
-    if idx == len(niveles) - 1:  # Mostrar etiquetas solo en la última serie (opcional)
-        serie["label"] = {"show": True, "position": "top"}
-    series.append(serie)
+        # No agregamos "label": {"show": True} → eso quita los números visibles
+    })
 
-# Configuración del gráfico ECharts
 options = {
-    "title": {"text": "Presupuesto por Nivel - Área Apilada"},
+    "title": {
+        "text": "Presupuesto por Nivel - Área Apilada",
+        "textStyle": {"color": "#eeeeee"}
+    },
     "tooltip": {
         "trigger": "axis",
-        "axisPointer": {"type": "cross", "label": {"backgroundColor": "#6a7985"}},
+        "axisPointer": {"type": "cross", "label": {"backgroundColor": "#6a7985"}}
     },
-    "legend": {"data": niveles},
+    "legend": {
+        "data": niveles,
+        "textStyle": {"color": "#eeeeee"}
+    },
     "toolbox": {"feature": {"saveAsImage": {}}},
     "grid": {"left": "3%", "right": "4%", "bottom": "3%", "containLabel": True},
     "xAxis": [
@@ -585,11 +585,17 @@ options = {
             "type": "category",
             "boundaryGap": False,
             "data": meses,
+            "axisLabel": {"color": "#eeeeee"}  # Eje X claro
         }
     ],
-    "yAxis": [{"type": "value"}],
+    "yAxis": [
+        {
+            "type": "value",
+            "axisLabel": {"color": "#eeeeee"}  # Eje Y claro
+        }
+    ],
     "series": series,
 }
 
-# Mostrar gráfico en Streamlit
 st_echarts(options=options, height="400px")
+
