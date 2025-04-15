@@ -70,16 +70,11 @@ data = worksheet.get_all_records()
 # 8️⃣ Convierte los datos en un DataFrame de pandas
 df = pd.DataFrame(data)
 
-# Listar las hojas disponibles
-nombres_hojas = [ws.title for ws in sheet.worksheets()]
-st.write("📄 Hojas disponibles:", nombres_hojas)
-
-# 9️⃣ Intenta cargar la hoja llamada "valores" como DataFrame
 try:
-    valores = pd.DataFrame(sheet.worksheet("valores").get_all_records())
+    valores_raw = sheet.worksheet("valores").get_all_values()
+    st.write("🔍 Contenido crudo de 'valores':", valores_raw)
 except Exception as e:
-    st.error("❌ No se pudo cargar la hoja 'valores'. Verificá que exista y tenga datos.")
-    st.stop()
+    st.error(f"❌ No se pudo leer la hoja 'valores': {e}")
 
 # 🔟 Limpieza y conversión de la columna "Monto" en el DataFrame 'valores'
 
