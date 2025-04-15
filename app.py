@@ -160,10 +160,10 @@ valor_col7 = df[df["Estado"] == "En Actividad Valoración"]["Agente"].count()
 valor_col8 = 0  # APROBADAS
 
 
+# --- ESTILO GLOBAL PARA HOVER Y TOOLTIP ---
 st.markdown("""
     <style>
     .tarjeta-hover {
-        background: linear-gradient(135deg, #00B4DB, #0083B0);
         padding: 25px;
         border-radius: 15px;
         height: 120px;
@@ -180,7 +180,7 @@ st.markdown("""
     }
 
     .tooltip-info {
-        font-size: 16px;
+        font-size: 14px;
         color: #eeeeee;
         margin-top: 8px;
         opacity: 0;
@@ -194,28 +194,18 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 
-
-
-# --- FUNCIÓN PARA TARJETAS CON GRADIENTE ---
-def tarjeta_gradiente_simple(titulo, valor, gradiente):
-    modo = st.get_option("theme.base") or "light"
-    color_texto = "#000000" if modo == "light" else "#FFFFFF"
-    sombra_texto = "1px 1px 3px #444" if modo == "dark" else "none"
-
+# --- FUNCIÓN TARJETAS CON HOVER Y TOOLTIP ---
+def tarjeta_hover_tooltip(titulo, valor, color, descripcion):
     st.markdown(f"""
-        <div style="
-            background: {gradiente};
-            padding: 25px;
-            border-radius: 15px;
-            height: 120px;
-            box-shadow: 0px 4px 10px rgba(0,0,0,0.25);
-            margin-bottom: 25px;
-        ">
-            <div style="font-size: 15px; color: {color_texto}; font-weight: 700; text-shadow: {sombra_texto};">
+        <div class="tarjeta-hover" style="background: {color};">
+            <div style="font-size: 17px; color: white; font-weight: 700;">
                 {titulo}
             </div>
-            <div style="font-size: 30px; color: {color_texto}; font-weight: bold; text-shadow: {sombra_texto};">
+            <div style="font-size: 36px; color: white; font-weight: bold;">
                 {valor}
+            </div>
+            <div class="tooltip-info">
+                {descripcion}
             </div>
         </div>
     """, unsafe_allow_html=True)
@@ -226,51 +216,36 @@ st.markdown("#### 🧍‍♂️🧍‍♀️ Postulaciones Totales")
 col1, col2, col3, col4 = st.columns(4)
 
 with col1:
-  #  tarjeta_gradiente_simple("POSTULACIONES", valor_col1, "linear-gradient(135deg, #00B4DB, #0083B0)")
-    st.markdown(f"""
-    <div class="tarjeta-hover">
-        <div style="font-size: 19px; color: white; font-weight: 700;">
-            POSTULACIONES
-        </div>
-        <div style="font-size: 37px; color: white; font-weight: bold;">
-            {valor_col1}
-        </div>
-        <div class="tooltip-info">
-            Incluye postulaciones en estado activo, capacitación o valoración.
-        </div>
-    </div>
-""", unsafe_allow_html=True)
-
+    tarjeta_hover_tooltip("POSTULACIONES", valor_col1, "#39d4cc", "Incluye postulaciones en estado activo, capacitación o valoración.")
 
 with col2:
-    tarjeta_gradiente_simple("POST. HISTÓRICOS", valor_col2, "linear-gradient(135deg, #FF5858, #FB5895)")
+    tarjeta_hover_tooltip("POST. HISTÓRICOS", valor_col2, "#6ce2be", "Agentes con antecedentes previos en el organismo.")
 
 with col3:
-    tarjeta_gradiente_simple("POST. INGRESANTES", valor_col3, "linear-gradient(135deg, #FDC830, #F37335)")
+    tarjeta_hover_tooltip("POST. INGRESANTES", valor_col3, "#9cefaf", "Agentes nuevos en el organismo.")
 
 with col4:
-    tarjeta_gradiente_simple("MONTO ESTIMADO", valor_col4_mostrado, "linear-gradient(135deg, #C33764, #1D2671)")
+    tarjeta_hover_tooltip("MONTO ESTIMADO", valor_col4_mostrado, "#cdf8a3", "Valor estimado para el conjunto de postulaciones.")
+
 
 # --- FILA 2 ---
 st.markdown("<div style='margin-top: 30px;'></div>", unsafe_allow_html=True)
-
 st.markdown("#### 📂 Estado de Tramitaciones")
 col5, col6, col7, col8 = st.columns(4)
 
 with col5:
-    tarjeta_gradiente_simple("PRESENTADAS", valor_col5, "linear-gradient(135deg, #00F260, #0575E6)")
+    tarjeta_hover_tooltip("PRESENTADAS", valor_col5, "#ffffa0", "Tramitaciones que fueron cargadas y están a la espera de revisión.")
 
 with col6:
-    tarjeta_gradiente_simple("EN ACTIV. CAPACITACION", valor_col6, "linear-gradient(135deg, #7F00FF, #E100FF)")
+    tarjeta_hover_tooltip("EN ACTIV. CAPACITACION", valor_col6, "#fdd274", "Postulaciones actualmente en proceso de capacitación.")
 
 with col7:
-    tarjeta_gradiente_simple("EN ACTIV. VALORACION", valor_col7, "linear-gradient(135deg, #43e97b, #38f9d7)")
+    tarjeta_hover_tooltip("EN ACTIV. VALORACION", valor_col7, "#f6a259", "Postulaciones en análisis por el comité de valoración.")
 
 with col8:
-    tarjeta_gradiente_simple("APROBADAS", valor_col8, "linear-gradient(135deg, #43C6AC, #191654)")
+    tarjeta_hover_tooltip("APROBADAS", valor_col8, "#ea714f", "Tramitaciones que recibieron aprobación definitiva.")
 
 
-st.markdown("<div style='margin-top: 50px;'></div>", unsafe_allow_html=True)
 
 # --- FUNCIÓN PARA GRÁFICOS PIE ---
 def pie_chart_donut(df, columna, titulo, key_id):
