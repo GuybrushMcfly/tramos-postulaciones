@@ -186,6 +186,7 @@ def tarjeta_gradiente_simple(titulo, valor, gradiente):
 
 
 # --- FILA 1 ---
+st.markdown("### 🧩 Postulaciones Totales")
 col1, col2, col3, col4 = st.columns(4)
 
 with col1:
@@ -201,6 +202,7 @@ with col4:
     tarjeta_gradiente_simple("MONTO ESTIMADO", valor_col4_mostrado, "linear-gradient(135deg, #C33764, #1D2671)")
 
 # --- FILA 2 ---
+st.markdown("### 🧩 Estado de Tramitaciones")
 col5, col6, col7, col8 = st.columns(4)
 
 with col5:
