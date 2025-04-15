@@ -139,8 +139,11 @@ valor_col3 = df[
     (df["Ingresante"] == "SI")
 ]["Agente"].count()
 
-st.write("🔍 Monto total (sin formato):", valor_col4, type(valor_col4))
+# --- LÓGICA DE VALORES ---
 valor_col4 = valores["Monto"].sum()
+st.write("🔍 Monto total (sin formato):", valor_col4, type(valor_col4))
+valor_col4_mostrado = f"{valor_col4:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
+
 
 
 
