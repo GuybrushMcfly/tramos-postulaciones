@@ -333,7 +333,7 @@ df_filtrado_para_mostrar = df_filtrado_para_mostrar[[col for col in columnas_tab
 # Mostrar con expander
 st.markdown("<div style='margin-top: 60px;'></div>", unsafe_allow_html=True)
 
-with st.expander("🔍 VER POSTULACIONES FILTRADAS 🔎"):
+with st.expander("🔍 #### VER POSTULACIONES FILTRADAS 🔎"):
     st.dataframe(df_filtrado_para_mostrar, use_container_width=True, hide_index=True)
 
 
@@ -365,6 +365,48 @@ tabla_dinamica = tabla_dash.pivot_table(
 
 # Mostrar tabla
 st.dataframe(tabla_dinamica, use_container_width=True, hide_index=True)
+
+
+# ----------------------
+st.markdown("### 📊 Distribución porcentual por Nivel en cada Dependencia")
+
+import plotly.express as px
+
+# Preparar datos para gráfico apilado al 100%
+df_grafico = tabla_dinamica.set_index("DEPENDENCIA NACIONAL/GENERAL")
+
+# Calcular proporciones por fila
+df_porcentajes = df_grafico.div(df_grafico.sum(axis=1), axis=0) * 100
+df_porcentajes = df_porcentajes.fillna(0).reset_index()
+
+# Pasar a formato largo (long format)
+df_melt = df_porcentajes.melt(id_vars="DEPENDENCIA NACIONAL/GENERAL", var_name="Nivel", value_name="Porcentaje")
+
+# Crear gráfico de barras horizontal apilado al 100%
+fig = px.bar(
+    df_melt,
+    x="Porcentaje",
+    y="DEPENDENCIA NACIONAL/GENERAL",
+    color="Nivel",
+    orientation="h",
+    text_auto=".1f",
+    color_discrete_sequence=px.colors.qualitative.Pastel  # colores suaves
+)
+
+fig.update_layout(
+    barmode="stack",
+    xaxis=dict(title="Porcentaje", range=[0, 100]),
+    yaxis=dict(title=""),
+    legend_title="Nivel Escalafonario",
+    height=500,
+    margin=dict(t=40, b=40, l=40, r=10),
+    plot_bgcolor="rgba(0,0,0,0)",
+)
+
+fig.update_traces(textposition='inside', insidetextanchor='middle', textfont_size=12)
+
+# Mostrar en Streamlit
+st.plotly_chart(fig, use_container_width=True)
 
 
 
