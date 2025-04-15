@@ -68,6 +68,12 @@ postulaciones = pd.DataFrame(sheet.worksheet("Postulaciones").get_all_records())
 valores = pd.DataFrame(sheet.worksheet("valores").get_all_records())
 worksheet = gc.open_by_key("11--jD47K72s9ddt727kYd9BhRmAOM7qXEUB60SX69UA").sheet1
 
+try:
+    valores = pd.DataFrame(sheet.worksheet("valores").get_all_records())
+except Exception as e:
+    st.error(f"Error al cargar hoja 'valores': {e}")
+    st.stop()
+
 valores["CUIL"] = valores["CUIL"].astype(str)
 df["CUIL"] = df["CUIL"].astype(str)
 
