@@ -395,11 +395,11 @@ st.dataframe(pivot_valores, use_container_width=True, hide_index=True)
 
 import plotly.graph_objects as go
 
-# Crear figura con barras agrupadas por nivel
+# Crear figura de barras apiladas
 fig = go.Figure()
 
 niveles = ["A", "B", "C", "D"]
-colores = ["#00B4DB", "#FF5858", "#FDC830", "#C33764"]  # opcionales
+colores = ["#00B4DB", "#FF5858", "#FDC830", "#C33764"]  # colores personalizados (opcional)
 
 for nivel, color in zip(niveles, colores):
     fig.add_trace(go.Bar(
@@ -409,19 +409,20 @@ for nivel, color in zip(niveles, colores):
         marker_color=color
     ))
 
-# Configurar layout
+# Configurar layout para apilado
 fig.update_layout(
-    title="Montos mensuales por Nivel",
+    title="Monto total mensual por Nivel (barras apiladas)",
     xaxis_title="Mes",
-    yaxis_title="Monto",
-    barmode="group",
+    yaxis_title="Monto total",
+    barmode="stack",  # clave para que se apilen
     legend_title="Nivel",
-    xaxis=dict(type='category'),  # mantiene el orden textual de los meses
+    xaxis=dict(type="category"),  # mantiene el orden del dataframe
     height=500
 )
 
-# Mostrar gráfico
+# Mostrar en Streamlit
 st.plotly_chart(fig, use_container_width=True)
+
 
 
 
