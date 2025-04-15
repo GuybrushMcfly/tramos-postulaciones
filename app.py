@@ -554,6 +554,10 @@ meses = pivot_valores["Mes"].tolist()
 niveles = ["A", "B", "C", "D"]
 series = []
 
+function (value) {
+    return value.toLocaleString('de-DE');
+}
+
 for nivel in niveles:
     series.append({
         "name": nivel,
@@ -572,7 +576,10 @@ options = {
     },
     "tooltip": {
         "trigger": "axis",
-        "axisPointer": {"type": "cross", "label": {"backgroundColor": "#6a7985"}}
+        "axisPointer": {"type": "cross", "label": {"backgroundColor": "#6a7985"}},
+        "valueFormatter": """function (value) {
+            return value.toLocaleString('de-DE');
+        }"""
     },
     "legend": {
         "data": niveles,
@@ -585,17 +592,23 @@ options = {
             "type": "category",
             "boundaryGap": False,
             "data": meses,
-            "axisLabel": {"color": "#eeeeee"}  # Eje X claro
+            "axisLabel": {"color": "#eeeeee"}
         }
     ],
     "yAxis": [
         {
             "type": "value",
-            "axisLabel": {"color": "#eeeeee"}  # Eje Y claro
+            "axisLabel": {
+                "color": "#eeeeee",
+                "formatter": """function (value) {
+                    return value.toLocaleString('de-DE');
+                }"""
+            }
         }
     ],
     "series": series,
 }
+
 
 st_echarts(options=options, height="400px")
 
