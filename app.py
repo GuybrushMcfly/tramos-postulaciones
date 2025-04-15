@@ -66,13 +66,13 @@ df = pd.DataFrame(data)
 #valores = pd.DataFrame(raw[1:], columns=columnas)
 
 # 5️⃣ Limpiar y convertir la columna "Monto"
-valores["Monto"] = (
-    valores["Monto"]
-    .astype(str)
-    .str.replace(".", "", regex=False)  # Quitar puntos de miles
-    .str.replace(",", ".", regex=False)  # Reemplazar coma decimal por punto
-)
-valores["Monto"] = pd.to_numeric(valores["Monto"], errors="coerce").fillna(0)
+#valores["Monto"] = (
+ #   valores["Monto"]
+    #.astype(str)
+    #.str.replace(".", "", regex=False)  # Quitar puntos de miles
+    #.str.replace(",", ".", regex=False)  # Reemplazar coma decimal por punto
+#)
+#valores["Monto"] = pd.to_numeric(valores["Monto"], errors="coerce").fillna(0)
 
 # ---- FILTROS EN LA BARRA LATERAL ----
 st.sidebar.header("Filtros")
