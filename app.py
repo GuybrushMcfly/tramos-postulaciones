@@ -337,39 +337,8 @@ with st.expander("🔍 #### VER POSTULACIONES FILTRADAS 🔎"):
     st.dataframe(df_filtrado_para_mostrar, use_container_width=True, hide_index=True)
 
 
-
 # ----------------------
-st.markdown("<div style='margin-top: 60px;'></div>", unsafe_allow_html=True)
-
-# 📊 TABLA DINÁMICA: Personas por Dependencia y Nivel
-st.markdown("### Personas por Dependencia Nacional y Nivel Escalafonario")
-
-# Cargar hoja "tabla-dash"
-tabla_dash = pd.DataFrame(sheet.worksheet("tabla-dash").get_all_records())
-
-# Crear columna con el nombre que querés mostrar
-tabla_dash["DEPENDENCIA NACIONAL/GENERAL"] = tabla_dash["Dep. Nacional"]
-
-# Asegurar tipos correctos
-tabla_dash["Nivel Post."] = tabla_dash["Nivel Post."].astype(str)
-tabla_dash["DEPENDENCIA NACIONAL/GENERAL"] = tabla_dash["DEPENDENCIA NACIONAL/GENERAL"].astype(str)
-
-# Crear tabla dinámica
-tabla_dinamica = tabla_dash.pivot_table(
-    index="DEPENDENCIA NACIONAL/GENERAL",
-    columns="Nivel Post.",
-    values="Agente",
-    aggfunc="count",
-    fill_value=0
-).reset_index()
-
-# Mostrar tabla
-st.dataframe(tabla_dinamica, use_container_width=True, hide_index=True)
-
-
-# ----------------------
-# ----------------------
-st.markdown("### 📊 Distribución porcentual por Nivel en cada Dependencia")
+st.markdown("#### 📊 Distribución porcentual por Nivel en cada Dependencia")
 
 import plotly.graph_objects as go
 
