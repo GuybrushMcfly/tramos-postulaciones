@@ -68,10 +68,12 @@ postulaciones = pd.DataFrame(sheet.worksheet("Postulaciones").get_all_records())
 valores = pd.DataFrame(sheet.worksheet("valores").get_all_records())
 worksheet = gc.open_by_key("11--jD47K72s9ddt727kYd9BhRmAOM7qXEUB60SX69UA").sheet1
 
-# LIMPIEZA Y CONVERSIÓN DE MONTOS
+# Limpieza de montos 
 valores["Monto"] = valores["Monto"].astype(str)
-valores["Monto"] = valores["Monto"].str.replace(",", ".", regex=False).str.strip()
+valores["Monto"] = valores["Monto"].str.replace(".", "", regex=False)   # Quita puntos de miles
+valores["Monto"] = valores["Monto"].str.replace(",", ".", regex=False)  # Cambia coma decimal por punto
 valores["Monto"] = pd.to_numeric(valores["Monto"], errors="coerce").fillna(0)
+
 
 # Cargar datos desde la hoja
 data = worksheet.get_all_records()
