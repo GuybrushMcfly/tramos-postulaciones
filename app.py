@@ -75,6 +75,8 @@ valores["Monto"] = valores["Monto"].str.replace(",", ".", regex=False)  # Cambia
 valores["Monto"] = pd.to_numeric(valores["Monto"], errors="coerce").fillna(0)
 
 
+
+
 # Cargar datos desde la hoja
 data = worksheet.get_all_records()
 df = pd.DataFrame(data)
