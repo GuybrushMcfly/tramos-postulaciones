@@ -216,10 +216,10 @@ st.markdown("#### 🧍‍♂️🧍‍♀️ Postulaciones Totales")
 col1, col2, col3, col4 = st.columns(4)
 
 with col1:
-    tarjeta_hover_tooltip("POSTULACIONES", valor_col1, "#39d4cc", "Incluye postulaciones en estado activo, capacitación o valoración.")
+    tarjeta_hover_tooltip("POSTULACIONES", valor_col1, "#1d5a55", "Incluye postulaciones en estado activo, capacitación o valoración.")
 
 with col2:
-    tarjeta_hover_tooltip("POST. HISTÓRICOS", valor_col2, "#6ce2be", "Agentes con antecedentes previos en el organismo.")
+    tarjeta_hover_tooltip("POST. HISTÓRICOS", valor_col2, "#42846d", "Agentes con antecedentes previos en el organismo.")
 
 with col3:
     tarjeta_hover_tooltip("POST. INGRESANTES", valor_col3, "#9cefaf", "Agentes nuevos en el organismo.")
