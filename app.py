@@ -63,16 +63,21 @@ df = pd.DataFrame(data)
 # Cargar hoja 'valores' directamente
 valores = pd.DataFrame(sheet.worksheet("valores").get_all_records())
 
+st.subheader("🧪 VERIFICACIÓN DE MONTOS ORIGINALES")
+st.write(valores["Monto"].head(20))  # mostrar los valores tal como llegan desde Sheets
+
 # Limpieza correcta del monto argentino (puntos de miles y coma decimal)
 import re
 
 def limpiar_monto(valor):
+    st.write("🧼 Valor crudo:", valor)  # VER qué entra
     if isinstance(valor, str):
-        # Elimina puntos SOLO si son separadores de miles (delante de tres dígitos y seguidos por punto o coma)
         valor = re.sub(r"\.(?=\d{3}(?:[.,]|$))", "", valor)
-        # Reemplaza la coma decimal por punto
         valor = valor.replace(",", ".")
+        st.write("✅ Limpio:", valor)
     return pd.to_numeric(valor, errors="coerce")
+
+valores["Monto"] = valores["Monto"].apply(limpiar_monto).fillna(0)
 
 st.write("🧪 Primeros 20 montos procesados:", valores["Monto"].head(20))
 
