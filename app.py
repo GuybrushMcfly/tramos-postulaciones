@@ -498,9 +498,6 @@ fig.update_layout(
 st.plotly_chart(fig, use_container_width=True)
 
 
-
-
-# --- TABLA DINÁMICA DE MONTOS POR MES Y NIVEL ---
 # --- TABLA DINÁMICA DE MONTOS POR MES Y NIVEL ---
 
 # Conversión y limpieza de datos
@@ -553,6 +550,29 @@ st.dataframe(pivot_valores, use_container_width=True, hide_index=True)
 
 # Suma total general
 total_monto = valores["Monto"].sum()
+
+
+
+import pandas as pd
+
+# Aseguramos que los datos estén bien formateados
+valores["Periodo"] = pd.to_datetime(valores["Periodo"].astype(str) + "01", format="%Y%m%d", errors="coerce")
+valores["Monto"] = pd.to_numeric(valores["Monto"], errors="coerce").fillna(0)
+valores["Nivel"] = valores["Nivel"].astype(str)
+
+# Creamos la tabla dinámica
+pivot = pd.pivot_table(
+    valores,
+    index=valores["Periodo"].dt.strftime("%Y-%m"),  # Formato Año-Mes
+    columns="Nivel",
+    values="Monto",
+    aggfunc="sum",
+    fill_value=0
+)
+
+# Mostrar la tabla (si estás usando Streamlit)
+import streamlit as st
+st.dataframe(pivot, use_container_width=True)
 
 
 
