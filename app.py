@@ -558,7 +558,7 @@ import pandas as pd
 # Aseguramos que los datos estén bien formateados
 valores["Periodo"] = pd.to_datetime(valores["Periodo"].astype(str) + "01", format="%Y%m%d", errors="coerce")
 valores["Monto"] = pd.to_numeric(valores["Monto"], errors="coerce").fillna(0)
-valores["Nivel"] = valores["Nivel"].astype(str)
+valores["Nivel Post."] = valores["Nivel Post."].astype(str)
 
 # Creamos la tabla dinámica
 pivot = pd.pivot_table(
