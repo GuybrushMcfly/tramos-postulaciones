@@ -265,8 +265,8 @@ with col5:
     tarjeta_hover_tooltip(
         titulo="PRESENTADAS",
         valor=valor_col5,
-        color="#ffffa0",
-        descripcion="Tramitaciones que fueron cargadas y están a la espera de revisión.",
+        color="#fa4c76",
+        descripcion="Postulaciones presentadas por los agentes a la espera de iniciar el trámite.",
         size_titulo=15,
         size_valor=35
     )
@@ -275,7 +275,7 @@ with col6:
     tarjeta_hover_tooltip(
         titulo="EN ACTIV. CAPACITACION",
         valor=valor_col6,
-        color="#fdd274",
+        color="#ff6357",
         descripcion="Postulaciones actualmente en proceso de capacitación.",
         size_titulo=14,
         size_valor=30
@@ -285,7 +285,7 @@ with col7:
     tarjeta_hover_tooltip(
         titulo="EN ACTIV. VALORACION",
         valor=valor_col7,
-        color="#f6a259",
+        color="#ff8336",
         descripcion="Postulaciones en análisis por el comité de valoración.",
         size_titulo=14,
         size_valor=32
@@ -295,8 +295,8 @@ with col8:
     tarjeta_hover_tooltip(
         titulo="APROBADAS",
         valor=valor_col8,
-        color="#d43d51",
-        descripcion="Tramitaciones que recibieron aprobación definitiva.",
+        color="#ffa600",
+        descripcion="Tramitaciones aprobadas por resolución.",
         size_titulo=15,
         size_valor=36
     )
