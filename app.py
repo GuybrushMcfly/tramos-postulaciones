@@ -63,6 +63,7 @@ df = pd.DataFrame(data)
 # Cargar hoja 'valores' directamente
 valores = pd.DataFrame(sheet.worksheet("valores").get_all_records())
 
+st.write(valores["Monto"].head(20))
 # Limpieza de la columna "Monto"
 valores["Monto"] = (
     valores["Monto"]
