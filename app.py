@@ -34,7 +34,8 @@ authenticator.login()
 if st.session_state["authentication_status"]:
     authenticator.logout("Cerrar sesión", "sidebar")
     st.sidebar.success(f"Hola, {st.session_state['name']}")
-    st.title("📊 Dashboard Tramos Escalafonarios")
+    #st.title("📊 Dashboard Tramos Escalafonarios")
+    st.markdown("""<h1 style='font-size: 36px; color: white;'>📊 Dashboard Tramos Escalafonarios</h1>""", unsafe_allow_html=True)
 elif st.session_state["authentication_status"] is False:
     st.error("❌ Usuario o contraseña incorrectos.")
     st.stop()
