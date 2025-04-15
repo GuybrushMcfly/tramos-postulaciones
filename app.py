@@ -64,13 +64,13 @@ df = pd.DataFrame(data)
 valores = pd.DataFrame(sheet.worksheet("valores").get_all_records())
 
 # Limpieza de la columna "Monto"
-valores["Monto"] = (
-    valores["Monto"]
-    .astype(str)
-    .str.replace(".", "", regex=False)
-    .str.replace(",", ".", regex=False)
-)
-valores["Monto"] = pd.to_numeric(valores["Monto"], errors="coerce").fillna(0)
+#valores["Monto"] = (
+#    valores["Monto"]
+#    .astype(str)
+#    .str.replace(".", "", regex=False)
+    #.str.replace(",", ".", regex=False)
+#)
+#valores["Monto"] = pd.to_numeric(valores["Monto"], errors="coerce").fillna(0)
 
 # ---- FILTROS EN LA BARRA LATERAL ----
 st.sidebar.header("Filtros")
