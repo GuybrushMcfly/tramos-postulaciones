@@ -470,14 +470,11 @@ st.plotly_chart(fig, use_container_width=True)
 # --- TABLA DINÁMICA DE MONTOS POR MES Y NIVEL ---
 
 # Asegurar formato correcto
-valores["Periodo"] = pd.to_datetime(valores["Periodo Valoracion"].astype(str) + "01", format="%Y%m%d", errors="coerce")
-valores["CUIL"] = valores["CUIL"].astype(str)
-valores["Nivel"] = valores["Nivel Post."].astype(str)
-valores["Monto"] = (
-    valores["Monto"].astype(str)
-    .str.replace(".", "", regex=False)
-    .str.replace(",", ".", regex=False)
+valores["Periodo Valoracion"] = pd.to_datetime(
+    valores["Periodo Valoracion"].astype(str) + "01", format="%Y%m%d", errors="coerce"
 )
+valores["CUIL"] = valores["CUIL"].astype(str)
+valores["Nivel Post."] = valores["Nivel Post."].astype(str)
 valores["Monto"] = pd.to_numeric(valores["Monto"], errors="coerce").fillna(0)
 
 # Diccionario de meses en español
@@ -487,13 +484,13 @@ meses_es = {
 }
 
 # Crear columna "Mes" con formato mes-año
-valores["Periodo_Orden"] = valores["Periodo"]
-valores["Mes"] = valores["Periodo"].dt.month.map(meses_es) + "-" + valores["Periodo"].dt.strftime("%y")
+valores["Periodo_Orden"] = valores["Periodo Valoracion"]
+valores["Mes"] = valores["Periodo_Orden"].dt.month.map(meses_es) + "-" + valores["Periodo_Orden"].dt.strftime("%y")
 
 # Tabla dinámica
 pivot_valores = valores.pivot_table(
     index=["Periodo_Orden", "Mes"],
-    columns="Nivel",
+    columns="Nivel Post.",
     values="Monto",
     aggfunc="sum",
     fill_value=0
@@ -518,6 +515,5 @@ pivot_valores = pivot_valores[columnas_finales]
 # Mostrar tabla en el dashboard
 st.markdown("### 📊 Tabla dinámica de montos por Nivel y Mes")
 st.dataframe(pivot_valores, use_container_width=True, hide_index=True)
-
 
 
