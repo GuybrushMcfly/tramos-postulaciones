@@ -65,7 +65,10 @@ gc = gspread.authorize(creds)
 # Abro la planilla
 sheet = gc.open_by_key("11--jD47K72s9ddt727kYd9BhRmAOM7qXEUB60SX69UA")
 postulaciones = pd.DataFrame(sheet.worksheet("Postulaciones").get_all_records())
+valores = pd.DataFrame(sheet.worksheet("valores").get_all_records())
 worksheet = gc.open_by_key("11--jD47K72s9ddt727kYd9BhRmAOM7qXEUB60SX69UA").sheet1
+
+valores["Monto"] = valores["Monto"].replace(",", ".", regex=True).astype(float)
 
 # Cargar datos desde la hoja
 data = worksheet.get_all_records()
@@ -126,6 +129,7 @@ df["Tipo Comité - Agrupado"] = df["Tipo Comité"].apply(lambda x: x if x in [
 
 
 
+
 # --- LÓGICA DE VALORES ---
 estados_validos = ["Presentada", "En Actividad Valoración", "En Actividad Capacitación"]
 
@@ -141,7 +145,8 @@ valor_col3 = df[
     (df["Ingresante"] == "SI")
 ]["Agente"].count()
 
-valor_col4 = 0  # MONTO ESTIMADO
+valor_col4 = valores[valores["CUIL"].isin(df["CUIL"])]["Monto"].sum()
+valor_col4_mostrado = f"${valor_col4:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
 
 valor_col5 = df[df["Estado"] == "Presentada"]["Agente"].count()
 valor_col6 = df[df["Estado"] == "En Actividad Capacitación"]["Agente"].count()
@@ -187,7 +192,7 @@ with col3:
     tarjeta_gradiente_simple("POST. INGRESANTES", valor_col3, "linear-gradient(135deg, #FDC830, #F37335)")
 
 with col4:
-    tarjeta_gradiente_simple("MONTO ESTIMADO", valor_col4, "linear-gradient(135deg, #C33764, #1D2671)")
+    tarjeta_gradiente_simple("MONTO ESTIMADO", valor_col4_mostrado, "linear-gradient(135deg, #C33764, #1D2671)")
 
 # --- FILA 2 ---
 col5, col6, col7, col8 = st.columns(4)
