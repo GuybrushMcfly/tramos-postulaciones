@@ -252,6 +252,8 @@ with col4:
     tarjeta_gradiente_simple("MONTO ESTIMADO", valor_col4_mostrado, "linear-gradient(135deg, #C33764, #1D2671)")
 
 # --- FILA 2 ---
+st.markdown("<div style='margin-top: 50px;'></div>", unsafe_allow_html=True)
+
 st.markdown("#### 📂 Estado de Tramitaciones")
 col5, col6, col7, col8 = st.columns(4)
 
