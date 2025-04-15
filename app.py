@@ -326,3 +326,8 @@ with st.expander("🔎 VER DETALLES DE POSTULACIONES 🔎"):
 
 #--------------------------
 
+# 👉 Ver solo las postulaciones que coinciden con los filtros actuales
+st.markdown("<div style='margin-top: 30px;'></div>", unsafe_allow_html=True)
+
+with st.expander("🔍 VER POSTULACIONES FILTRADAS"):
+    st.dataframe(df, use_container_width=True, hide_index=True)
