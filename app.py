@@ -64,15 +64,16 @@ df = pd.DataFrame(data)
 valores = pd.DataFrame(sheet.worksheet("valores").get_all_records())
 
 # Limpieza correcta del monto argentino (puntos de miles y coma decimal)
-valores["Monto"] = (
-    valores["Monto"]
-    .astype(str)
-    .str.replace(".", "", regex=False)        # eliminar separador de miles
-    .str.replace(",", ".", regex=False)       # convertir coma decimal a punto decimal
-)
+import re
 
-# Convertir a número decimal (float)
-valores["Monto"] = pd.to_numeric(valores["Monto"], errors="coerce").fillna(0)
+def limpiar_monto(valor):
+    if isinstance(valor, str):
+        # Reemplaza solo la coma decimal final por un punto
+        valor = re.sub(r"\.(?=\d{3}(?:\.|,))", "", valor)  # elimina puntos de miles
+        valor = valor.replace(",", ".")  # cambia la coma decimal por punto
+    return pd.to_numeric(valor, errors="coerce")
+
+valores["Monto"] = valores["Monto"].apply(limpiar_monto).fillna(0)
 
 st.write("🧪 Primeros 20 montos procesados:", valores["Monto"].head(20))
 
