@@ -545,3 +545,48 @@ pivot_valores = pivot_valores[columnas_finales]
 # Mostrar en el dashboard
 st.markdown("#### 📊 Presupuesto estimado por Nivel y Período")
 st.dataframe(pivot_valores, use_container_width=True, hide_index=True)
+
+
+# Construimos la base de datos para ECharts
+meses = pivot_valores["Mes"].tolist()
+
+series = []
+niveles = ["A", "B", "C", "D"]
+colores = ["#5470C6", "#91CC75", "#FAC858", "#EE6666"]  # opcionales
+
+for idx, nivel in enumerate(niveles):
+    serie = {
+        "name": nivel,
+        "type": "line",
+        "stack": "Total",
+        "areaStyle": {},
+        "emphasis": {"focus": "series"},
+        "data": pivot_valores[nivel].round(2).tolist()
+    }
+    if idx == len(niveles) - 1:  # Mostrar etiquetas solo en la última serie (opcional)
+        serie["label"] = {"show": True, "position": "top"}
+    series.append(serie)
+
+# Configuración del gráfico ECharts
+options = {
+    "title": {"text": "Presupuesto por Nivel - Área Apilada"},
+    "tooltip": {
+        "trigger": "axis",
+        "axisPointer": {"type": "cross", "label": {"backgroundColor": "#6a7985"}},
+    },
+    "legend": {"data": niveles},
+    "toolbox": {"feature": {"saveAsImage": {}}},
+    "grid": {"left": "3%", "right": "4%", "bottom": "3%", "containLabel": True},
+    "xAxis": [
+        {
+            "type": "category",
+            "boundaryGap": False,
+            "data": meses,
+        }
+    ],
+    "yAxis": [{"type": "value"}],
+    "series": series,
+}
+
+# Mostrar gráfico en Streamlit
+st_echarts(options=options, height="400px")
