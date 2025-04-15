@@ -247,10 +247,10 @@ with col3:
 
 with col4:
     tarjeta_hover_tooltip(
-        titulo="MONTO ESTIMADO",
+        titulo="PRESUPUESTO ESTIMADO",
         valor=valor_col4_mostrado,
         color="#dc4390",
-        descripcion="Valor total estimado de asignación por tramo.",
+        descripcion="Presupuesto estimado de asignación por tramo.",
         size_titulo=15,
         size_valor=25
     )
@@ -545,7 +545,7 @@ columnas_finales = ["Mes", "A", "B", "C", "D", "Total"]
 pivot_valores = pivot_valores[columnas_finales]
 
 # Mostrar tabla en el dashboard
-st.markdown("### 📊 Tabla dinámica de montos por Nivel y Mes")
+st.markdown("#### 📊 Presupuesto estimado por Nivel y Período")
 st.dataframe(pivot_valores, use_container_width=True, hide_index=True)
 
 
@@ -554,7 +554,7 @@ total_monto = valores["Monto"].sum()
 
 # Mostrar en millones con dos decimales y formato regional
 total_formateado = f"{total_monto:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
-st.markdown(f"### 💰 Suma total de Monto: **${total_formateado}**")
+st.markdown(f"#### 💰 Suma total de Monto: **${total_formateado}**")
 
 
 
