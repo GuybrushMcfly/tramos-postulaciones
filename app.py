@@ -399,9 +399,9 @@ import plotly.graph_objects as go
 fig = go.Figure()
 
 niveles = ["A", "B", "C", "D"]
-colores = ["#00B4DB", "#FF5858", "#FDC830", "#C33764"]  # colores personalizados
+colores = ["#00B4DB", "#FF5858", "#FDC830", "#C33764"]
 
-# Agregar una barra por cada nivel
+# Barras apiladas por nivel
 for nivel, color in zip(niveles, colores):
     fig.add_trace(go.Bar(
         x=pivot_valores["Mes"],
@@ -410,7 +410,7 @@ for nivel, color in zip(niveles, colores):
         marker_color=color
     ))
 
-# Agregar etiquetas con el total mensual en la punta
+# Etiquetas con totales en millones
 fig.add_trace(go.Scatter(
     x=pivot_valores["Mes"],
     y=pivot_valores["Total"],
@@ -418,10 +418,10 @@ fig.add_trace(go.Scatter(
     text=[f"{x/1_000_000:.1f}M" for x in pivot_valores["Total"]],
     textposition="top center",
     showlegend=False,
-    textfont=dict(size=12, color="#333", family="Arial")
+    textfont=dict(size=14, color="black", family="Arial")  # Cambiá color acá si querés
 ))
 
-# Configuración general del gráfico
+# Layout final
 fig.update_layout(
     title="Monto mensual total por Nivel (barras apiladas)",
     xaxis_title="Mes",
@@ -429,12 +429,12 @@ fig.update_layout(
     barmode="stack",
     legend_title="Nivel",
     xaxis=dict(type="category"),
-    height=550
+    height=550,
+    margin=dict(t=80),  # espacio arriba para que entren los números
 )
 
-# Mostrar en Streamlit
+# Mostrar gráfico en Streamlit
 st.plotly_chart(fig, use_container_width=True)
-
 
 
 
