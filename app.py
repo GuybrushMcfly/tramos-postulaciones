@@ -63,16 +63,15 @@ df = pd.DataFrame(data)
 # Cargar hoja 'valores' directamente
 valores = pd.DataFrame(sheet.worksheet("valores").get_all_records())
 
-st.write(valores["Monto"].head(20))
-# Limpieza de la columna "Monto"
+# Limpieza correcta del monto argentino (puntos de miles y coma decimal)
 valores["Monto"] = (
     valores["Monto"]
     .astype(str)
-    .str.replace(",", "DECIMAL", regex=False)  # Paso 1: marcador temporal
-    .str.replace(".", "", regex=False)         # Paso 2: eliminar separadores de miles
-    .str.replace("DECIMAL", ".", regex=False)  # Paso 3: restaurar como punto decimal
+    .str.replace(".", "", regex=False)        # eliminar separador de miles
+    .str.replace(",", ".", regex=False)       # convertir coma decimal a punto decimal
 )
 
+# Convertir a número decimal (float)
 valores["Monto"] = pd.to_numeric(valores["Monto"], errors="coerce").fillna(0)
 
 
