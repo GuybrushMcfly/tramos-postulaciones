@@ -45,382 +45,382 @@ if st.session_state["authentication_status"]:
         st.markdown("""<h1 style='font-size: 30px; color: white;'>📊 Dashboard Tramos Escalafonarios</h1>""", unsafe_allow_html=True)
 
      
-        # ---- CARGA DE DATOS DE GOOGLE SHEETS ----
-        
-        # 1️⃣ Definir permisos de acceso
-        scope = ["https://www.googleapis.com/auth/spreadsheets"]
-        credenciales_dict = json.loads(st.secrets["GOOGLE_CREDS"])
-        creds = Credentials.from_service_account_info(credenciales_dict, scopes=scope)
-        gc = gspread.authorize(creds)
-        
-        # 2️⃣ Abrir archivo de Sheets
-        sheet = gc.open_by_key("11--jD47K72s9ddt727kYd9BhRmAOM7qXEUB60SX69UA")
-        
-        # 3️⃣ Cargar hoja principal
-        worksheet = sheet.sheet1
-        data = worksheet.get_all_records()
-        df = pd.DataFrame(data)
-        
-        # Cargar hoja 'valores' directamente
-        valores = pd.DataFrame(sheet.worksheet("valores").get_all_records())
-        
-        # ---- FILTROS EN LA BARRA LATERAL ----
-        st.sidebar.header("Filtros")
-        
-        # Filtro por Tramo
-        st.sidebar.subheader("TRAMO")
-        tramos = df["Tramo Post."].dropna()
-        tramos = tramos[tramos != ""].unique()
-        tramo_seleccionado = st.sidebar.multiselect(
-            "Seleccionar uno o más tramos",
-            options=sorted(tramos),
-            default=sorted(tramos)
-        )
-        
-        # Filtro por Periodo
-        st.sidebar.subheader("PERIODO")
-        periodos = df["Periodo Valoración"].dropna()
-        periodos = periodos[periodos != ""].unique()
-        periodo_seleccionado = st.sidebar.multiselect(
-            "Seleccionar uno o más periodos",
-            options=sorted(periodos),
-            default=sorted(periodos)
-        )
-        
-        # Filtro por Nivel Escalafonario
-        st.sidebar.subheader("NIVEL ESCALAFONARIO")
-        niveles = df["Nivel Post."].dropna()
-        niveles = niveles[niveles != ""].unique()
-        nivel_seleccionado = st.sidebar.multiselect(
-            "Seleccionar uno o más niveles",
-            options=sorted(niveles),
-            default=sorted(niveles)
-        )
-        
-        
-        # Filtro por tipo de personal
-        df["Tipo Personal"] = df["Ingresante"].apply(lambda x: "INGRESANTES" if x == "SI" else "HISTÓRICOS")
-        st.sidebar.subheader("PERSONAL")
-        tipos_personal = df["Tipo Personal"].dropna().unique()
-        tipo_seleccionado = st.sidebar.multiselect(
-            "Seleccionar tipo de personal",
-            options=sorted(tipos_personal),
-            default=sorted(tipos_personal)
-        )
-        
-        # Aplicar filtros
-        df = df[
-            df["Tipo Personal"].isin(tipo_seleccionado) &
-            df["Tramo Post."].isin(tramo_seleccionado) &
-            df["Periodo Valoración"].isin(periodo_seleccionado) &
-            df["Nivel Post."].isin(nivel_seleccionado) &
-            ~df["Estado"].isin(["Pendiente", "Anulada"])
-        ]
-        
-        # Agrupar tipo de comité en categorías personalizadas
-        df["Tipo Comité - Agrupado"] = df["Tipo Comité"].apply(lambda x: x if x in [
-            "Jurisdiccional (INDEC)",
-            "Transversal (INAP)",
-            "Funciones informáticas (ONTI)"
-        ] else "Otros (EXTERNOS)")
-        
-        
-        
-        # --- LÓGICA DE VALORES ---
-        estados_validos = ["Presentada", "En Actividad Valoración", "En Actividad Capacitación"]
-        
-        valor_col1 = df[df["Estado"].isin(estados_validos)]["Agente"].count()
-        
-        valor_col2 = df[
-            (df["Estado"].isin(estados_validos)) &
-            (df["Ingresante"] == "")
-        ]["Agente"].count()
-        
-        valor_col3 = df[
-            (df["Estado"].isin(estados_validos)) &
-            (df["Ingresante"] == "SI")
-        ]["Agente"].count()
-        
-        # --- LÓGICA DE VALORES ---
-        #valor_col4 = valores["Monto"].sum()
-        #valor_col4_mostrado = f"{valor_col4:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
-        
-        # Asegurar que los CUIL estén como texto
-        valores["CUIL"] = valores["CUIL"].astype(str)
-        df["CUIL"] = df["CUIL"].astype(str)
-        # Filtrar los montos según los CUIL del df filtrado
-        valores_filtrados = valores[valores["CUIL"].isin(df["CUIL"])]
-        # Sumar y formatear
-        valor_col4 = valores_filtrados["Monto"].sum()
-        valor_col4_mostrado = f"{valor_col4:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
-        
-        
-        valor_col5 = df[df["Estado"] == "Presentada"]["Agente"].count()
-        valor_col6 = df[df["Estado"] == "En Actividad Capacitación"]["Agente"].count()
-        valor_col7 = df[df["Estado"] == "En Actividad Valoración"]["Agente"].count()
-        valor_col8 = 0  # APROBADAS
-        
-        
-        # --- ESTILO GLOBAL PARA HOVER Y TOOLTIP ---
-        st.markdown("""
-            <style>
-            .tarjeta-hover {
-                padding: 25px;
-                border-radius: 15px;
-                height: 120px;
-                box-shadow: 0px 4px 10px rgba(0,0,0,0.25);
-                margin-bottom: 25px;
-                transition: all 0.3s ease;
-                position: relative;
-            }
-        
-            .tarjeta-hover:hover {
-                transform: translateY(-5px);
-                box-shadow: 0px 8px 20px rgba(0,0,0,0.35);
-                cursor: default;
-            }
-        
-            .tooltip-info {
-                font-size: 13px;
-                color: #eeeeee;
-                margin-top: 20px;
-                opacity: 0;
-                transition: opacity 0.3s ease;
-            }
-        
-            .tarjeta-hover:hover .tooltip-info {
-                opacity: 1;
-            }
-            </style>
-        """, unsafe_allow_html=True)
-        
-        
-        # --- FUNCIÓN CON CONTROL TOTAL ---
-        def tarjeta_hover_tooltip(titulo, valor, color, descripcion, size_titulo=17, size_valor=36):
-            st.markdown(f"""
-                <div class="tarjeta-hover" style="background: {color};">
-                    <div style="font-size: {size_titulo}px; color: white; font-weight: 700;">
-                        {titulo}
-                    </div>
-                    <div style="font-size: {size_valor}px; color: white; font-weight: bold;">
-                        {valor}
-                    </div>
-                    <div class="tooltip-info">
-                        {descripcion}
-                    </div>
-                </div>
+            # ---- CARGA DE DATOS DE GOOGLE SHEETS ----
+            
+            # 1️⃣ Definir permisos de acceso
+            scope = ["https://www.googleapis.com/auth/spreadsheets"]
+            credenciales_dict = json.loads(st.secrets["GOOGLE_CREDS"])
+            creds = Credentials.from_service_account_info(credenciales_dict, scopes=scope)
+            gc = gspread.authorize(creds)
+            
+            # 2️⃣ Abrir archivo de Sheets
+            sheet = gc.open_by_key("11--jD47K72s9ddt727kYd9BhRmAOM7qXEUB60SX69UA")
+            
+            # 3️⃣ Cargar hoja principal
+            worksheet = sheet.sheet1
+            data = worksheet.get_all_records()
+            df = pd.DataFrame(data)
+            
+            # Cargar hoja 'valores' directamente
+            valores = pd.DataFrame(sheet.worksheet("valores").get_all_records())
+            
+            # ---- FILTROS EN LA BARRA LATERAL ----
+            st.sidebar.header("Filtros")
+            
+            # Filtro por Tramo
+            st.sidebar.subheader("TRAMO")
+            tramos = df["Tramo Post."].dropna()
+            tramos = tramos[tramos != ""].unique()
+            tramo_seleccionado = st.sidebar.multiselect(
+                "Seleccionar uno o más tramos",
+                options=sorted(tramos),
+                default=sorted(tramos)
+            )
+            
+            # Filtro por Periodo
+            st.sidebar.subheader("PERIODO")
+            periodos = df["Periodo Valoración"].dropna()
+            periodos = periodos[periodos != ""].unique()
+            periodo_seleccionado = st.sidebar.multiselect(
+                "Seleccionar uno o más periodos",
+                options=sorted(periodos),
+                default=sorted(periodos)
+            )
+            
+            # Filtro por Nivel Escalafonario
+            st.sidebar.subheader("NIVEL ESCALAFONARIO")
+            niveles = df["Nivel Post."].dropna()
+            niveles = niveles[niveles != ""].unique()
+            nivel_seleccionado = st.sidebar.multiselect(
+                "Seleccionar uno o más niveles",
+                options=sorted(niveles),
+                default=sorted(niveles)
+            )
+            
+            
+            # Filtro por tipo de personal
+            df["Tipo Personal"] = df["Ingresante"].apply(lambda x: "INGRESANTES" if x == "SI" else "HISTÓRICOS")
+            st.sidebar.subheader("PERSONAL")
+            tipos_personal = df["Tipo Personal"].dropna().unique()
+            tipo_seleccionado = st.sidebar.multiselect(
+                "Seleccionar tipo de personal",
+                options=sorted(tipos_personal),
+                default=sorted(tipos_personal)
+            )
+            
+            # Aplicar filtros
+            df = df[
+                df["Tipo Personal"].isin(tipo_seleccionado) &
+                df["Tramo Post."].isin(tramo_seleccionado) &
+                df["Periodo Valoración"].isin(periodo_seleccionado) &
+                df["Nivel Post."].isin(nivel_seleccionado) &
+                ~df["Estado"].isin(["Pendiente", "Anulada"])
+            ]
+            
+            # Agrupar tipo de comité en categorías personalizadas
+            df["Tipo Comité - Agrupado"] = df["Tipo Comité"].apply(lambda x: x if x in [
+                "Jurisdiccional (INDEC)",
+                "Transversal (INAP)",
+                "Funciones informáticas (ONTI)"
+            ] else "Otros (EXTERNOS)")
+            
+            
+            
+            # --- LÓGICA DE VALORES ---
+            estados_validos = ["Presentada", "En Actividad Valoración", "En Actividad Capacitación"]
+            
+            valor_col1 = df[df["Estado"].isin(estados_validos)]["Agente"].count()
+            
+            valor_col2 = df[
+                (df["Estado"].isin(estados_validos)) &
+                (df["Ingresante"] == "")
+            ]["Agente"].count()
+            
+            valor_col3 = df[
+                (df["Estado"].isin(estados_validos)) &
+                (df["Ingresante"] == "SI")
+            ]["Agente"].count()
+            
+            # --- LÓGICA DE VALORES ---
+            #valor_col4 = valores["Monto"].sum()
+            #valor_col4_mostrado = f"{valor_col4:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
+            
+            # Asegurar que los CUIL estén como texto
+            valores["CUIL"] = valores["CUIL"].astype(str)
+            df["CUIL"] = df["CUIL"].astype(str)
+            # Filtrar los montos según los CUIL del df filtrado
+            valores_filtrados = valores[valores["CUIL"].isin(df["CUIL"])]
+            # Sumar y formatear
+            valor_col4 = valores_filtrados["Monto"].sum()
+            valor_col4_mostrado = f"{valor_col4:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
+            
+            
+            valor_col5 = df[df["Estado"] == "Presentada"]["Agente"].count()
+            valor_col6 = df[df["Estado"] == "En Actividad Capacitación"]["Agente"].count()
+            valor_col7 = df[df["Estado"] == "En Actividad Valoración"]["Agente"].count()
+            valor_col8 = 0  # APROBADAS
+            
+            
+            # --- ESTILO GLOBAL PARA HOVER Y TOOLTIP ---
+            st.markdown("""
+                <style>
+                .tarjeta-hover {
+                    padding: 25px;
+                    border-radius: 15px;
+                    height: 120px;
+                    box-shadow: 0px 4px 10px rgba(0,0,0,0.25);
+                    margin-bottom: 25px;
+                    transition: all 0.3s ease;
+                    position: relative;
+                }
+            
+                .tarjeta-hover:hover {
+                    transform: translateY(-5px);
+                    box-shadow: 0px 8px 20px rgba(0,0,0,0.35);
+                    cursor: default;
+                }
+            
+                .tooltip-info {
+                    font-size: 13px;
+                    color: #eeeeee;
+                    margin-top: 20px;
+                    opacity: 0;
+                    transition: opacity 0.3s ease;
+                }
+            
+                .tarjeta-hover:hover .tooltip-info {
+                    opacity: 1;
+                }
+                </style>
             """, unsafe_allow_html=True)
-        
-        
-        # --- FILA 1 ---
-        st.markdown("#### 🧍‍♂️🧍‍♀️ Postulaciones Totales")
-        col1, col2, col3, col4 = st.columns(4)
-        
-        with col1:
-            tarjeta_hover_tooltip(
-                titulo="POSTULACIONES",
-                valor=valor_col1,
-                color="#3850a6",
-                descripcion="Total de postulaciones presentadas por los agentes.",
-                size_titulo=15,
-                size_valor=34
-            )
-        
-        with col2:
-            tarjeta_hover_tooltip(
-                titulo="POST. HISTÓRICOS",
-                valor=valor_col2,
-                color="#7c4daa",
-                descripcion="Agentes de planta permanente históricos.",
-                size_titulo=15,
-                size_valor=34
-            )
-        
-        with col3:
-            tarjeta_hover_tooltip(
-                titulo="POST. INGRESANTES",
-                valor=valor_col3,
-                color="#b147a2",
-                descripcion="Agentes que concursaron en 2023.",
-                size_titulo=15,
-                size_valor=34
-            )
-        
-        with col4:
-            tarjeta_hover_tooltip(
-                titulo="PRESUPUESTO",
-                valor=valor_col4_mostrado,
-                color="#dc4390",
-                descripcion="Presupuesto estimado de asignación por tramo.",
-                size_titulo=15,
-                size_valor=25
-            )
-        
-        
-        # --- FILA 2 ---
-        st.markdown("<div style='margin-top: 30px;'></div>", unsafe_allow_html=True)
-        st.markdown("#### 📂 Estado de Tramitaciones")
-        
-        col5, col6, col7, col8 = st.columns(4)
-        
-        with col5:
-            tarjeta_hover_tooltip(
-                titulo="PRESENTADAS",
-                valor=valor_col5,
-                color="#fa4c76",
-                descripcion="Postulaciones presentadas por los agentes a la espera de iniciar el trámite.",
-                size_titulo=15,
-                size_valor=34
-            )
-        
-        with col6:
-            tarjeta_hover_tooltip(
-                titulo="EN ACTIV. CAPACITACION",
-                valor=valor_col6,
-                color="#ff6357",
-                descripcion="Postulaciones actualmente en proceso de capacitación.",
-                size_titulo=15,
-                size_valor=34
-            )
-        
-        with col7:
-            tarjeta_hover_tooltip(
-                titulo="EN ACTIV. VALORACION",
-                valor=valor_col7,
-                color="#ff8336",
-                descripcion="Postulaciones en análisis por el comité de valoración.",
-                size_titulo=15,
-                size_valor=34
-            )
-        
-        with col8:
-            tarjeta_hover_tooltip(
-                titulo="APROBADAS",
-                valor=valor_col8,
-                color="#ffa600",
-                descripcion="Tramitaciones aprobadas por resolución.",
-                size_titulo=15,
-                size_valor=34
-            )
-        
-        st.markdown("<div style='margin-top: 60px;'></div>", unsafe_allow_html=True)
-        st.markdown("##### 📊 Distribución de las postulaciones")
-        
-        # --- FUNCIÓN PARA GRÁFICOS PIE ---
-        def pie_chart_donut(df, columna, titulo, key_id):
-            conteo = df[columna].value_counts().reset_index()
-            conteo.columns = ["name", "value"]
-            data = conteo.to_dict(orient="records")
-        
-            # Detectar tema y color de texto
-            modo = st.get_option("theme.base") or "light"
-            color_texto = "#000000" if modo == "light" else "#CCCCCC"
-        
-            option = {
-                "title": {
-                    "text": titulo,
-                    "left": "center",
-                    "top": "top",
-                    "textStyle": {
-                        "fontSize": 16,
-                        "fontWeight": "bold",
-                        "color": color_texto
-                    }
-                },  # ← esta llave FALTABA
-                "tooltip": {
-                    "trigger": "item",
-                    "formatter": "{b}: {c} ({d}%)"
-                },
-                "legend": {
-                    "orient": "horizontal",
-                    "top": "90%",  # más arriba para que no se corte
-                    "left": "center",
-                    "padding": [0, 0, 20, 0],
-                    "textStyle": {"color": color_texto}
-                },
-                
-                "series": [
-                    {
-                        "name": titulo,
-                        "type": "pie",
-                        "radius": ["40%", "75%"],
-                        "avoidLabelOverlap": False,
-                        "itemStyle": {
-                            "borderRadius": 10,
-                            "borderColor": "#fff",
-                            "borderWidth": 2
-                        },
-                        "label": {
-                            "show": False,
-                            "position": "center",
+            
+            
+            # --- FUNCIÓN CON CONTROL TOTAL ---
+            def tarjeta_hover_tooltip(titulo, valor, color, descripcion, size_titulo=17, size_valor=36):
+                st.markdown(f"""
+                    <div class="tarjeta-hover" style="background: {color};">
+                        <div style="font-size: {size_titulo}px; color: white; font-weight: 700;">
+                            {titulo}
+                        </div>
+                        <div style="font-size: {size_valor}px; color: white; font-weight: bold;">
+                            {valor}
+                        </div>
+                        <div class="tooltip-info">
+                            {descripcion}
+                        </div>
+                    </div>
+                """, unsafe_allow_html=True)
+            
+            
+            # --- FILA 1 ---
+            st.markdown("#### 🧍‍♂️🧍‍♀️ Postulaciones Totales")
+            col1, col2, col3, col4 = st.columns(4)
+            
+            with col1:
+                tarjeta_hover_tooltip(
+                    titulo="POSTULACIONES",
+                    valor=valor_col1,
+                    color="#3850a6",
+                    descripcion="Total de postulaciones presentadas por los agentes.",
+                    size_titulo=15,
+                    size_valor=34
+                )
+            
+            with col2:
+                tarjeta_hover_tooltip(
+                    titulo="POST. HISTÓRICOS",
+                    valor=valor_col2,
+                    color="#7c4daa",
+                    descripcion="Agentes de planta permanente históricos.",
+                    size_titulo=15,
+                    size_valor=34
+                )
+            
+            with col3:
+                tarjeta_hover_tooltip(
+                    titulo="POST. INGRESANTES",
+                    valor=valor_col3,
+                    color="#b147a2",
+                    descripcion="Agentes que concursaron en 2023.",
+                    size_titulo=15,
+                    size_valor=34
+                )
+            
+            with col4:
+                tarjeta_hover_tooltip(
+                    titulo="PRESUPUESTO",
+                    valor=valor_col4_mostrado,
+                    color="#dc4390",
+                    descripcion="Presupuesto estimado de asignación por tramo.",
+                    size_titulo=15,
+                    size_valor=25
+                )
+            
+            
+            # --- FILA 2 ---
+            st.markdown("<div style='margin-top: 30px;'></div>", unsafe_allow_html=True)
+            st.markdown("#### 📂 Estado de Tramitaciones")
+            
+            col5, col6, col7, col8 = st.columns(4)
+            
+            with col5:
+                tarjeta_hover_tooltip(
+                    titulo="PRESENTADAS",
+                    valor=valor_col5,
+                    color="#fa4c76",
+                    descripcion="Postulaciones presentadas por los agentes a la espera de iniciar el trámite.",
+                    size_titulo=15,
+                    size_valor=34
+                )
+            
+            with col6:
+                tarjeta_hover_tooltip(
+                    titulo="EN ACTIV. CAPACITACION",
+                    valor=valor_col6,
+                    color="#ff6357",
+                    descripcion="Postulaciones actualmente en proceso de capacitación.",
+                    size_titulo=15,
+                    size_valor=34
+                )
+            
+            with col7:
+                tarjeta_hover_tooltip(
+                    titulo="EN ACTIV. VALORACION",
+                    valor=valor_col7,
+                    color="#ff8336",
+                    descripcion="Postulaciones en análisis por el comité de valoración.",
+                    size_titulo=15,
+                    size_valor=34
+                )
+            
+            with col8:
+                tarjeta_hover_tooltip(
+                    titulo="APROBADAS",
+                    valor=valor_col8,
+                    color="#ffa600",
+                    descripcion="Tramitaciones aprobadas por resolución.",
+                    size_titulo=15,
+                    size_valor=34
+                )
+            
+            st.markdown("<div style='margin-top: 60px;'></div>", unsafe_allow_html=True)
+            st.markdown("##### 📊 Distribución de las postulaciones")
+            
+            # --- FUNCIÓN PARA GRÁFICOS PIE ---
+            def pie_chart_donut(df, columna, titulo, key_id):
+                conteo = df[columna].value_counts().reset_index()
+                conteo.columns = ["name", "value"]
+                data = conteo.to_dict(orient="records")
+            
+                # Detectar tema y color de texto
+                modo = st.get_option("theme.base") or "light"
+                color_texto = "#000000" if modo == "light" else "#CCCCCC"
+            
+                option = {
+                    "title": {
+                        "text": titulo,
+                        "left": "center",
+                        "top": "top",
+                        "textStyle": {
+                            "fontSize": 16,
+                            "fontWeight": "bold",
                             "color": color_texto
-                        },
-                        "emphasis": {
+                        }
+                    },  # ← esta llave FALTABA
+                    "tooltip": {
+                        "trigger": "item",
+                        "formatter": "{b}: {c} ({d}%)"
+                    },
+                    "legend": {
+                        "orient": "horizontal",
+                        "top": "90%",  # más arriba para que no se corte
+                        "left": "center",
+                        "padding": [0, 0, 20, 0],
+                        "textStyle": {"color": color_texto}
+                    },
+                    
+                    "series": [
+                        {
+                            "name": titulo,
+                            "type": "pie",
+                            "radius": ["40%", "75%"],
+                            "avoidLabelOverlap": False,
+                            "itemStyle": {
+                                "borderRadius": 10,
+                                "borderColor": "#fff",
+                                "borderWidth": 2
+                            },
                             "label": {
-                                "show": True,
-                                "fontSize": 20,
-                                "fontWeight": "bold",
+                                "show": False,
+                                "position": "center",
                                 "color": color_texto
-                            }
-                        },
-                        "labelLine": {
-                            "show": True,
-                            "lineStyle": {"color": color_texto}
-                        },
-                        "data": data
-                    }
-                ]
-            }
-        
-            st_echarts(options=option, height="380px", key=key_id)
-        
-        
-        
-        # --- GRILLA 3x3 DE PIE CHARTS ---
-        
-        # FILA 1
-        col1, col2, col3 = st.columns(3)
-        
-        with col1:
-            pie_chart_donut(df, "Puesto Tipo", "Distribución por Puesto Tipo", "pie1")
-        
-        with col2:
-            pie_chart_donut(df, "Tipo Comité - Agrupado", "Distribución por Tipo Comité", "pie2")
-        
-        with col3:
-            pie_chart_donut(df, "Nivel Post.", "Distribución por Nivel", "pie3")
-        
-        st.markdown("<div style='margin-top: 40px;'></div>", unsafe_allow_html=True)
-        
-        # FILA 2
-        col4, col5, col6 = st.columns(3)
-        
-        with col4:
-            pie_chart_donut(df, "Modalidad", "Distribución por Modalidad", "pie4")
-        
-        with col5:
-            pie_chart_donut(df, "Tramo Post.", "Distribución por Tramo", "pie5")
-        
-        with col6:
-            pie_chart_donut(df, "Agrup. Post.", "Distribución por Agrupamiento", "pie6")
-        
-        
-        #----------------------
-        st.markdown("<div style='margin-top: 60px;'></div>", unsafe_allow_html=True)
-        
-        # Obtener las columnas de la hoja "tabla-dash"
-        postulaciones = pd.DataFrame(sheet.worksheet("tabla-dash").get_all_records())
-        columnas_tabla_dash = postulaciones.columns.tolist()
-        
-        # Aplicar esas columnas al df filtrado (descartando cualquier otra)
-        df_filtrado_para_mostrar = df.copy()
-        df_filtrado_para_mostrar = df_filtrado_para_mostrar[[col for col in columnas_tabla_dash if col in df_filtrado_para_mostrar.columns]]
-        
-        # Mostrar con expander
-        st.markdown("<div style='margin-top: 60px;'></div>", unsafe_allow_html=True)
-        
-        with st.expander("🔍 #### VER POSTULACIONES FILTRADAS 🔎"):
-            st.dataframe(df_filtrado_para_mostrar, use_container_width=True, hide_index=True)
+                            },
+                            "emphasis": {
+                                "label": {
+                                    "show": True,
+                                    "fontSize": 20,
+                                    "fontWeight": "bold",
+                                    "color": color_texto
+                                }
+                            },
+                            "labelLine": {
+                                "show": True,
+                                "lineStyle": {"color": color_texto}
+                            },
+                            "data": data
+                        }
+                    ]
+                }
+            
+                st_echarts(options=option, height="380px", key=key_id)
+            
+            
+            
+            # --- GRILLA 3x3 DE PIE CHARTS ---
+            
+            # FILA 1
+            col1, col2, col3 = st.columns(3)
+            
+            with col1:
+                pie_chart_donut(df, "Puesto Tipo", "Distribución por Puesto Tipo", "pie1")
+            
+            with col2:
+                pie_chart_donut(df, "Tipo Comité - Agrupado", "Distribución por Tipo Comité", "pie2")
+            
+            with col3:
+                pie_chart_donut(df, "Nivel Post.", "Distribución por Nivel", "pie3")
+            
+            st.markdown("<div style='margin-top: 40px;'></div>", unsafe_allow_html=True)
+            
+            # FILA 2
+            col4, col5, col6 = st.columns(3)
+            
+            with col4:
+                pie_chart_donut(df, "Modalidad", "Distribución por Modalidad", "pie4")
+            
+            with col5:
+                pie_chart_donut(df, "Tramo Post.", "Distribución por Tramo", "pie5")
+            
+            with col6:
+                pie_chart_donut(df, "Agrup. Post.", "Distribución por Agrupamiento", "pie6")
+            
+            
+            #----------------------
+            st.markdown("<div style='margin-top: 60px;'></div>", unsafe_allow_html=True)
+            
+            # Obtener las columnas de la hoja "tabla-dash"
+            postulaciones = pd.DataFrame(sheet.worksheet("tabla-dash").get_all_records())
+            columnas_tabla_dash = postulaciones.columns.tolist()
+            
+            # Aplicar esas columnas al df filtrado (descartando cualquier otra)
+            df_filtrado_para_mostrar = df.copy()
+            df_filtrado_para_mostrar = df_filtrado_para_mostrar[[col for col in columnas_tabla_dash if col in df_filtrado_para_mostrar.columns]]
+            
+            # Mostrar con expander
+            st.markdown("<div style='margin-top: 60px;'></div>", unsafe_allow_html=True)
+            
+            with st.expander("🔍 VER POSTULACIONES FILTRADAS 🔎"):
+                st.dataframe(df_filtrado_para_mostrar, use_container_width=True, hide_index=True)
         
         
        
