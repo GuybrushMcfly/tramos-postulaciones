@@ -543,8 +543,8 @@ columnas_finales = ["Mes", "A", "B", "C", "D", "Total"]
 pivot_valores = pivot_valores[columnas_finales]
 
 # Mostrar en el dashboard
-st.markdown("#### 📊 Presupuesto estimado por Nivel y Período")
-st.dataframe(pivot_valores, use_container_width=True, hide_index=True)
+#st.markdown("#### 📊 Presupuesto estimado por Nivel y Período")
+#st.dataframe(pivot_valores, use_container_width=True, hide_index=True)
 
 
 
