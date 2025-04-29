@@ -11,7 +11,7 @@ from streamlit_echarts import st_echarts
 #import seaborn as sns
 
 # ---- CONFIGURACIÓN DE PÁGINA ----
-st.set_page_config(page_title="Dashboard de Tramos", layout="wide")
+st.set_page_config(page_title="Dashboard de Tramos", layout="wide", initial_sidebar_state="expanded")
 st.sidebar.image("logo-cap.png", use_container_width=True)
 
 modo = st.get_option("theme.base")
