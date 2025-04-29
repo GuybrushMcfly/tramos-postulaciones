@@ -498,6 +498,9 @@ if st.session_state["authentication_status"]:
     st.plotly_chart(fig, use_container_width=True)
     
     
+    with tab2:
+        st.markdown("""<h1 style='font-size: 30px; color: white;'>📊 Presupuesto</h1>""", unsafe_allow_html=True)
+
     # --- TABLA DINÁMICA DE MONTOS POR MES Y NIVEL ---
     
     # Conversión y limpieza de datos
@@ -599,11 +602,9 @@ if st.session_state["authentication_status"]:
     
     st_echarts(options=options, height="400px")
 
-  with tab2:
-        st.markdown("""<h1 style='font-size: 30px; color: white;'>📊 Dashboard Tramos Escalafonarios</h1>""", unsafe_allow_html=True)
-
+    
     with tab3:
-        st.markdown("""<h1 style='font-size: 30px; color: white;'>📊 Dashboard Tramos Escalafonarios</h1>""", unsafe_allow_html=True)
+        st.markdown("""<h1 style='font-size: 30px; color: white;'>📊 Capacitación</h1>""", unsafe_allow_html=True)
 
 elif st.session_state["authentication_status"] is False:
     st.error("❌ Usuario o contraseña incorrectos.")
