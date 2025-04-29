@@ -35,10 +35,14 @@ if st.session_state["authentication_status"]:
     authenticator.logout("Cerrar sesión", "sidebar")
     st.sidebar.success(f"Hola, {st.session_state['name']}")
     #st.title("📊 Dashboard Tramos Escalafonarios")
-    st.markdown("""<h1 style='font-size: 30px; color: white;'>📊 Dashboard Tramos Escalafonarios</h1>""", unsafe_allow_html=True)
+     #st.markdown("""<h1 style='font-size: 30px; color: white;'>📊 Dashboard Tramos Escalafonarios</h1>""", unsafe_allow_html=True)
+     #st.markdown("<div style='margin-top: 10px;'></div>", unsafe_allow_html=True)
 
-
-    st.markdown("<div style='margin-top: 10px;'></div>", unsafe_allow_html=True)
+    # Aquí van las tabs
+    tab1, tab2, tab3 = st.tabs(["📊 Dashboard", "📁 Otra pestaña", "📈 Tercera pestaña"])
+    
+    with tab1:
+        st.markdown("""<h1 style='font-size: 30px; color: white;'>📊 Dashboard Tramos Escalafonarios</h1>""", unsafe_allow_html=True)
     
     # ---- CARGA DE DATOS DE GOOGLE SHEETS ----
     
