@@ -43,7 +43,8 @@ if st.session_state["authentication_status"]:
     
     with tab1:
         st.markdown("""<h1 style='font-size: 30px; color: white;'>📊 Dashboard Tramos Escalafonarios</h1>""", unsafe_allow_html=True)
-    
+
+     
     # ---- CARGA DE DATOS DE GOOGLE SHEETS ----
     
     # 1️⃣ Definir permisos de acceso
@@ -597,6 +598,12 @@ if st.session_state["authentication_status"]:
     }
     
     st_echarts(options=options, height="400px")
+
+  with tab2:
+        st.markdown("""<h1 style='font-size: 30px; color: white;'>📊 Dashboard Tramos Escalafonarios</h1>""", unsafe_allow_html=True)
+
+    with tab3:
+        st.markdown("""<h1 style='font-size: 30px; color: white;'>📊 Dashboard Tramos Escalafonarios</h1>""", unsafe_allow_html=True)
 
 elif st.session_state["authentication_status"] is False:
     st.error("❌ Usuario o contraseña incorrectos.")
