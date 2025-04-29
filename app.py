@@ -39,7 +39,7 @@ if st.session_state["authentication_status"]:
      #st.markdown("<div style='margin-top: 10px;'></div>", unsafe_allow_html=True)
 
     # Aquí van las tabs
-    tab1, tab2, tab3 = st.tabs(["📊 Dashboard", "📁 Otra pestaña", "📈 Tercera pestaña"])
+    tab1, tab2, tab3 = st.tabs(["📊 Dashboard", "📈 Presupuesto", "📈 Capacitación"])
     
     with tab1:
         st.markdown("""<h1 style='font-size: 30px; color: white;'>📊 Dashboard Tramos Escalafonarios</h1>""", unsafe_allow_html=True)
@@ -499,7 +499,7 @@ if st.session_state["authentication_status"]:
     
     
     with tab2:
-        st.markdown("""<h1 style='font-size: 30px; color: white;'>📊 Presupuesto</h1>""", unsafe_allow_html=True)
+        st.markdown("""<h1 style='font-size: 30px; color: white;'>📈 Presupuesto</h1>""", unsafe_allow_html=True)
 
     # --- TABLA DINÁMICA DE MONTOS POR MES Y NIVEL ---
     
@@ -604,7 +604,7 @@ if st.session_state["authentication_status"]:
 
     
     with tab3:
-        st.markdown("""<h1 style='font-size: 30px; color: white;'>📊 Capacitación</h1>""", unsafe_allow_html=True)
+        st.markdown("""<h1 style='font-size: 30px; color: white;'>📈 Capacitación</h1>""", unsafe_allow_html=True)
 
 elif st.session_state["authentication_status"] is False:
     st.error("❌ Usuario o contraseña incorrectos.")
