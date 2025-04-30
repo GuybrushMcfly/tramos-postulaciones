@@ -487,21 +487,38 @@ if puesto_seleccionado != "Todos":
 # ----------------------
 columnas_fijas = ['Agente', 'Actividad', 'Comision', 'Fecha Inicio', 'Fecha Fin', 'Vacante']
 
-with st.expander("📚 LISTADO DE INGRESANTES", expanded=True):
-    # Si quieres mantener el selector de columnas (tercera barra):
+with st.expander("📋 LISTADO DE INGRESANTES", expanded=True):
     columnas_seleccionadas = st.multiselect(
         "Seleccionar columnas a mostrar:",
         options=columnas_fijas,
         default=columnas_fijas
     )
     
-    st.dataframe(
-        df_filtrado[columnas_seleccionadas],
-        use_container_width=True,
-        hide_index=True,
-        height=400
-    )
-    st.caption(f"📌 Total registros: {len(df_filtrado)}")
+    st.dataframe(df_filtrado[columnas_seleccionadas], use_container_width=True, hide_index=True, height=400)
+    
+    # --- NUEVO: SECCIÓN DE MÉTRICAS ---
+    if len(df_filtrado) > 0:
+        total_actividad = len(df_filtrado)
+        vacantes_si = len(df_filtrado[df_filtrado['Vacante'] == "SI"])
+        porcentaje = (vacantes_si / total_actividad) * 100
+        
+        st.divider()
+        st.subheader("📊 Control de Vacantes")
+        
+        cols = st.columns([1, 1, 2])
+        with cols[0]:
+            st.metric("Total agentes", total_actividad)
+        with cols[1]:
+            st.metric("Con vacante", vacantes_si)
+        with cols[2]:
+            st.metric("% Asignación", f"{porcentaje:.1f}%", 
+                    help="Porcentaje de agentes con Vacante = 'SI' sobre el total filtrado")
+        
+        # Gráfico de barra de progreso
+        st.progress(int(porcentaje), 
+                  text=f"Progreso de asignación: {porcentaje:.1f}%")
+    else:
+        st.warning("⚠️ No hay registros con los filtros actuales")
 
 
 
