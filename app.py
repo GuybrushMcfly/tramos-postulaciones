@@ -48,22 +48,29 @@ st.markdown("<div style='margin-top: 10px;'></div>", unsafe_allow_html=True)
 
 # ---- CARGA DE DATOS DE GOOGLE SHEETS ----
 
-# 1️⃣ Definir permisos de acceso
+#  Definir permisos de acceso
 scope = ["https://www.googleapis.com/auth/spreadsheets"]
 credenciales_dict = json.loads(st.secrets["GOOGLE_CREDS"])
 creds = Credentials.from_service_account_info(credenciales_dict, scopes=scope)
 gc = gspread.authorize(creds)
 
-# 2️⃣ Abrir archivo de Sheets
-sheet = gc.open_by_key("11--jD47K72s9ddt727kYd9BhRmAOM7qXEUB60SX69UA")
+#  Abrir archivo de Sheets
+sheet = gc.open_by_key("11--jD47K72s9ddt727kYd9BhRmAOM7qXEUB60SX69UA") #sheet postulaciones tramos
 
-# 3️⃣ Cargar hoja principal
+#  Cargar hoja principal
+worksheet = sheet.sheet1
+data = worksheet.get_all_records()
+df = pd.DataFrame(data)
+# Cargar hoja 'valores' directamente
+valores = pd.DataFrame(sheet.worksheet("valores").get_all_records())
+cursos = pd.DataFrame(sheet.worksheet("cursos").get_all_records())
+
+
+#  Cargar hoja principal
 worksheet = sheet.sheet1
 data = worksheet.get_all_records()
 df = pd.DataFrame(data)
 
-# Cargar hoja 'valores' directamente
-valores = pd.DataFrame(sheet.worksheet("valores").get_all_records())
 
 # ---- FILTROS EN LA BARRA LATERAL ----
 st.sidebar.header("Filtros")
@@ -422,6 +429,48 @@ st.markdown("<div style='margin-top: 60px;'></div>", unsafe_allow_html=True)
 
 with st.expander("🔍 VER POSTULACIONES FILTRADAS 🔎"):
     st.dataframe(df_filtrado_para_mostrar, use_container_width=True, hide_index=True)
+
+
+
+#----------------------
+st.markdown("<div style='margin-top: 60px;'></div>", unsafe_allow_html=True)
+
+# Obtener las columnas de referencia (puedes usar las del mismo dataframe o de otra hoja)
+columnas_referencia = cursos.columns.tolist()  # Usando las propias columnas del dataframe
+
+# Si quisieras obtenerlas de otra hoja como en tu ejemplo:
+# columnas_referencia = pd.DataFrame(sheet.worksheet("hoja_referencia").get_all_records()).columns.tolist()
+
+# Filtrar columnas para mostrar (solo las que existan en ambos dataframes)
+cursos_para_mostrar = cursos.copy()
+cursos_para_mostrar = cursos_para_mostrar[[col for col in columnas_referencia if col in cursos_para_mostrar.columns]]
+
+# Mostrar con expander
+st.markdown("<div style='margin-top: 30px;'></div>", unsafe_allow_html=True)
+
+with st.expander("📚 VER CURSOS DISPONIBLES 📚", expanded=False):
+    # Opción para seleccionar columnas a mostrar
+    columnas_seleccionadas = st.multiselect(
+        "Seleccionar columnas a mostrar:",
+        options=columnas_referencia,
+        default=columnas_referencia  # Mostrar todas por defecto
+    )
+    
+    # Filtrar columnas seleccionadas
+    if columnas_seleccionadas:
+        cursos_para_mostrar = cursos_para_mostrar[columnas_seleccionadas]
+    
+    st.dataframe(
+        cursos_para_mostrar,
+        use_container_width=True,
+        hide_index=True,
+        height=400  # Altura fija para el dataframe
+    )
+    
+    # Opcional: Mostrar estadísticas rápidas
+    st.caption(f"Total de cursos registrados: {len(cursos_para_mostrar)}")
+
+
 
 
 # ----------------------
