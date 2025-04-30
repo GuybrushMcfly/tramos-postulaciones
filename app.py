@@ -433,32 +433,35 @@ with st.expander("🔍 VER POSTULACIONES FILTRADAS 🔎"):
 
 
 # ----------------------
-# CONFIGURACIÓN INICIAL
+# PRIMERA BARRA (FILTRO POR ACTIVIDAD)
 # ----------------------
-st.markdown("<div style='margin-top: 60px;'></div>", unsafe_allow_html=True)
+st.markdown("<div style='margin-top: 20px;'></div>", unsafe_allow_html=True)
 
-# 1. Filtro inicial por Ingresante == "SI"
-df_filtrado = cursos[cursos['Ingresante'] == "SI"].copy()
+# Filtro por Actividad (nuevo)
+actividades = ["Todas"] + sorted(cursos[cursos['Ingresante'] == "SI"]['Actividad'].unique().tolist())
+actividad_seleccionada = st.selectbox(
+    "🔹 Actividad:",
+    options=actividades,
+    index=0
+)
 
 # ----------------------
-# FILTROS SUPERIORES (Periodo Valoración y Puesto Tipo)
+# SEGUNDA BARRA (FILTROS ORIGINALES: PERIODO Y PUESTO)
 # ----------------------
 col1, col2 = st.columns(2)
 
 with col1:
-    # Filtro por Periodo Valoración
-    periodos = ["Todos"] + sorted(df_filtrado['Periodo Valoración'].unique().tolist())
+    periodos = ["Todos"] + sorted(cursos[cursos['Ingresante'] == "SI"]['Periodo Valoración'].unique().tolist())
     periodo_seleccionado = st.selectbox(
-        "Periodo Valoración:",
+        "🔹 Periodo Valoración:",
         options=periodos,
         index=0
     )
 
 with col2:
-    # Filtro por Puesto Tipo
-    puestos = ["Todos"] + sorted(df_filtrado['Puesto Tipo'].unique().tolist())
+    puestos = ["Todos"] + sorted(cursos[cursos['Ingresante'] == "SI"]['Puesto Tipo'].unique().tolist())
     puesto_seleccionado = st.selectbox(
-        "Puesto Tipo:",
+        "🔹 Puesto Tipo:",
         options=puestos,
         index=0
     )
@@ -466,6 +469,11 @@ with col2:
 # ----------------------
 # APLICAR FILTROS
 # ----------------------
+df_filtrado = cursos[cursos['Ingresante'] == "SI"].copy()
+
+if actividad_seleccionada != "Todas":
+    df_filtrado = df_filtrado[df_filtrado['Actividad'] == actividad_seleccionada]
+
 if periodo_seleccionado != "Todos":
     df_filtrado = df_filtrado[df_filtrado['Periodo Valoración'] == periodo_seleccionado]
 
@@ -473,25 +481,25 @@ if puesto_seleccionado != "Todos":
     df_filtrado = df_filtrado[df_filtrado['Puesto Tipo'] == puesto_seleccionado]
 
 # ----------------------
-# MOSTRAR DATAFRAME CON COLUMNAS ESPECÍFICAS
+# TERCERA BARRA (DENTRO DEL EXPANDER - OPCIONAL)
 # ----------------------
 columnas_fijas = ['Agente', 'Actividad', 'Comision', 'Fecha Inicio', 'Fecha Fin', 'Vacante']
 
-st.markdown("<div style='margin-top: 30px;'></div>", unsafe_allow_html=True)
-
 with st.expander("📋 LISTADO DE INGRESANTES", expanded=True):
-    # Mostrar siempre las columnas fijas (sin selector de columnas)
+    # Si quieres mantener el selector de columnas (tercera barra):
+    columnas_seleccionadas = st.multiselect(
+        "Seleccionar columnas a mostrar:",
+        options=columnas_fijas,
+        default=columnas_fijas
+    )
+    
     st.dataframe(
-        df_filtrado[columnas_fijas],
+        df_filtrado[columnas_seleccionadas],
         use_container_width=True,
         hide_index=True,
         height=400
     )
-    
-    # Estadísticas
-    st.caption(f"Total registros: {len(df_filtrado)} | " 
-               f"Periodo: {periodo_seleccionado} | "
-               f"Puesto: {puesto_seleccionado}")
+    st.caption(f"📌 Total registros: {len(df_filtrado)}")
 
 
 
