@@ -433,42 +433,54 @@ with st.expander("🔍 VER POSTULACIONES FILTRADAS 🔎"):
 
 
 #----------------------
-st.markdown("<div style='margin-top: 60px;'></div>", unsafe_allow_html=True)
+# ----------------------
+# FILTROS SUPERIORES
+# ----------------------
+st.markdown("<div style='margin-top: 20px;'></div>", unsafe_allow_html=True)
 
-# Obtener las columnas de referencia (puedes usar las del mismo dataframe o de otra hoja)
-columnas_referencia = cursos.columns.tolist()  # Usando las propias columnas del dataframe
+# 1. Filtro por Periodo Valoración
+periodos = ["Todos"] + sorted(df_filtrado['Periodo Valoración'].unique().tolist())
+periodo_seleccionado = st.selectbox(
+    "🔹 Periodo Valoración:",
+    options=periodos,
+    index=0  # "Todos" por defecto
+)
 
-# Si quisieras obtenerlas de otra hoja como en tu ejemplo:
-# columnas_referencia = pd.DataFrame(sheet.worksheet("hoja_referencia").get_all_records()).columns.tolist()
+# 2. Filtro por Puesto Tipo
+puestos = ["Todos"] + sorted(df_filtrado['Puesto Tipo'].unique().tolist())
+puesto_seleccionado = st.selectbox(
+    "🔹 Puesto Tipo:",
+    options=puestos,
+    index=0  # "Todos" por defecto
+)
 
-# Filtrar columnas para mostrar (solo las que existan en ambos dataframes)
-cursos_para_mostrar = cursos.copy()
-cursos_para_mostrar = cursos_para_mostrar[[col for col in columnas_referencia if col in cursos_para_mostrar.columns]]
+# ----------------------
+# APLICAR FILTROS
+# ----------------------
+# Filtro inicial (Ingresante == SI)
+df_final = df_filtrado.copy()
 
-# Mostrar con expander
+# Aplicar filtros adicionales si no son "Todos"
+if periodo_seleccionado != "Todos":
+    df_final = df_final[df_final['Periodo Valoración'] == periodo_seleccionado]
+
+if puesto_seleccionado != "Todos":
+    df_final = df_final[df_final['Puesto Tipo'] == puesto_seleccionado]
+
+# ----------------------
+# MOSTRAR DATAFRAME (SOLO COLUMNAS SELECCIONADAS)
+# ----------------------
+columnas_a_mostrar = ['Agente', 'Actividad', 'Comision', 'Fecha Inicio', 'Fecha Fin', 'Vacante']
 st.markdown("<div style='margin-top: 30px;'></div>", unsafe_allow_html=True)
 
-with st.expander("📚 VER CURSOS DISPONIBLES 📚", expanded=False):
-    # Opción para seleccionar columnas a mostrar
-    columnas_seleccionadas = st.multiselect(
-        "Seleccionar columnas a mostrar:",
-        options=columnas_referencia,
-        default=columnas_referencia  # Mostrar todas por defecto
-    )
-    
-    # Filtrar columnas seleccionadas
-    if columnas_seleccionadas:
-        cursos_para_mostrar = cursos_para_mostrar[columnas_seleccionadas]
-    
+with st.expander("📋 LISTADO DE INGRESANTES", expanded=True):
     st.dataframe(
-        cursos_para_mostrar,
+        df_final[columnas_a_mostrar],
         use_container_width=True,
         hide_index=True,
-        height=400  # Altura fija para el dataframe
+        height=400
     )
-    
-    # Opcional: Mostrar estadísticas rápidas
-    st.caption(f"Total de cursos registrados: {len(cursos_para_mostrar)}")
+    st.caption(f"📌 Total registros: {len(df_final)}")
 
 
 
