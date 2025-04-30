@@ -431,6 +431,8 @@ with st.expander("🔍 VER POSTULACIONES FILTRADAS 🔎"):
     st.dataframe(df_filtrado_para_mostrar, use_container_width=True, hide_index=True)
 
 
+st.markdown("<div style='margin-top: 60px;'></div>", unsafe_allow_html=True)
+st.markdown("##### 📚 Actividades de Capacitación ATP")
 
 # ----------------------
 # PRIMERA BARRA (FILTRO POR ACTIVIDAD)
@@ -485,7 +487,7 @@ if puesto_seleccionado != "Todos":
 # ----------------------
 columnas_fijas = ['Agente', 'Actividad', 'Comision', 'Fecha Inicio', 'Fecha Fin', 'Vacante']
 
-with st.expander("📋 LISTADO DE INGRESANTES", expanded=True):
+with st.expander("📚 LISTADO DE INGRESANTES", expanded=True):
     # Si quieres mantener el selector de columnas (tercera barra):
     columnas_seleccionadas = st.multiselect(
         "Seleccionar columnas a mostrar:",
