@@ -507,8 +507,8 @@ with st.expander("📚 LISTADO DE INGRESANTES", expanded=True):
 
 
 # ----------------------
-st.markdown("<div style='margin-top: 60px;'></div>", unsafe_allow_html=True)
-st.markdown("##### 📊 Personas por Dependencia Nacional y Nivel Escalafonario")
+#st.markdown("<div style='margin-top: 60px;'></div>", unsafe_allow_html=True)
+#st.markdown("##### 📊 Personas por Dependencia Nacional y Nivel Escalafonario")
 
 # Cargar hoja "tabla-dash"
 tabla_dash = pd.DataFrame(sheet.worksheet("tabla-dash").get_all_records())
