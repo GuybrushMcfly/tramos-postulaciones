@@ -496,7 +496,7 @@ fig.update_layout(
 )
 
 # Mostrar gráfico en Streamlit
-st.plotly_chart(fig, use_container_width=True)
+#st.plotly_chart(fig, use_container_width=True)
 
 
 # --- TABLA DINÁMICA DE MONTOS POR MES Y NIVEL ---
