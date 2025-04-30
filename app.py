@@ -420,7 +420,7 @@ df_filtrado_para_mostrar = df_filtrado_para_mostrar[[col for col in columnas_tab
 # Mostrar con expander
 st.markdown("<div style='margin-top: 60px;'></div>", unsafe_allow_html=True)
 
-with st.expander("🔍 #### VER POSTULACIONES FILTRADAS 🔎"):
+with st.expander("🔍 VER POSTULACIONES FILTRADAS 🔎"):
     st.dataframe(df_filtrado_para_mostrar, use_container_width=True, hide_index=True)
 
 
