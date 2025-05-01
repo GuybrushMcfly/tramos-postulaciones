@@ -526,8 +526,7 @@ with st.expander("📋 LISTADO DE INGRESANTES", expanded=True):
                   text=f"Progreso de asignación: {porcentaje_vacantes:.1f}%")
         
         st.progress(int(porcentaje_aprobados), 
-                  text=f"Progreso de aprobación: {porcentaje_aprobados:.1f}%",
-                  help="Porcentaje de agentes que aprobaron la capacitación")
+                  text=f"Progreso de aprobación: {porcentaje_aprobados:.1f}%"
         
         # Advertencia si hay datos incompletos
         if "Pendiente" in df_filtrado['Capacitación'].unique():
