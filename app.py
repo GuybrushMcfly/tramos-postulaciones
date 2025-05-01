@@ -496,27 +496,42 @@ with st.expander("📋 LISTADO DE INGRESANTES", expanded=True):
     
     st.dataframe(df_filtrado[columnas_seleccionadas], use_container_width=True, hide_index=True, height=400)
     
-    # --- NUEVO: SECCIÓN DE MÉTRICAS ---
+    # --- SECCIÓN DE MÉTRICAS MEJORADA ---
     if len(df_filtrado) > 0:
         total_actividad = len(df_filtrado)
         vacantes_si = len(df_filtrado[df_filtrado['Vacante'] == "SI"])
-        porcentaje = (vacantes_si / total_actividad) * 100
+        aprobados = len(df_filtrado[df_filtrado['Capacitación'] == "Aprobada"])
+        
+        porcentaje_vacantes = (vacantes_si / total_actividad) * 100
+        porcentaje_aprobados = (aprobados / total_actividad) * 100
         
         st.divider()
-        st.subheader("📊 Control de Vacantes")
+        st.subheader("📊 Indicadores Clave")
         
-        cols = st.columns([1, 1, 2])
+        # Métricas en 4 columnas
+        cols = st.columns(4)
         with cols[0]:
-            st.metric("Total agentes", total_actividad)
+            st.metric("Total Agentes", total_actividad)
         with cols[1]:
-            st.metric("Con vacante", vacantes_si)
+            st.metric("Con Vacante", vacantes_si)
         with cols[2]:
-            st.metric("% Asignación", f"{porcentaje:.1f}%", 
-                    help="Porcentaje de agentes con Vacante = 'SI' sobre el total filtrado")
+            st.metric("% Asignación", f"{porcentaje_vacantes:.1f}%",
+                    help="Porcentaje con Vacante = 'SI'")
+        with cols[3]:
+            st.metric("% Aprobados", f"{porcentaje_aprobados:.1f}%",
+                    help="Porcentaje con Capacitación = 'Aprobada'")
         
-        # Gráfico de barra de progreso
-        st.progress(int(porcentaje), 
-                  text=f"Progreso de asignación: {porcentaje:.1f}%")
+        # Barras de progreso dobles
+        st.progress(int(porcentaje_vacantes), 
+                  text=f"Progreso de asignación: {porcentaje_vacantes:.1f}%")
+        
+        st.progress(int(porcentaje_aprobados), 
+                  text=f"Progreso de aprobación: {porcentaje_aprobados:.1f}%",
+                  help="Porcentaje de agentes que aprobaron la capacitación")
+        
+        # Advertencia si hay datos incompletos
+        if "Pendiente" in df_filtrado['Capacitación'].unique():
+            st.warning("ℹ️ Existen registros con capacitación pendiente en los datos filtrados")
     else:
         st.warning("⚠️ No hay registros con los filtros actuales")
 
