@@ -75,15 +75,11 @@ df = pd.DataFrame(data)
 # ---- EN TU SIDEBAR ----
 st.sidebar.header("Navegación Rápida")
 st.sidebar.markdown("""
-[🔍 Ir a Filtros](#filtros)  
-[📚 Ir a Capacitaciones](#capacitaciones)  
-[📊 Ir a Métricas](#metricas)  
-[📋 Ir a Detalle](#detalle)
+[📊 Ir a GRÁFICOS](#distribucion)  
+[🔍 Ir a LISTADO GENERAL](#listado)  
+[📚 Ir a CAPACITACIONES](#capacitaciones)  
+[📋 Ir a PRESUPUESTO](#presupuesto)
 """)
-
-
-
-
 
 # ---- FILTROS EN LA BARRA LATERAL ----
 st.sidebar.header("Filtros")
@@ -324,8 +320,9 @@ with col8:
         size_valor=34
     )
 
+st.markdown('<a id="distribucion"></a>', unsafe_allow_html=True)
 st.markdown("<div style='margin-top: 60px;'></div>", unsafe_allow_html=True)
-st.markdown("##### 📊 Distribución de las postulaciones")
+st.markdown("#### 📊 Distribución de las postulaciones")
 
 # --- FUNCIÓN PARA GRÁFICOS PIE ---
 def pie_chart_donut(df, columna, titulo, key_id):
