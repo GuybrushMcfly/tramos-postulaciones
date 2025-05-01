@@ -496,44 +496,45 @@ with st.expander("📋 LISTADO DE INGRESANTES", expanded=True):
     
     st.dataframe(df_filtrado[columnas_seleccionadas], use_container_width=True, hide_index=True, height=400)
     
-    # --- SECCIÓN DE MÉTRICAS MEJORADA ---
+    # --- SECCIÓN DE MÉTRICAS CON MANEJO DE ERRORES ---
     if len(df_filtrado) > 0:
         total_actividad = len(df_filtrado)
         vacantes_si = len(df_filtrado[df_filtrado['Vacante'] == "SI"])
         aprobados = len(df_filtrado[df_filtrado['Capacitación'] == "Aprobada"])
         
-        porcentaje_vacantes = (vacantes_si / total_actividad) * 100
-        porcentaje_aprobados = (aprobados / total_actividad) * 100
+        # Cálculos seguros con manejo de división por cero
+        porcentaje_vacantes = (vacantes_si / total_actividad) * 100 if total_actividad > 0 else 0
+        porcentaje_aprobados = (aprobados / total_actividad) * 100 if total_actividad > 0 else 0
         
         st.divider()
         st.subheader("📊 Indicadores Clave")
         
-        # Métricas en 4 columnas
+        # Métricas
         cols = st.columns(4)
         with cols[0]:
             st.metric("Total Agentes", total_actividad)
         with cols[1]:
             st.metric("Con Vacante", vacantes_si)
         with cols[2]:
-            st.metric("% Asignación", f"{porcentaje_vacantes:.1f}%",
-                    help="Porcentaje con Vacante = 'SI'")
+            st.metric("% Asignación", f"{porcentaje_vacantes:.1f}%")
         with cols[3]:
-            st.metric("% Aprobados", f"{porcentaje_aprobados:.1f}%",
-                    help="Porcentaje con Capacitación = 'Aprobada'")
+            st.metric("% Aprobados", f"{porcentaje_aprobados:.1f}%")
         
-        # Barras de progreso dobles
-        st.progress(int(porcentaje_vacantes), 
-                  text=f"Progreso de asignación: {porcentaje_vacantes:.1f}%")
+        # Barras de progreso con validación
+        try:
+            st.progress(min(100, max(0, int(porcentaje_vacantes))), 
+                      text=f"Progreso de asignación: {porcentaje_vacantes:.1f}%")
+            
+            st.progress(min(100, max(0, int(porcentaje_aprobados))),
+                      text=f"Progreso de aprobación: {porcentaje_aprobados:.1f}%")
+        except Exception as e:
+            st.error(f"Error al mostrar progreso: {str(e)}")
         
-        st.progress(int(porcentaje_aprobados), 
-                  text=f"Progreso de aprobación: {porcentaje_aprobados:.1f}%"
-        
-        # Advertencia si hay datos incompletos
+        # Advertencia de datos pendientes
         if "Pendiente" in df_filtrado['Capacitación'].unique():
-            st.warning("ℹ️ Existen registros con capacitación pendiente en los datos filtrados")
+            st.warning("Existen registros con capacitación pendiente")
     else:
-        st.warning("⚠️ No hay registros con los filtros actuales")
-
+        st.warning("No hay registros con los filtros actuales")
 
 
 
