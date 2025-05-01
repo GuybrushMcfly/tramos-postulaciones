@@ -78,7 +78,7 @@ st.sidebar.markdown("""
 [📊 Ir a GRÁFICOS](#distribucion)  
 [🔍 Ir a LISTADO GENERAL](#listado)  
 [📚 Ir a CAPACITACIONES](#capacitaciones)  
-[📋 Ir a PRESUPUESTO](#presupuesto)
+[💲 Ir a PRESUPUESTO](#presupuesto)
 """)
 
 # ---- FILTROS EN LA BARRA LATERAL ----
@@ -275,7 +275,7 @@ with col4:
 
 
 # --- FILA 2 ---
-st.markdown("<div style='margin-top: 30px;'></div>", unsafe_allow_html=True)
+st.markdown("<div style='margin-top: 30px;'></div>", unsafe_allow_html=True) 
 st.markdown("#### 📂 Estado de Tramitaciones")
 
 col5, col6, col7, col8 = st.columns(4)
@@ -320,7 +320,7 @@ with col8:
         size_valor=34
     )
 
-st.markdown('<a id="distribucion"></a>', unsafe_allow_html=True)
+st.markdown('<a id="distribucion"></a>', unsafe_allow_html=True) #para ir al lugar
 st.markdown("<div style='margin-top: 60px;'></div>", unsafe_allow_html=True)
 st.markdown("#### 📊 Distribución de las postulaciones")
 
@@ -435,12 +435,16 @@ df_filtrado_para_mostrar = df.copy()
 df_filtrado_para_mostrar = df_filtrado_para_mostrar[[col for col in columnas_tabla_dash if col in df_filtrado_para_mostrar.columns]]
 
 # Mostrar con expander
+st.markdown('<a id="listado"></a>', unsafe_allow_html=True) #para ir al lugar
 st.markdown("<div style='margin-top: 60px;'></div>", unsafe_allow_html=True)
 
 with st.expander("🔍 VER POSTULACIONES FILTRADAS 🔎"):
     st.dataframe(df_filtrado_para_mostrar, use_container_width=True, hide_index=True)
 
 
+# ----------------------
+
+st.markdown('<a id="capacitaciones"></a>', unsafe_allow_html=True) #para ir al lugar
 st.markdown("<div style='margin-top: 60px;'></div>", unsafe_allow_html=True)
 st.markdown("#### 📚 Actividades de Capacitación ATP")
 
@@ -668,8 +672,9 @@ columnas_finales = ["Mes", "A", "B", "C", "D", "Total"]
 pivot_valores = pivot_valores[columnas_finales]
 
 # Mostrar en el dashboard
+st.markdown('<a id="presupuesto"></a>', unsafe_allow_html=True) #para ir al lugar
 st.markdown("<div style='margin-top: 60px;'></div>", unsafe_allow_html=True)
-st.markdown("#### 📊 Presupuesto estimado por Nivel y Período")
+st.markdown("#### 💲 Presupuesto estimado por Nivel y Período")
 #st.dataframe(pivot_valores, use_container_width=True, hide_index=True)
 
 meses = pivot_valores["Mes"].tolist()
