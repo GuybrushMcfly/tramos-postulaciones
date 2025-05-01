@@ -72,6 +72,19 @@ data = worksheet.get_all_records()
 df = pd.DataFrame(data)
 
 
+# ---- EN TU SIDEBAR ----
+st.sidebar.header("Navegación Rápida")
+st.sidebar.markdown("""
+[🔍 Ir a Filtros](#filtros)  
+[📚 Ir a Capacitaciones](#capacitaciones)  
+[📊 Ir a Métricas](#metricas)  
+[📋 Ir a Detalle](#detalle)
+""")
+
+
+
+
+
 # ---- FILTROS EN LA BARRA LATERAL ----
 st.sidebar.header("Filtros")
 
