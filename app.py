@@ -518,6 +518,13 @@ with st.expander("📋 LISTADO DE POSTULANTES", expanded=True):
             else:
                 # Si ya es de tipo datetime, no hacer nada
                 df_filtrado[col] = pd.to_datetime(df_filtrado[col], errors='coerce')
+    
+            # Cambiar formato de fecha a 'DD/MM/YYYY'
+            df_filtrado[col] = df_filtrado[col].dt.strftime('%d/%m/%Y')
+    
+            # Reemplazar valores vacíos con una cadena vacía
+            df_filtrado[col] = df_filtrado[col].fillna("")
+
 
 
     
