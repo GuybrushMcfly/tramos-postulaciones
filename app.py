@@ -509,21 +509,16 @@ with st.expander("📋 LISTADO DE POSTULANTES", expanded=True):
         default=columnas_fijas
     )
 
-    # Convertir fechas de Excel a datetime, si están en formato numérico
+    # Convertir las fechas en pandas al formato correcto (si es necesario)
     for col in ['Fecha Inicio', 'Fecha Fin']:
         if col in df_filtrado.columns:
-            # Verificar si hay valores numéricos en la columna y convertir solo esos
-            if pd.api.types.is_numeric_dtype(df_filtrado[col]):
-                df_filtrado[col] = pd.to_datetime(df_filtrado[col], errors='coerce', origin='1899-12-30', unit='D')
-            else:
-                # Si ya es de tipo datetime, no hacer nada
-                df_filtrado[col] = pd.to_datetime(df_filtrado[col], errors='coerce')
-    
-            # Cambiar formato de fecha a 'DD/MM/YYYY'
+            df_filtrado[col] = pd.to_datetime(df_filtrado[col], errors='coerce', origin='1899-12-30', unit='D')
+            # Formatear la fecha para asegurar que se muestre como dd/mm/yyyy
             df_filtrado[col] = df_filtrado[col].dt.strftime('%d/%m/%Y')
     
-            # Reemplazar valores vacíos con una cadena vacía
-            df_filtrado[col] = df_filtrado[col].fillna("")
+    # Mostrar el dataframe con las fechas formateadas correctamente
+    st.dataframe(df_filtrado[columnas_seleccionadas], use_container_width=True, hide_index=True, height=400)
+
 
 
 
