@@ -512,7 +512,13 @@ with st.expander("📋 LISTADO DE POSTULANTES", expanded=True):
     # Convertir fechas de Excel a datetime, si están en formato numérico
     for col in ['Fecha Inicio', 'Fecha Fin']:
         if col in df_filtrado.columns:
-            df_filtrado[col] = pd.to_datetime(df_filtrado[col], errors='coerce', origin='1899-12-30', unit='D')
+            # Verificar si hay valores numéricos en la columna y convertir solo esos
+            if pd.api.types.is_numeric_dtype(df_filtrado[col]):
+                df_filtrado[col] = pd.to_datetime(df_filtrado[col], errors='coerce', origin='1899-12-30', unit='D')
+            else:
+                # Si ya es de tipo datetime, no hacer nada
+                df_filtrado[col] = pd.to_datetime(df_filtrado[col], errors='coerce')
+
 
     
     
