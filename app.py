@@ -423,6 +423,7 @@ with col6:
     pie_chart_donut(df, "Agrup. Post.", "Distribución por Agrupamiento", "pie6")
 
 
+
 #----------------------
 st.markdown("<div style='margin-top: 60px;'></div>", unsafe_allow_html=True)
 
@@ -501,12 +502,19 @@ if puesto_seleccionado != "Todos":
 # ----------------------
 columnas_fijas = ['Agente', 'Actividad', 'Comision', 'Fecha Inicio', 'Fecha Fin', 'Vacante']
 
-with st.expander("📋 LISTADO DE INGRESANTES", expanded=True):
+with st.expander("📋 LISTADO DE POSTULANTES", expanded=True):
     columnas_seleccionadas = st.multiselect(
         "Seleccionar columnas a mostrar:",
         options=columnas_fijas,
         default=columnas_fijas
     )
+
+    # Convertir fechas de Excel a datetime, si están en formato numérico
+    for col in ['Fecha Inicio', 'Fecha Fin']:
+        if col in df_filtrado.columns:
+            df_filtrado[col] = pd.to_datetime(df_filtrado[col], errors='coerce', origin='1899-12-30', unit='D')
+
+    
     
     st.dataframe(df_filtrado[columnas_seleccionadas], use_container_width=True, hide_index=True, height=400)
     
@@ -521,7 +529,7 @@ with st.expander("📋 LISTADO DE INGRESANTES", expanded=True):
         porcentaje_aprobados = (aprobados / total_actividad) * 100 if total_actividad > 0 else 0
         
         st.divider()
-        st.subheader("📊 Indicadores Clave")
+        st.subheader("📊 Indicadores")
         
         # Métricas
         cols = st.columns(4)
