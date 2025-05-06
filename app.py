@@ -509,7 +509,7 @@ with st.expander("📋 LISTADO DE POSTULANTES", expanded=True):
         default=columnas_fijas
     )
 
-  
+    st.dataframe(df_filtrado[columnas_seleccionadas], use_container_width=True, hide_index=True, height=400) 
        
     # --- SECCIÓN DE MÉTRICAS CON MANEJO DE ERRORES ---
     if len(df_filtrado) > 0:
