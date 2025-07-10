@@ -1,7 +1,12 @@
 [theme]
-base = "dark"
-primaryColor = "#8a6dff"               # Violeta brillante (botones, resaltados)
-backgroundColor = "#1f2235"            # Fondo principal oscuro
-secondaryBackgroundColor = "#2a2e45"   # Tarjetas o sidebar
-textColor = "#f5f6fa"                  # Texto claro
+#base = "dark"
+#primaryColor = "#8a6dff"               # Violeta brillante (botones, resaltados)
+#backgroundColor = "#1f2235"            # Fondo principal oscuro
+#secondaryBackgroundColor = "#2a2e45"   # Tarjetas o sidebar
+#textColor = "#f5f6fa"                  # Texto claro
+#font = "sans serif"
+primaryColor = "#2C75B2"               # azul gobierno sobrio
+backgroundColor = "#E5E8EC"            # gris azulado claro (ni blanco ni oscuro)
+secondaryBackgroundColor = "#D1D6DC"   # gris medio para campos y tarjetas
+textColor = "#1E1E1E"                  # gris casi negro
 font = "sans serif"
